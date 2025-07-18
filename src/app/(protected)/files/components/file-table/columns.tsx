@@ -1,13 +1,19 @@
 "use client";
 
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
+import { groupBy, map, upperFirst } from "lodash";
+import Link from "next/link";
 
 export type File = {
   id: string;
   mimeType: string;
   name: string;
+  webViewLink: string;
   owners: {
     me: boolean;
     displayName: string;
@@ -49,25 +55,36 @@ export const columns: ColumnDef<File>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    size: 50,
   },
 
+  {
+    accessorKey: "webViewLink",
+    header: "Link",
+    cell: ({ row }) => {
+      return (
+        <Link href={row.original.webViewLink} target="_blank">
+          Link
+        </Link>
+      );
+    },
+  },
   {
     accessorKey: "permissions",
     header: "Permissions",
     cell: ({ row }) => {
       const permissions = row.original.permissions || [];
+      const grouped = groupBy(permissions, "role");
+
       return (
-        <div className="flex  flex-col gap-1">
-          {permissions.map((permission) => {
+        <div className="flex flex-col gap-2">
+          {map(grouped, (group, key) => {
             return (
-              <WiseButton key={permission.id} className="flex flex-col h-fit">
-                <div className="flex flex-col items-start  self-start">
-                  <span>{`Name: ${permission.displayName}`}</span>
-                  <span>{`Email: ${permission.emailAddress ?? ""}`}</span>
-                  <span>{`Role: ${permission.role}`}</span>
+              <div key={key} className="flex flex-col gap-1">
+                <label>{upperFirst(key)}</label>
+                <div className="flex  flex-wrap gap-1">
+                  {group.map(renderCard)}
                 </div>
-              </WiseButton>
+              </div>
             );
           })}
         </div>
@@ -75,3 +92,23 @@ export const columns: ColumnDef<File>[] = [
     },
   },
 ];
+
+const renderCard = (permission: File["permissions"][number]) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger>
+        <span
+          key={permission.id}
+          className="bg-primary px-2 py-1 rounded-sm flex flex-col text-white"
+        >
+          <span>{`${permission.emailAddress ?? "null"}`}</span>
+        </span>
+      </TooltipTrigger>
+      <TooltipContent className="flex flex-col gap-1">
+        <span>{`Name: ${permission.displayName ?? "null"}`}</span>
+        <span>{`Email: ${permission.emailAddress ?? "null"}`}</span>
+        <span>{`Role: ${permission.role ?? "null"}`}</span>
+      </TooltipContent>
+    </Tooltip>
+  );
+};
