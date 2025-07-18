@@ -8,20 +8,34 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, HomeIcon } from "lucide-react";
 import { AppSidebarFooter, AppSidebarHeader } from "./";
+import { SidebarButton } from "@/lib/components/sidebar/sidebar.button";
+import Link from "next/link";
 
 export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar();
-  console.log("open", open);
 
   return (
-    <Sidebar className="relative text-white" collapsible="icon">
+    <Sidebar className=" sticky top-0 right-0 text-white" collapsible="icon">
       <AppSidebarHeader />
 
       <SidebarContent className="bg-sidebar-foreground">
-        <SidebarGroup />
-        <SidebarGroup />
+        <SidebarGroup className="gap-2">
+          <Link href={"/"}>
+            <SidebarButton icon={<HomeIcon />} label="Homepage" />
+          </Link>
+          <Link href={"/files"}>
+            <SidebarButton icon={<HomeIcon />} label="Files" />
+          </Link>
+          <Link href={"debug"}>
+            <SidebarButton icon={<HomeIcon />} label="Debug" />
+          </Link>
+
+          <Link href={"/transactions"}>
+            <SidebarButton icon={<HomeIcon />} label="Transactions" />
+          </Link>
+        </SidebarGroup>
       </SidebarContent>
 
       <AppSidebarFooter />
