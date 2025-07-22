@@ -1,9 +1,24 @@
 "use client";
 
-import { WrapperWallet } from "@/modules/wallet/components/wrapper-wallet";
+import { QueryKeys } from "@/lib/configs";
+import { ServiceWallet } from "@/lib/services";
+import { WrapperWallet } from "@/modules/wallet/components";
+import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
+import { useEffect } from "react";
 
 export const PageWallet = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: [QueryKeys.getWallet],
+    queryFn: ServiceWallet.getWallet,
+  });
+
+  useEffect(() => {
+    (() => {
+      ServiceWallet.getWallet();
+    })();
+  });
+
   return (
     <div className="flex w-full flex-col gap-2">
       <h1>Wallet2</h1>
