@@ -7,11 +7,16 @@ import {
   SidebarGroup,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-import { ChevronRight, HomeIcon } from "lucide-react";
-import { AppSidebarFooter, AppSidebarHeader } from "./";
 import { SidebarButton } from "@/lib/components/sidebar/sidebar.button";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
+import {
+  ChevronRight,
+  CircleUserRound,
+  LayoutDashboard,
+  Tags,
+  WalletMinimal,
+} from "lucide-react";
+import { AppSidebarFooter, AppSidebarHeader } from "./";
 
 export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar();
@@ -22,19 +27,21 @@ export function AppSidebar() {
 
       <SidebarContent className="bg-sidebar-foreground">
         <SidebarGroup className="gap-2">
-          <Link href={"/"}>
-            <SidebarButton icon={<HomeIcon />} label="Homepage" />
-          </Link>
-          <Link href={"/files"}>
-            <SidebarButton icon={<HomeIcon />} label="Files" />
-          </Link>
-          <Link href={"debug"}>
-            <SidebarButton icon={<HomeIcon />} label="Debug" />
-          </Link>
+          <SidebarButton
+            href={"/dashboard"}
+            icon={<LayoutDashboard />}
+            label="Dashboard"
+          />
 
-          <Link href={"/transactions"}>
-            <SidebarButton icon={<HomeIcon />} label="Transactions" />
-          </Link>
+          <SidebarButton href={"/"} icon={<WalletMinimal />} label="Wallets" />
+
+          <SidebarButton href={"/"} icon={<Tags />} label="Categories" />
+
+          <SidebarButton
+            href={"/"}
+            icon={<CircleUserRound />}
+            label="Profile"
+          />
         </SidebarGroup>
       </SidebarContent>
 
@@ -42,7 +49,7 @@ export function AppSidebar() {
 
       <Button
         onClick={toggleSidebar}
-        className="absolute -right-4 bottom-12 rounded-full bg-white shadow hover:bg-white/80"
+        className="absolute -right-4 bottom-12 rounded-full bg-foreground border-2 shadow hover:bg-white/80"
         size={"icon"}
       >
         <ChevronRight

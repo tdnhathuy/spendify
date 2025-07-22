@@ -17,7 +17,7 @@ export default auth((req) => {
   }
 
   if (req.auth && url.pathname === "/") {
-    url.pathname = "/home";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
