@@ -1,11 +1,12 @@
 "use client";
-
 import { signIn } from "next-auth/react";
 
-export default function AuthPage() {
+export default function () {
   return (
-    <button onClick={() => signIn("google", { callbackUrl: "/home" })}>
-      Signin with Google
-    </button>
+    <section>
+      <form action={async () => await signIn("google")}>
+        <button type="submit">Signin with Google</button>
+      </form>
+    </section>
   );
 }
