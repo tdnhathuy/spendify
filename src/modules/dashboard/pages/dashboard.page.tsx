@@ -1,5 +1,4 @@
-import { HeaderDashboard } from "@/modules/dashboard/components";
-import { ListTrans } from "@/modules/dashboard/components/list-trans/list-trans";
+import { HeaderDashboard, ListTrans } from "@/modules/dashboard/components";
 
 export const PageDashboard = () => {
   return (

@@ -33,7 +33,11 @@ export function AppSidebar() {
             label="Dashboard"
           />
 
-          <SidebarButton href={"/"} icon={<WalletMinimal />} label="Wallets" />
+          <SidebarButton
+            href={"/wallet"}
+            icon={<WalletMinimal />}
+            label="Wallets"
+          />
 
           <SidebarButton href={"/"} icon={<Tags />} label="Categories" />
 
