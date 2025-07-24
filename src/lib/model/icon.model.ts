@@ -9,11 +9,14 @@ import { Types } from "mongoose";
   },
 })
 export class IconClass {
+  @prop({ type: Types.ObjectId })
+  public _id?: Types.ObjectId;
+
   @prop({ type: String, required: true })
   public code!: string;
 
   @prop({ type: Types.ObjectId, required: true })
-  public userId!: Types.ObjectId;
+  public idUser!: Types.ObjectId;
 
   @prop({ type: String, required: true })
   public isDefault!: boolean;

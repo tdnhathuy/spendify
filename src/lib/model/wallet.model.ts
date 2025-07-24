@@ -1,12 +1,15 @@
 import { createSafeModel } from "@/lib/server/helper.server";
 import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
+import { Types } from "mongoose";
 
-enum EnumWalletType {
+export enum EnumWalletType {
   Cash = "Cash",
   Debit = "Debit",
   Credit = "Credit",
   Crypto = "Crypto",
 }
+
+export type WalletType = keyof typeof EnumWalletType;
 
 @modelOptions({
   schemaOptions: {
@@ -15,8 +18,14 @@ enum EnumWalletType {
   },
 })
 export class WalletClass {
-  @prop({ type: String, required: true })
-  public idIcon!: string;
+  @prop({ type: Types.ObjectId })
+  public _id!: Types.ObjectId;
+
+  @prop({ type: Types.ObjectId, required: true })
+  public idIcon!: Types.ObjectId;
+
+  @prop({ type: Types.ObjectId, required: true })
+  public idUser!: Types.ObjectId;
 
   @prop({ type: String, required: true })
   public name!: string;
@@ -25,7 +34,7 @@ export class WalletClass {
   public initBalance!: number;
 
   @prop({ type: String, required: true, enum: EnumWalletType })
-  public type!: EnumWalletType;
+  public type!: WalletType;
 }
 
 export const WalletModel = createSafeModel("WalletModel", () =>

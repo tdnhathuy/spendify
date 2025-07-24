@@ -9,8 +9,10 @@ export interface Response<T> {
 export type Wallet = {
   id: string;
   name: string;
-  balance: number;
+  initBalance: number;
+  icon: Icon | null;
 };
+
 export type Icon = {
   id: string;
   code: string;
