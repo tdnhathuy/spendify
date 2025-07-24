@@ -1,38 +1,54 @@
 // middleware.ts
 import { auth } from "@/auth";
+import { dbConnect } from "@/lib/server/mongoose.server";
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 export const config = {
   matcher: [
-    // "/((?!auth|api|favicon.ico|_next/static|_next/image|assets|public).*)",
-    "/((?!auth|favicon.ico|_next/static|_next/image|assets|public).*)",
+    "/((?!auth|api/auth|favicon.ico|_next/static|_next/image|assets|public).*)",
+    "/api/:path*",
   ],
 };
 
 export default auth(async (request) => {
   const url = request.nextUrl.clone();
 
-  if (!request.auth && url.pathname !== "/auth") {
-    url.pathname = "/auth";
-    return NextResponse.redirect(url);
+  // Skip NextAuth own routes completely
+  if (url.pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
   }
 
-  if (request.auth && url.pathname === "/") {
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+  // -------------- PAGE ROUTES -------------
+  if (!url.pathname.startsWith("/api")) {
+    // Trang cần đăng nhập
+    if (!request.auth && url.pathname !== "/auth") {
+      url.pathname = "/auth";
+      return NextResponse.redirect(url);
+    }
+
+    // Đã đăng nhập nhưng truy cập root => chuyển thẳng dashboard
+    if (request.auth && url.pathname === "/") {
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next();
   }
 
-  if (request.auth && url.pathname.startsWith("/api")) {
-    const session = await getToken({
-      req: request,
-      secret: process.env.AUTH_SECRET,
-    });
+  // -------------- API ROUTES -------------
+  // Các API riêng của app phải có token, nếu không 401
+  const token = await getToken({
+    req: request,
+    secret: process.env.AUTH_SECRET,
+  });
 
-    console.log("session", session);
-    request.headers.set("abc", "123");
+  if (!token) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+
+  request.headers.set("x-user-email", String(token.email ?? ""));
+  request.headers.set("x-user-token", String(token.accessToken ?? ""));
 
   return NextResponse.next({ request });
 });

@@ -1,9 +1,9 @@
 "use client";
 
-import { QueryKeys } from "@/lib/configs";
+import { client, MutationKeys, QueryKeys } from "@/lib/configs";
 import { ServiceWallet } from "@/lib/services";
 import { WrapperWallet } from "@/modules/wallet/components";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 
 export const PageWallet = () => {
@@ -11,7 +11,13 @@ export const PageWallet = () => {
     queryKey: [QueryKeys.getWallet],
     queryFn: ServiceWallet.getWallet,
   });
-  console.log("data", data);
+
+  const mutation = useMutation({
+    mutationKey: [MutationKeys.createWallet],
+    mutationFn: (data: any) => {
+      return client.post("/api/wallet", data);
+    },
+  });
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -22,6 +28,7 @@ export const PageWallet = () => {
           className="flex justify-center items-center"
           onClick={() => {
             console.log("clicked");
+            mutation.mutateAsync({});
           }}
         >
           <span className="text-center gap-2 flex items-center justify-center flex-col text-sm ">

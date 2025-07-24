@@ -42,7 +42,7 @@ export function AppSidebar() {
           <SidebarButton href={"/"} icon={<Tags />} label="Categories" />
 
           <SidebarButton
-            href={"/"}
+            href={"/profile"}
             icon={<CircleUserRound />}
             label="Profile"
           />

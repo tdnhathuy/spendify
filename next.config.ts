@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://lh3.googleusercontent.com/**")],
   },
+  experimental: {
+    // esmExternals: "loose",
+  },
+  serverExternalPackages: ["mongoose"],
 
   async headers() {
     return [

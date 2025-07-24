@@ -1,4 +1,4 @@
-import { client } from "@/lib/api/client";
+import { client } from "@/lib/configs";
 import { Response, Wallet } from "@/lib/types";
 
 export const ServiceWallet = {
