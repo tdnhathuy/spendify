@@ -40,6 +40,7 @@ export const createDefaultIcon = (userId: string): IconClass[] => {
       code: x,
       idUser: new Types.ObjectId(userId),
       isDefault: true,
+      _id: new Types.ObjectId(),
     };
     return icon;
   });
@@ -67,6 +68,7 @@ export const createCategory = async (
       idIcon: new Types.ObjectId(icon?._id),
       type: EnumCategoryType.Expense,
       idParent: null,
+      _id: new Types.ObjectId(),
     });
 
     expense.children.forEach((child) => {
@@ -77,6 +79,7 @@ export const createCategory = async (
         idIcon: new Types.ObjectId(icon?._id),
         type: EnumCategoryType.Expense,
         idParent: parentId,
+        _id: new Types.ObjectId(),
       });
     });
   });
@@ -89,6 +92,7 @@ export const createCategory = async (
       idIcon: new Types.ObjectId(icon?._id),
       type: EnumCategoryType.Income,
       idParent: null,
+      _id: new Types.ObjectId(),
     });
   });
 

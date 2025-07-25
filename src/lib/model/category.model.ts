@@ -15,6 +15,9 @@ export enum EnumCategoryType {
   },
 })
 export class CategoryClass {
+  @prop({ type: Types.ObjectId })
+  public _id?: Types.ObjectId;
+
   @prop({ type: Types.ObjectId, required: true })
   public idIcon!: Types.ObjectId;
 

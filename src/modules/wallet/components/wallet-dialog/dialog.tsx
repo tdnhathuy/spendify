@@ -1,14 +1,17 @@
 import { Dialog, DialogClose } from "@/components/ui/dialog";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { LabelBlock } from "@/lib/components/shared/label-block";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
-import { schemaWallet } from "@/modules/wallet/components/wallet-dialog/schema";
+import {
+  SchemaWallet,
+  schemaWallet,
+} from "@/modules/wallet/components/wallet-dialog/schema";
 import { useStoreDialogWallet } from "@/modules/wallet/components/wallet-dialog/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import z from "zod";
+import { useForm, useFormContext } from "react-hook-form";
 
 export const DialogWallet = () => {
   const actions = useStoreDialogWallet((s) => s.actions);
@@ -18,11 +21,12 @@ export const DialogWallet = () => {
   const wallet = values.wallet;
   const title = !!wallet ? "Edit Wallet" : "Add Wallet";
 
-  const form = useForm<z.infer<typeof schemaWallet>>({
+  const form = useForm<SchemaWallet>({
     resolver: zodResolver(schemaWallet),
     defaultValues: {
       name: wallet?.name || "",
       initBalance: wallet?.initBalance.toString() || "",
+      icon: wallet?.icon || null,
     },
   });
   return (
@@ -33,8 +37,14 @@ export const DialogWallet = () => {
         form.reset();
       }}
     >
-      <WiseDialogContent className="w-sm" title={title} footer={<Footer />}>
-        <Form {...form}>
+      <Form {...form}>
+        <WiseDialogContent className="w-sm" title={title} footer={<Footer />}>
+          <FormField
+            control={form.control}
+            name="icon"
+            render={({ field }) => <IconPicker onChange={field.onChange} />}
+          />
+
           <LabelBlock label="Wallet Name">
             <FormField
               control={form.control}
@@ -50,13 +60,18 @@ export const DialogWallet = () => {
               render={({ field }) => <Input {...field} value={field.value} />}
             />
           </LabelBlock>
-        </Form>
-      </WiseDialogContent>
+        </WiseDialogContent>
+      </Form>
     </Dialog>
   );
 };
 
 const Footer = () => {
+  const form = useFormContext<SchemaWallet>();
+
+  const onClickCreate = () => {
+    console.log("form.getValues", form.getValues());
+  };
   return (
     <>
       <DialogClose asChild>
@@ -65,7 +80,7 @@ const Footer = () => {
         </WiseButton>
       </DialogClose>
 
-      <WiseButton size={"sm"} variant={"outline"}>
+      <WiseButton size={"sm"} variant={"outline"} onClick={onClickCreate}>
         Create
       </WiseButton>
     </>
