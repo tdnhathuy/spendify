@@ -1,4 +1,3 @@
-import { Icon } from "lucide-react";
 import z from "zod";
 
 export const schemaIcon = z.object({
@@ -8,9 +7,10 @@ export const schemaIcon = z.object({
 });
 
 export const schemaWallet = z.object({
-  name: z.string(),
-  initBalance: z.string(),
-  icon: schemaIcon.nullable(),
+  name: z.string().min(1, { message: "Name is required" }),
+  initBalance: z.string().min(1, { message: "Init balance is required" }),
+  icon: schemaIcon.nonoptional(),
+  type: z.string(),
 });
 
 export type SchemaWallet = z.infer<typeof schemaWallet>;

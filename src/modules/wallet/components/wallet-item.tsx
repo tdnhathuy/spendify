@@ -1,3 +1,4 @@
+import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { Wallet } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { WrapperWallet } from "@/modules/wallet/components";
@@ -24,7 +25,7 @@ export const WalletItem = (props: Props) => {
     <WrapperWallet onClick={onClick}>
       <div className="flex flex-1 p-4 gap-2 flex-col border-b">
         <span className="flex items-center gap-2">
-          <span className="size-8 rounded-full bg-red-400"></span>
+          <IconPicker size="sm" icon={props.wallet.icon} disabled />
           <span className="text-sm font-bold">{props.wallet.name}</span>
         </span>
 

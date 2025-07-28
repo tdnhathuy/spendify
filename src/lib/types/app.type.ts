@@ -1,4 +1,4 @@
-import { EnumCategoryType } from "@/lib/model";
+import { CategoryType, WalletType } from "@/lib/model";
 
 export interface Response<T> {
   data: T;
@@ -11,6 +11,7 @@ export type Wallet = {
   name: string;
   initBalance: number;
   icon: Icon | null;
+  type: WalletType;
 };
 
 export type Icon = {
@@ -19,11 +20,16 @@ export type Icon = {
   url: string;
 };
 
-export type Category = {
+export interface BaseCategory {
   id: string;
   name: string;
-  type: EnumCategoryType;
-};
+  type: CategoryType;
+  icon: Icon | null;
+}
+
+export interface Category extends BaseCategory {
+  children: BaseCategory[] | null;
+}
 
 export interface UserProfile {
   id: string;
@@ -32,4 +38,15 @@ export interface UserProfile {
   wallets: Wallet[];
   icons: Icon[];
   categories: Category[];
+}
+
+export interface Transaction {
+  id: string;
+  amount: number;
+  category: BaseCategory | null;
+  categoryParent: BaseCategory | null;
+
+  wallet: Wallet | null;
+  date: Date;
+  description: string | null;
 }

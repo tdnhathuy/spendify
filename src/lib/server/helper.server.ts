@@ -1,6 +1,6 @@
-import { UserModel } from "@/lib/model";
+import { CategoryModel, IconModel, UserModel, WalletModel } from "@/lib/model";
 import { dbConnect } from "@/lib/server/mongoose.server";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function createSafeModel<T>(
   modelName: string,
@@ -16,9 +16,6 @@ export function createSafeModel<T>(
   return model;
 }
 
-interface ExParams {
-  userId?: string;
-}
 export function createApiHandler<T extends (req: NextRequest) => Promise<any>>(
   handler: T
 ): T {
@@ -34,3 +31,43 @@ export function createApiHandler<T extends (req: NextRequest) => Promise<any>>(
     return handler(req);
   }) as T;
 }
+
+export const responseSuccessV2 = (data: any) => {
+  return NextResponse.json({
+    status: 200,
+    message: "success",
+    data,
+  });
+};
+
+type Key = "categories" | "icons" | "wallets";
+export const queryById = async (
+  idUser: string,
+  keys: Key[] = ["categories", "icons", "wallets"]
+): Promise<Record<Key, any>> => {
+  const promises = [];
+  const keyOrder: Key[] = [];
+
+  if (keys.includes("categories")) {
+    promises.push(CategoryModel.find({ idUser }));
+    keyOrder.push("categories");
+  }
+  if (keys.includes("icons")) {
+    promises.push(IconModel.find({ idUser }));
+    keyOrder.push("icons");
+  }
+  if (keys.includes("wallets")) {
+    promises.push(WalletModel.find({ idUser }));
+    keyOrder.push("wallets");
+  }
+
+  const res = await Promise.all(promises);
+
+  // Gộp lại thành object
+  const result: Record<string, any> = {};
+  keyOrder.forEach((key, idx) => {
+    result[key] = res[idx];
+  });
+
+  return result;
+};

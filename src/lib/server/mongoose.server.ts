@@ -4,8 +4,6 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI!; // nên set trong .env.local
 const MONGODB_DB = process.env.MONGODB_DB!;
 
-if (!MONGODB_URI) throw new Error("Missing MONGODB_URI");
-
 let cached = (global as any).mongoose || { conn: null, promise: null };
 
 export async function dbConnect() {

@@ -1,19 +1,12 @@
 "use client";
 
-import { QueryKeys } from "@/lib/configs";
-import { ServiceWallet } from "@/lib/services";
+import { useQueryWallet } from "@/lib/api/app.query";
 import { ButtonAddWallet } from "@/modules/wallet/components/add-wallet.button";
 import { DialogWallet } from "@/modules/wallet/components/wallet-dialog/dialog";
 import { WalletItem } from "@/modules/wallet/components/wallet-item";
-import { useQuery } from "@tanstack/react-query";
 
 export const PageWallet = () => {
-  const { data } = useQuery({
-    queryKey: [QueryKeys.getWallet],
-    queryFn: ServiceWallet.get,
-  });
-
-  const listWallet = data?.data || [];
+  const { data: listWallet = [] } = useQueryWallet();
 
   return (
     <div className="flex w-full flex-col gap-2">

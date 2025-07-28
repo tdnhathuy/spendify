@@ -1,17 +1,21 @@
-import { DTOCategory } from "@/lib/dto/categoru.dto";
+import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOIcon } from "@/lib/dto/icon.dto";
 import { CategoryModel, IconModel, UserModel } from "@/lib/model";
-import { createApiHandler } from "@/lib/server/helper.server";
-import { responseSuccess } from "@/lib/server/response.server";
+import {
+  createApiHandler,
+  responseSuccessV2,
+} from "@/lib/server/helper.server";
 import { UserProfile } from "@/lib/types";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const GET = createApiHandler(async (req: NextRequest) => {
-  const userId = req.headers.get("x-user-id");
-  if (userId) {
-    const user = await UserModel.findById(userId).lean();
-    const icons = await IconModel.find({ userId }).lean();
-    const categories = await CategoryModel.find({ userId }).lean();
+  const idUser = req.headers.get("x-user-id");
+  if (idUser) {
+    const user = await UserModel.findById(idUser);
+    const icons = await IconModel.find({ idUser });
+    const cates = await CategoryModel.find({ idUser });
+
+    const categories = DTOCategory.fromClasses(cates, icons);
 
     const profile: UserProfile = {
       id: user?._id.toString() || "",
@@ -19,11 +23,11 @@ export const GET = createApiHandler(async (req: NextRequest) => {
       email: user?.email || "",
       wallets: [],
       icons: icons.map(DTOIcon.fromIcon),
-      categories: categories.map(DTOCategory.fromClass),
+      categories: categories,
     };
 
     console.log("profile", profile);
-    return NextResponse.json(responseSuccess(profile));
+    return responseSuccessV2(profile);
   }
-  return NextResponse.json(responseSuccess([]));
+  return responseSuccessV2([]);
 });

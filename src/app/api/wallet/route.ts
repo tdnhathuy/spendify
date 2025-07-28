@@ -26,7 +26,7 @@ export const POST = createApiHandler(async (req: NextRequest) => {
   const payload: PayloadCreateWallet = await req.json();
   await WalletModel.create({
     ...payload,
-    idIcon: new Types.ObjectId(userId!),
+    idIcon: new Types.ObjectId(payload.idIcon!),
     idUser: new Types.ObjectId(userId!),
     _id: new Types.ObjectId(),
   });

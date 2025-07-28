@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Popover,
   PopoverContent,
@@ -13,8 +15,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Props {
-  selectedIcon?: Icon | null;
+  icon?: Icon | null;
   onChange?: (icon: Icon) => void;
+  disabled?: boolean;
+  size?: "xs" | "sm" | "md" | "lg";
 }
 
 const defaultIcon: Icon = {
@@ -23,40 +27,51 @@ const defaultIcon: Icon = {
   url: "https://cdn-icons-png.flaticon.com/512/3875/3875433.png",
 };
 
-export const IconPicker = ({ selectedIcon, onChange }: Props) => {
+export const IconPicker = ({
+  icon: selectedIcon,
+  onChange,
+  disabled,
+  size = "md",
+}: Props) => {
   const { data: icons = [] } = useQuery({
     queryKey: [QueryKeys.getIcon],
     queryFn: ServiceIcon.get,
+    enabled: !disabled,
   });
 
-  // Khi selectedIcon từ ngoài thay đổi thì update local state
   const [icon, setIcon] = useState<Icon>(selectedIcon ?? defaultIcon);
 
   useEffect(() => {
     if (selectedIcon) setIcon(selectedIcon);
   }, [selectedIcon]);
 
-  // Xử lý khi chọn icon
   const handleSelectIcon = (icon: Icon) => {
     setIcon(icon);
     onChange?.(icon);
   };
 
-  // Render 1 icon (dùng cho cả trigger và list item)
   const renderIcon = (icon: Icon) => (
     <Image
+      draggable={false}
       key={icon.id}
       alt={icon.code}
       src={icon.url}
-      width={20}
-      height={20}
-      className={cn(" size-8 cursor-pointer")}
+      width={40}
+      height={40}
+      className={cn("size-8 ", {
+        "size-6": size === "sm",
+        "size-8": size === "md",
+        "size-10": size === "lg",
+        "size-3": size === "xs",
+        "cursor-pointer": !disabled,
+      })}
     />
   );
 
   return (
     <Popover>
-      <PopoverTrigger asChild>{renderIcon(icon)}</PopoverTrigger>
+      <PopoverTrigger disabled={disabled}>{renderIcon(icon)}</PopoverTrigger>
+
       <PopoverContent className="p-2">
         <div
           className={cn(

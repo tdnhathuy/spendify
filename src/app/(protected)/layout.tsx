@@ -9,7 +9,7 @@ export default function ProtectedLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="flex p-4 w-full flex-1">{children}</main>
+      <main className="flex bg-[#fbfbfb] p-4 w-full flex-1">{children}</main>
     </SidebarProvider>
   );
 }

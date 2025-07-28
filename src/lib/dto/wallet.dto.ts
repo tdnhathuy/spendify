@@ -12,6 +12,7 @@ export const DTOWallet = {
       initBalance: wallet.initBalance,
       name: wallet.name,
       icon: icon ? DTOIcon.fromIcon(icon) : null,
+      type: wallet.type,
     };
   },
 };

@@ -8,6 +8,8 @@ export enum EnumCategoryType {
   Transfer = "Transfer",
 }
 
+export type CategoryType = keyof typeof EnumCategoryType;
+
 @modelOptions({
   schemaOptions: {
     collection: "categories",
@@ -31,7 +33,7 @@ export class CategoryClass {
   public type!: EnumCategoryType;
 
   @prop({ type: Types.ObjectId, required: true })
-  public userId!: Types.ObjectId;
+  public idUser!: Types.ObjectId;
 }
 
 export const CategoryModel = createSafeModel("CategoryModel", () =>

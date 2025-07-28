@@ -1,5 +1,8 @@
-import { MutationKeys } from "@/lib/configs";
+import { Refetch, updateQueryData } from "@/lib/api/app.refech";
+import { MutationKeys, queryClient, QueryKeys } from "@/lib/configs";
+import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceUser } from "@/lib/services/user.service";
+import { Transaction } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { getSession } from "next-auth/react";
 
@@ -16,5 +19,47 @@ export const useMutateSetup = () => {
         email: session?.user?.email || "",
       });
     },
+  });
+};
+
+export const useMutateCreateWallet = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.createWallet],
+    mutationFn: ServiceWallet.create,
+    onSuccess: Refetch.wallet,
+  });
+};
+
+export const useMutateUpdateWallet = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.createWallet],
+    mutationFn: ServiceWallet.update,
+    onSuccess: Refetch.wallet,
+  });
+};
+
+export const useMutateCreateTrans = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.createTransaction],
+    mutationFn: ServiceTrans.create,
+    onSuccess: Refetch.trans,
+  });
+};
+
+export const useMutateAssignCategory = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.assignCategory],
+    mutationFn: ServiceTrans.assignCategory,
+    onSuccess: (newTrans) => {
+      updateQueryData.trans(newTrans);
+    },
+  });
+};
+
+export const useMutateAssignWallet = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.assignWallet],
+    mutationFn: ServiceTrans.assignWallet,
+    onSuccess: Refetch.trans,
   });
 };
