@@ -7,7 +7,7 @@ export const ServiceTrans = {
       .get("transaction")
       .json<Response<Transaction[]>>()
       .then((s) => s.data)
-      .catch((_) => []),
+      .catch(() => []),
 
   create: (json: PayloadCreateTrans) => client.post("transaction", { json }),
 

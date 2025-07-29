@@ -10,7 +10,6 @@ import {
   schemaWallet,
 } from "@/modules/wallet/components/wallet-dialog/schema";
 import { useStoreDialogWallet } from "@/modules/wallet/components/wallet-dialog/store";
-import { EnumWalletType } from "@/lib/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useDidUpdate } from "rooks";

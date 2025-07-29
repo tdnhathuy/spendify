@@ -1,11 +1,10 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
 import { CategoryClass, IconClass } from "@/lib/model";
-import { Category, Transaction } from "@/lib/types";
+import { Category } from "@/lib/types";
 
 const fromClass = (
   category: CategoryClass,
-  icons: IconClass[] = [],
-  parentName: string | null = null
+  icons: IconClass[] = []
 ): Category => {
   const icon = icons.find(
     (x) => x._id?.toString() === category.idIcon.toString()
@@ -27,7 +26,7 @@ const fromClasses = (
   const listParent = categories.filter((x) => x.idParent === null);
   const listChildren = categories.filter((x) => x.idParent !== null);
 
-  const list = listParent.map((x) => fromClass(x, icons, null));
+  const list = listParent.map((x) => fromClass(x, icons));
 
   listChildren.forEach((child) => {
     const idx = list.findIndex(
@@ -35,8 +34,9 @@ const fromClasses = (
     );
 
     if (idx !== -1) {
-      const cate = fromClass(child, icons, null);
+      const cate = fromClass(child, icons);
       const { children, ...rest } = cate;
+      console.log("children", children);
       list[idx].children?.push(rest);
     }
   });

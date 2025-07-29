@@ -60,7 +60,7 @@ export const AssignCategory = (props: Props) => {
   };
 
   return (
-    <Popover>
+    <Popover modal>
       <PopoverTrigger className={baseStyleTW}>
         <IconPicker icon={props.category?.icon} size="xs" disabled />
         <span>{title}</span>

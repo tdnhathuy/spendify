@@ -24,7 +24,7 @@ export const AssignWallet = (props: Props) => {
     assignWallet({ idTransaction, idWallet: id });
   };
   return (
-    <Popover>
+    <Popover modal>
       <PopoverTrigger className={baseStyleTW}>
         <IconPicker icon={wallet?.icon} size="xs" disabled />
         <span>{title}</span>
@@ -34,6 +34,7 @@ export const AssignWallet = (props: Props) => {
         {data.map((s) => {
           return (
             <PopoverClose
+              key={s.id}
               asChild
               className=" flex"
               onClick={() => onSelect(s.id)}

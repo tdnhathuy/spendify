@@ -17,8 +17,10 @@ function PopoverTrigger({
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
 
-interface PopoverContentProps
-  extends React.ComponentProps<typeof PopoverPrimitive.Content> {}
+type PopoverContentProps = React.ComponentProps<
+  typeof PopoverPrimitive.Content
+>;
+
 function PopoverContent({
   className,
   align = "center",

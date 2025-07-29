@@ -1,5 +1,5 @@
 import { PageDashboard } from "@/modules/dashboard";
 
-export default function () {
+export default function Page() {
   return <PageDashboard />;
 }

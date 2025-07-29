@@ -24,3 +24,5 @@ export const PageWallet = () => {
     </div>
   );
 };
+
+PageWallet.displayName = "PageWallet";

@@ -1,6 +1,5 @@
 // middleware.ts
 import { auth } from "@/auth";
-import { dbConnect } from "@/lib/server/mongoose.server";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
@@ -43,6 +42,7 @@ export default auth(async (request) => {
     secret: process.env.AUTH_SECRET,
   });
 
+  console.log("token", token);
   if (!token) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }

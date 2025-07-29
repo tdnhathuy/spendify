@@ -39,7 +39,7 @@ export const POST = createApiHandler(async (req: NextRequest) => {
   return Response.json(responseSuccessV2([]));
 });
 
-export const createDefaultIcon = (userId: string): IconClass[] => {
+const createDefaultIcon = (userId: string): IconClass[] => {
   const defaultIcons: IconClass[] = values(flatIcon).map((x) => {
     const icon: IconClass = {
       code: x,
@@ -53,7 +53,7 @@ export const createDefaultIcon = (userId: string): IconClass[] => {
   return defaultIcons;
 };
 
-export const createCategory = async (
+const createCategory = async (
   userId: string,
   icons: IconClass[]
 ): Promise<CategoryClass[]> => {
@@ -64,12 +64,11 @@ export const createCategory = async (
 
   arrExpense.forEach((expense) => {
     const icon = icons.find((x) => x.code === expense.idIcon);
-    console.log("icon", icon);
     const parentId = new Types.ObjectId();
     result.push({
       idUser: new Types.ObjectId(userId),
       name: expense.name,
-      idIcon: icon?._id!,
+      idIcon: icon!._id!,
       type: EnumCategoryType.Expense,
       idParent: null,
       _id: parentId,
@@ -80,7 +79,7 @@ export const createCategory = async (
       result.push({
         idUser: new Types.ObjectId(userId),
         name: child.name,
-        idIcon: new Types.ObjectId(icon?._id),
+        idIcon: new Types.ObjectId(icon!._id),
         type: EnumCategoryType.Expense,
         idParent: parentId,
         _id: new Types.ObjectId(),
