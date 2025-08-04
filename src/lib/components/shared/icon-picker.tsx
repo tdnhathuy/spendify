@@ -11,17 +11,17 @@ import {
 } from "@/components/ui/popover";
 import { QueryKeys } from "@/lib/configs";
 import { ServiceIcon } from "@/lib/services/icon.service";
-import type { Icon } from "@/lib/types";
+import type { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  icon?: Icon | null;
-  onChange?: (icon: Icon) => void;
+  icon?: IIcon | null;
+  onChange?: (icon: IIcon) => void;
   disabled?: boolean;
   size?: "xs" | "sm" | "md" | "lg";
 }
 
-const defaultIcon: Icon = {
+const defaultIcon: IIcon = {
   code: "",
   id: "",
   url: "https://cdn-icons-png.flaticon.com/512/3875/3875433.png",
@@ -39,18 +39,18 @@ export const IconPicker = ({
     enabled: !disabled,
   });
 
-  const [icon, setIcon] = useState<Icon>(selectedIcon ?? defaultIcon);
+  const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);
 
   useEffect(() => {
     if (selectedIcon) setIcon(selectedIcon);
   }, [selectedIcon]);
 
-  const handleSelectIcon = (icon: Icon) => {
+  const handleSelectIcon = (icon: IIcon) => {
     setIcon(icon);
     onChange?.(icon);
   };
 
-  const renderIcon = (icon: Icon) => (
+  const renderIcon = (icon: IIcon) => (
     <Image
       draggable={false}
       key={icon.id}
@@ -79,7 +79,7 @@ export const IconPicker = ({
             "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
           )}
         >
-          {icons.map((ic: Icon) => (
+          {icons.map((ic: IIcon) => (
             <PopoverClose asChild key={ic.id}>
               <button
                 type="button"

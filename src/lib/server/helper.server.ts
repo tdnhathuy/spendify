@@ -1,5 +1,5 @@
-import { CategoryModel, IconModel, UserModel, WalletModel } from "@/lib/model";
-import { dbConnect } from "@/lib/server/mongoose.server";
+import { CategoryModel, IconModel, WalletModel } from "@/lib/model";
+import { prisma } from "@/lib/server/prisma.server";
 import { NextRequest, NextResponse } from "next/server";
 
 export function createSafeModel<T>(
@@ -20,13 +20,14 @@ export function createApiHandler<T extends (req: NextRequest) => Promise<any>>(
   handler: T
 ): T {
   return (async (req: NextRequest) => {
-    await dbConnect();
+    await prisma.$connect();
 
     const email = req.headers.get("x-user-email");
-    const user = await UserModel.findOne({ email }).lean();
-
-    const userId = user?._id.toString();
-    req.headers.set("x-user-id", userId ?? "");
+    if (email) {
+      const info = await prisma.user.findFirst({ where: { email } });
+      if (!info) throw new Error("User not found");
+      req.headers.set("x-user-id", info.id ?? "");
+    }
 
     return handler(req);
   }) as T;

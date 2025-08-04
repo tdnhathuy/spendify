@@ -4,7 +4,7 @@ export interface DialogValues {
   open: boolean;
 }
 
-export interface DialogActions {    
+export interface DialogActions {
   setOpen: (open: boolean) => void;
 }
 
@@ -18,11 +18,11 @@ export type Wallet = {
   id: string;
   name: string;
   initBalance: number;
-  icon: Icon | null;
+  icon: IIcon | null;
   type: WalletType;
 };
 
-export type Icon = {
+export type IIcon = {
   id: string;
   code: string;
   url: string;
@@ -32,7 +32,7 @@ export interface BaseCategory {
   id: string;
   name: string;
   type: CategoryType;
-  icon: Icon | null;
+  icon: IIcon | null;
 }
 
 export interface Category extends BaseCategory {
@@ -44,7 +44,7 @@ export interface UserProfile {
   name: string;
   email: string;
   wallets: Wallet[];
-  icons: Icon[];
+  icons: IIcon[];
   categories: Category[];
 }
 

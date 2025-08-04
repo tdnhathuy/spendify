@@ -1,103 +1,69 @@
+import { CategoryType } from "@/generated/prisma";
 import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
 import { flatIcon } from "@/lib/configs/cdn.config";
-import {
-  CategoryClass,
-  CategoryModel,
-  EnumCategoryType,
-  IconClass,
-  IconModel,
-  TransactionModel,
-  UserModel,
-  WalletModel,
-} from "@/lib/model";
-import { createApiHandler, responseSuccessV2 } from "@/lib/server";
-import { PayloadSetupUser } from "@/lib/services";
+import { responseSuccessV2 } from "@/lib/server";
+import { prisma } from "@/lib/server/prisma.server";
 import { values } from "lodash";
-import { Types } from "mongoose";
+import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 
-export const POST = createApiHandler(async (req: NextRequest) => {
-  const userId = req.headers.get("x-user-id");
-  if (userId) {
-    const idUser = new Types.ObjectId(userId);
-    await Promise.all([
-      UserModel.findByIdAndDelete(idUser),
-      IconModel.deleteMany({ idUser }),
-      CategoryModel.deleteMany({ idUser }),
-      WalletModel.deleteMany({ idUser }),
-      TransactionModel.deleteMany({ idUser }),
-    ]);
-  }
-
-  const payload: PayloadSetupUser = await req.json();
-  const user = await UserModel.create(payload);
-  const newId = user.id;
-
-  const icons = await IconModel.create(createDefaultIcon(newId));
-  await CategoryModel.create(await createCategory(newId, icons));
-
-  return Response.json(responseSuccessV2([]));
-});
-
-const createDefaultIcon = (userId: string): IconClass[] => {
-  const defaultIcons: IconClass[] = values(flatIcon).map((x) => {
-    const icon: IconClass = {
-      code: x,
-      idUser: new Types.ObjectId(userId),
-      isDefault: true,
-      _id: new Types.ObjectId(),
-    };
-    return icon;
-  });
-
-  return defaultIcons;
+const clearData = async (id: string) => {
+  await prisma.icon.deleteMany({ where: { idUser: id } });
+  await prisma.category.deleteMany({ where: { idUser: id } });
+  await prisma.wallet.deleteMany({ where: { idUser: id } });
+  await prisma.user.delete({ where: { id } });
 };
 
-const createCategory = async (
-  userId: string,
-  icons: IconClass[]
-): Promise<CategoryClass[]> => {
-  const arrExpense = defaultExpenseCategory;
-  const arrIncome = defaultIncomeCategory;
+const secret = process.env.AUTH_SECRET;
+export const POST = async (req: NextRequest) => {
+  const token = await getToken({ req, secret });
 
-  const result: CategoryClass[] = [];
+  if (!token) return responseSuccessV2([]);
+  const { email, name } = token as { email: string; name: string };
 
-  arrExpense.forEach((expense) => {
-    const icon = icons.find((x) => x.code === expense.idIcon);
-    const parentId = new Types.ObjectId();
-    result.push({
-      idUser: new Types.ObjectId(userId),
-      name: expense.name,
-      idIcon: icon!._id!,
-      type: EnumCategoryType.Expense,
-      idParent: null,
-      _id: parentId,
+  const info = await prisma.user.findFirst({ where: { email } });
+  if (info) await clearData(info.id);
+
+  const user = await prisma.user.create({ data: { email, name } });
+
+  const icons = values(flatIcon).map((code) => ({ code, idUser: user.id }));
+  await prisma.icon.createMany({ data: icons });
+  const userIcons = await prisma.icon.findMany({
+    where: { idUser: user.id },
+    select: { id: true, code: true },
+  });
+
+  const defaultIncome = defaultIncomeCategory.map((x) => ({
+    name: x.name,
+    idUser: user.id,
+    idIcon: userIcons.find((i) => i.code === x.idIcon)?.id,
+    type: "Income" as CategoryType,
+  }));
+
+  await prisma.category.createMany({ data: defaultIncome });
+
+  for (const parent of defaultExpenseCategory) {
+    const result = await prisma.category.create({
+      data: {
+        name: parent.name,
+        idUser: user.id,
+        idIcon: userIcons.find((x) => x.code === parent.idIcon)?.id,
+        type: "Expense" as CategoryType,
+      },
     });
 
-    expense.children.forEach((child) => {
-      const icon = icons.find((x) => x.code === child.idIcon);
-      result.push({
-        idUser: new Types.ObjectId(userId),
-        name: child.name,
-        idIcon: new Types.ObjectId(icon!._id),
-        type: EnumCategoryType.Expense,
-        idParent: parentId,
-        _id: new Types.ObjectId(),
+    for (const child of parent.children) {
+      await prisma.category.create({
+        data: {
+          name: child.name,
+          idUser: user.id,
+          idParent: result.id,
+          idIcon: userIcons.find((x) => x.code === child.idIcon)?.id,
+          type: "Expense" as CategoryType,
+        },
       });
-    });
-  });
+    }
+  }
 
-  arrIncome.forEach((income) => {
-    const icon = icons.find((x) => x.code === income.idIcon);
-    result.push({
-      idUser: new Types.ObjectId(userId),
-      name: income.name,
-      idIcon: new Types.ObjectId(icon?._id),
-      type: EnumCategoryType.Income,
-      idParent: null,
-      _id: new Types.ObjectId(),
-    });
-  });
-
-  return result;
+  return responseSuccessV2([]);
 };

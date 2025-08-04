@@ -1,8 +1,8 @@
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import type { Icon } from "@/lib/types";
+import type { IIcon } from "@/lib/types";
 
 interface Props {
-  icon?: Icon | null;
+  icon?: IIcon | null;
   label?: string | null;
 }
 export const InputOption = (props: Props) => {

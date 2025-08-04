@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  name         String
+  wallets      Wallet[]
+  categories   Category[]
+  transactions Transaction[]
+  icons        Icon[]
+}
+
+model Icon {
+  id           String        @id @default(uuid())
+  code         String
+  idUser       String
+  user         User          @relation(fields: [idUser], references: [id])
+  wallets      Wallet[]
+  categories   Category[]
+  transactions Transaction[]
+}
+
+model Wallet {
+  id           String        @id @default(uuid())
+  name         String
+  balance      Float         @default(0)
+  idUser       String
+  idIcon       String?
+  user         User          @relation(fields: [idUser], references: [id])
+  icon         Icon?         @relation(fields: [idIcon], references: [id])
+  transactions Transaction[]
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  name         String
+  idUser       String
+  idIcon       String?
+  idParent     String?
+  type         CategoryType
+  user         User          @relation(fields: [idUser], references: [id])
+  icon         Icon?         @relation(fields: [idIcon], references: [id])
+  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id])
+  children     Category[]    @relation("CategoryToCategory")
+  transactions Transaction[]
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  idUser     String
+  idWallet   String
+  idCategory String
+  idIcon     String?
+  amount     Float
+  note       String?
+  date       DateTime @default(now())
+  user       User     @relation(fields: [idUser], references: [id])
+  wallet     Wallet   @relation(fields: [idWallet], references: [id])
+  category   Category @relation(fields: [idCategory], references: [id])
+  icon       Icon?    @relation(fields: [idIcon], references: [id])
+}
+
+enum CategoryType {
+  Income
+  Expense
+}

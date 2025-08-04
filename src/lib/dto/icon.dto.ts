@@ -1,11 +1,11 @@
+import { Icon } from "@/generated/prisma";
 import { convertIdFlatIcon } from "@/lib/helpers/func.helper";
-import { IconClass } from "@/lib/model";
-import { Icon } from "@/lib/types";
+import { IIcon } from "@/lib/types";
 
 export const DTOIcon = {
-  fromIcon: (icon: IconClass): Icon => {
+  fromIcon: (icon: Icon): IIcon => {
     return {
-      id: (icon as any)._id.toString(),
+      id: icon.id,
       code: icon.code,
       url: convertIdFlatIcon(icon.code),
     };
