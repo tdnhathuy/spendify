@@ -7,9 +7,18 @@ type Props = {
   className?: string;
 };
 export const LabelBlock = (props: Props) => {
+  console.log("props", props);
   return (
-    <div className={cn("flex flex-col gap-1", props.className)}>
-      <span className={cn("text-sm text-gray-500", props.labelClassName)}>
+    <div
+      {...props}
+      className={cn("flex flex-col gap-1 w-full ", props.className)}
+    >
+      <span
+        className={cn(
+          "text-sm text-gray-500 w-full text-left ",
+          props.labelClassName
+        )}
+      >
         {props.label}
       </span>
 

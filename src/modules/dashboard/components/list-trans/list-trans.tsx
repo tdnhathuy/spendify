@@ -6,6 +6,7 @@ import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { ListTransItem } from "@/modules/dashboard/components/list-trans/list-trans-item";
 import { groupBy, map } from "lodash";
 import dayjs from "dayjs";
+import { openDialog } from "@/lib/components/dialogs/dialog.store";
 
 export const ListTrans = () => {
   const { data = [] } = useQueryTrans();
@@ -21,6 +22,9 @@ export const ListTrans = () => {
         <h1 className="font-semibold text-xl">List Transaction</h1>
         <WiseButton
           onClick={() => {
+            openDialog("trans", null);
+            console.log("1", 1);
+            return;
             create({
               amount: "1000",
               date: new Date(),
@@ -31,7 +35,7 @@ export const ListTrans = () => {
           }}
           size={"sm"}
         >
-          Add Transaction
+          Add Transaction 2
         </WiseButton>
       </span>
 

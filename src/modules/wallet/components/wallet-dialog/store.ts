@@ -1,12 +1,11 @@
-import { Wallet } from "@/lib/types";
+import { DialogValues, Wallet } from "@/lib/types";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-interface Values {
-  open: boolean;
+interface Values extends DialogValues {
   wallet: Wallet | null;
 }
-
+  
 interface Actions {
   setOpen: (open: boolean, wallet?: Wallet) => void;
 }

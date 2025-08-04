@@ -1,4 +1,12 @@
-import { CategoryType, WalletType } from "@/lib/model";
+import type { CategoryType, WalletType } from "@/lib/model";
+
+export interface DialogValues {
+  open: boolean;
+}
+
+export interface DialogActions {    
+  setOpen: (open: boolean) => void;
+}
 
 export interface Response<T> {
   data: T;

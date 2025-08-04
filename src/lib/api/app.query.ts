@@ -1,6 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { QueryKeys } from "@/lib/configs";
 import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
-import { useQuery } from "@tanstack/react-query";
 
 export const useQueryTrans = () => {
   return useQuery({

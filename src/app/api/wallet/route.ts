@@ -1,10 +1,10 @@
+import { Types } from "mongoose";
+import { type NextRequest, NextResponse } from "next/server";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
 import { IconModel, WalletModel } from "@/lib/model";
-import { createApiHandler } from "@/lib/server";
+import { createApiHandler, responseSuccessV2 } from "@/lib/server";
 import { responseSuccess } from "@/lib/server/response.server";
-import { PayloadCreateWallet } from "@/lib/services";
-import { Types } from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import type { PayloadCreateWallet } from "@/lib/services";
 
 export const GET = createApiHandler(async (req: NextRequest) => {
   const idUser = req.headers.get("x-user-id");
@@ -12,13 +12,13 @@ export const GET = createApiHandler(async (req: NextRequest) => {
     const wallets = await WalletModel.find({ idUser });
     const icons = await IconModel.find({ idUser });
 
-    return NextResponse.json(
-      responseSuccess(
-        wallets.map((wallet) => DTOWallet.fromClass(wallet, icons))
-      )
+    const response = wallets.map((wallet) =>
+      DTOWallet.fromClass(wallet, icons)
     );
+
+    return responseSuccessV2(response);
   }
-  return NextResponse.json(responseSuccess([]));
+  return responseSuccessV2([]);
 });
 
 export const POST = createApiHandler(async (req: NextRequest) => {

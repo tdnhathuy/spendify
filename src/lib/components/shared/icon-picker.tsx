@@ -1,5 +1,9 @@
 "use client";
 
+import { PopoverClose } from "@radix-ui/react-popover";
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -7,12 +11,8 @@ import {
 } from "@/components/ui/popover";
 import { QueryKeys } from "@/lib/configs";
 import { ServiceIcon } from "@/lib/services/icon.service";
-import { Icon } from "@/lib/types";
+import type { Icon } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { PopoverClose } from "@radix-ui/react-popover";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
 interface Props {
   icon?: Icon | null;

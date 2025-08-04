@@ -1,6 +1,6 @@
-import { createSafeModel } from "@/lib/server/helper.server";
 import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
+import { createSafeModel } from "@/lib/server/helper.server";
 
 export enum EnumCategoryType {
   Expense = "Expense",

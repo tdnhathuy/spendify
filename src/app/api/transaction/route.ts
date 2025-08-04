@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+import { NextResponse } from "next/server";
 import { DTOTrans } from "@/lib/dto/trans.dto";
 import {
   CategoryModel,
@@ -6,9 +8,7 @@ import {
   WalletModel,
 } from "@/lib/model";
 import { createApiHandler, responseSuccessV2 } from "@/lib/server";
-import { PayloadCreateTrans } from "@/lib/services";
-import { Types } from "mongoose";
-import { NextResponse } from "next/server";
+import type { PayloadCreateTrans } from "@/lib/services";
 
 export const GET = createApiHandler(async (req) => {
   const id = req.headers.get("x-user-id");

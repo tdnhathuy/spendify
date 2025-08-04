@@ -1,9 +1,9 @@
+import { Popover, PopoverClose, PopoverTrigger } from "@radix-ui/react-popover";
+import { useMutateAssignCategory } from "@/lib/api/app.mutate";
 import { useQueryCategory } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import { useMutateAssignCategory } from "@/lib/api/app.mutate";
-import { Category, Transaction } from "@/lib/types";
-import { Popover, PopoverClose, PopoverTrigger } from "@radix-ui/react-popover";
+import type { Category, Transaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -29,11 +29,14 @@ export const AssignCategory = (props: Props) => {
     const { idTransaction } = props;
     const idCategory = cate.id;
     return (
-      <PopoverClose asChild>
-        <span
-          className="flex gap-2 items-center text-xs font-medium cursor-pointer"
-          onClick={() => assignCategory({ idTransaction, idCategory })}
-        >
+      <PopoverClose
+        asChild
+        onClick={(e) => {
+          e.stopPropagation();
+          assignCategory({ idTransaction, idCategory });
+        }}
+      >
+        <span className="flex gap-2 items-center text-xs font-medium cursor-pointer">
           <IconPicker size="sm" disabled icon={cate.icon} />
           <span>{cate.name}</span>
         </span>
@@ -61,9 +64,15 @@ export const AssignCategory = (props: Props) => {
 
   return (
     <Popover modal>
-      <PopoverTrigger className={baseStyleTW}>
-        <IconPicker icon={props.category?.icon} size="xs" disabled />
-        <span>{title}</span>
+      <PopoverTrigger
+        asChild
+        className={baseStyleTW}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div>
+          <IconPicker icon={props.category?.icon} size="xs" disabled />
+          <span>{title}</span>
+        </div>
       </PopoverTrigger>
 
       <WisePopoverContent className="grid h-72 grid-cols-2 gap-4 w-96 ">

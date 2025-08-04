@@ -1,3 +1,4 @@
+import { openDialog } from "@/lib/components/dialogs/dialog.store";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { formatMoney } from "@/lib/helpers/func.helper";
 import { Transaction } from "@/lib/types";
@@ -15,7 +16,10 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
   const isIncome = item.categoryParent?.type === "Income";
 
   return (
-    <div className="flex gap-2 w-lg px-4 hover:bg-gray-100 py-2 rounded-sm ">
+    <div
+      className="flex gap-2 w-lg px-4 hover:bg-gray-100 py-2 rounded-sm "
+      onClick={() => openDialog("trans", item)}
+    >
       <span className="bg-gray-100 p-2 h-fit w-fit flex rounded-full">
         <IconPicker icon={item.categoryParent?.icon} disabled size="md" />
       </span>

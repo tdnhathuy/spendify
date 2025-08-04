@@ -1,11 +1,11 @@
+import { PopoverClose } from "@radix-ui/react-popover";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { useMutateAssignWallet } from "@/lib/api/app.mutate";
 import { useQueryWallet } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import { Wallet } from "@/lib/types";
+import type { Wallet } from "@/lib/types";
 import { baseStyleTW } from "@/modules/dashboard/components/list-trans/assign-category";
-import { PopoverClose } from "@radix-ui/react-popover";
 
 interface Props {
   wallet?: Wallet | null;
@@ -25,9 +25,15 @@ export const AssignWallet = (props: Props) => {
   };
   return (
     <Popover modal>
-      <PopoverTrigger className={baseStyleTW}>
-        <IconPicker icon={wallet?.icon} size="xs" disabled />
-        <span>{title}</span>
+      <PopoverTrigger
+        asChild
+        className={baseStyleTW}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div>
+          <IconPicker icon={wallet?.icon} size="xs" disabled />
+          <span>{title}</span>
+        </div>
       </PopoverTrigger>
 
       <WisePopoverContent className="flex flex-col">
@@ -36,8 +42,11 @@ export const AssignWallet = (props: Props) => {
             <PopoverClose
               key={s.id}
               asChild
-              className=" flex"
-              onClick={() => onSelect(s.id)}
+              className="flex"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(s.id);
+              }}
             >
               <span>{s.name}</span>
             </PopoverClose>
