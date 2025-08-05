@@ -1,18 +1,24 @@
+import { Icon, Wallet } from "@/generated/prisma";
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { IconClass, WalletClass } from "@/lib/model";
-import { Wallet } from "@/lib/types";
+import { IWallet } from "@/lib/types";
+
+const fromObject = (wallet: Wallet, icons: Icon[]): IWallet => {
+  const icon = icons.find((x) => x.id === wallet.idIcon);
+
+  return {
+    id: wallet.id,
+    icon: icon ? DTOIcon.fromIcon(icon) : null,
+    name: wallet.name,
+    initBalance: wallet.balance,
+    type: wallet.type,
+  };
+};
+
+const fromObjects = (wallets: Wallet[], icons: Icon[]): IWallet[] => {
+  return wallets.map((wallet) => fromObject(wallet, icons));
+};
 
 export const DTOWallet = {
-  fromClass: (wallet: WalletClass, icons: IconClass[] = []): Wallet => {
-    const icon = icons.find(
-      (x) => x._id?.toString() === wallet.idIcon.toString()
-    );
-    return {
-      id: wallet._id.toString(),
-      initBalance: wallet.initBalance,
-      name: wallet.name,
-      icon: icon ? DTOIcon.fromIcon(icon) : null,
-      type: wallet.type,
-    };
-  },
+  fromObject,
+  fromObjects,
 };

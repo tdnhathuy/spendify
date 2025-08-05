@@ -1,12 +1,12 @@
-import { Category, Transaction, Wallet } from "@/lib/types";
+import { ICategory, ITransaction, IWallet } from "@/lib/types";
 import { create } from "zustand";
 
 // 1. Định nghĩa Discriminated Union
 export type DialogType =
   | { type: null; data: null }
-  | { type: "trans"; data: Transaction }
-  | { type: "wallet"; data: Wallet }
-  | { type: "category"; data: Category };
+  | { type: "trans"; data: ITransaction }
+  | { type: "wallet"; data: IWallet }
+  | { type: "category"; data: ICategory };
 
 export type DialogTypeKey = DialogType["type"];
 

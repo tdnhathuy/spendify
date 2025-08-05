@@ -1,10 +1,10 @@
 import { QueryKeys, queryClient } from "@/lib/configs";
-import type { Wallet } from "@/lib/types";
+import type { IWallet } from "@/lib/types";
 
 const { getWallet } = QueryKeys;
 
 export const Cache = {
-  getWallet: (): Wallet[] => {
-    return queryClient.getQueryData<Wallet[]>([getWallet]) || [];
+  getWallet: (): IWallet[] => {
+    return queryClient.getQueryData<IWallet[]>([getWallet]) || [];
   },
 };

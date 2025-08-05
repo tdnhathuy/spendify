@@ -1,11 +1,11 @@
 import { client } from "@/lib/configs";
-import { Response, Transaction } from "@/lib/types";
+import { Response, ITransaction } from "@/lib/types";
 
 export const ServiceTrans = {
   get: () =>
     client
       .get("transaction")
-      .json<Response<Transaction[]>>()
+      .json<Response<ITransaction[]>>()
       .then((s) => s.data)
       .catch(() => []),
 
@@ -14,13 +14,13 @@ export const ServiceTrans = {
   assignCategory: (json: PayloadAssignCategory) =>
     client
       .post("transaction/assign-category", { json })
-      .json<Response<Transaction>>()
+      .json<Response<ITransaction>>()
       .then((s) => s.data),
 
   assignWallet: (json: PayloadAssignWallet) =>
     client
       .post("transaction/assign-wallet", { json })
-      .json<Response<Transaction>>()
+      .json<Response<ITransaction>>()
       .then((s) => s.data),
 };
 

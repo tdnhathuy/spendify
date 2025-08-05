@@ -1,12 +1,12 @@
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import { Wallet } from "@/lib/types";
+import { IWallet } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { WrapperWallet } from "@/modules/wallet/components";
 import { useStoreDialogWallet } from "@/modules/wallet/components/wallet-dialog/store";
 import { ArrowRightLeft, SquarePen } from "lucide-react";
 
 interface Props {
-  wallet: Wallet;
+  wallet: IWallet;
 }
 
 const btnTW = cn(

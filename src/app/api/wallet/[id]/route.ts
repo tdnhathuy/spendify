@@ -1,12 +1,15 @@
-import { WalletModel } from "@/lib/model";
-import { createApiHandler } from "@/lib/server";
-import { responseSuccess } from "@/lib/server/response.server";
+import { createApiHandler, responseSuccessV2 } from "@/lib/server";
+import { prisma } from "@/lib/server/prisma.server";
 import { PayloadCreateWallet } from "@/lib/services";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const PUT = createApiHandler(async (req: NextRequest) => {
   const id = req.nextUrl.pathname.split("/").pop();
+
   const payload: PayloadCreateWallet = await req.json();
-  await WalletModel.findByIdAndUpdate(id, payload);
-  return NextResponse.json(responseSuccess([]));
+  await prisma.wallet.update({
+    where: { id: id! },
+    data: payload,
+  });
+  return responseSuccessV2([]);
 });

@@ -32,6 +32,7 @@ model Wallet {
   id           String        @id @default(uuid())
   name         String
   balance      Float         @default(0)
+  type         WalletType
   idUser       String
   idIcon       String?
   user         User          @relation(fields: [idUser], references: [id])
@@ -54,21 +55,28 @@ model Category {
 }
 
 model Transaction {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   idUser     String
-  idWallet   String
-  idCategory String
+  idWallet   String?
+  idCategory String?
   idIcon     String?
   amount     Float
   note       String?
-  date       DateTime @default(now())
-  user       User     @relation(fields: [idUser], references: [id])
-  wallet     Wallet   @relation(fields: [idWallet], references: [id])
-  category   Category @relation(fields: [idCategory], references: [id])
-  icon       Icon?    @relation(fields: [idIcon], references: [id])
+  date       DateTime  @default(now())
+  user       User      @relation(fields: [idUser], references: [id])
+  wallet     Wallet?   @relation(fields: [idWallet], references: [id])
+  category   Category? @relation(fields: [idCategory], references: [id])
+  icon       Icon?     @relation(fields: [idIcon], references: [id])
 }
 
 enum CategoryType {
   Income
   Expense
+}
+
+enum WalletType {
+  Cash
+  Debit
+  Credit
+  Crypto
 }

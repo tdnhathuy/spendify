@@ -4,11 +4,11 @@ import { useMutateAssignWallet } from "@/lib/api/app.mutate";
 import { useQueryWallet } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import type { Wallet } from "@/lib/types";
+import type { IWallet } from "@/lib/types";
 import { baseStyleTW } from "@/modules/dashboard/components/list-trans/assign-category";
 
 interface Props {
-  wallet?: Wallet | null;
+  wallet?: IWallet | null;
   idTransaction: string;
 }
 

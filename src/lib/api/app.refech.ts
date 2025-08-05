@@ -1,5 +1,5 @@
 import { queryClient, QueryKeys } from "@/lib/configs";
-import { Transaction } from "@/lib/types";
+import { ITransaction } from "@/lib/types";
 
 const { getWallet, getCategory, getTrans } = QueryKeys;
 export const Refetch = {
@@ -9,8 +9,8 @@ export const Refetch = {
 };
 
 export const updateQueryData = {
-  trans: (newTrans: Transaction) => {
-    queryClient.setQueryData([QueryKeys.getTrans], (old: Transaction[]) => {
+  trans: (newTrans: ITransaction) => {
+    queryClient.setQueryData([QueryKeys.getTrans], (old: ITransaction[]) => {
       return old.map((item) => {
         if (item.id === newTrans.id) {
           return newTrans;

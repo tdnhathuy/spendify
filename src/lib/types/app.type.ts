@@ -14,7 +14,7 @@ export interface Response<T> {
   status: number;
 }
 
-export type Wallet = {
+export type IWallet = {
   id: string;
   name: string;
   initBalance: number;
@@ -35,26 +35,26 @@ export interface BaseCategory {
   icon: IIcon | null;
 }
 
-export interface Category extends BaseCategory {
-  children: BaseCategory[] | null;
+export interface ICategory extends BaseCategory {
+  children?: BaseCategory[];
 }
 
 export interface UserProfile {
   id: string;
   name: string;
   email: string;
-  wallets: Wallet[];
+  wallets: IWallet[];
   icons: IIcon[];
-  categories: Category[];
+  categories: ICategory[];
 }
 
-export interface Transaction {
+export interface ITransaction {
   id: string;
   amount: number;
   category: BaseCategory | null;
   categoryParent: BaseCategory | null;
 
-  wallet: Wallet | null;
+  wallet: IWallet | null;
   date: Date;
   description: string | null;
 }

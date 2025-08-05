@@ -10,12 +10,10 @@ import { openDialog } from "@/lib/components/dialogs/dialog.store";
 
 export const ListTrans = () => {
   const { data = [] } = useQueryTrans();
-  console.log("data", data);
   const grouped = groupBy(data, (item) =>
     dayjs(item.date).format("DD/MM/YYYY")
   );
 
-  const { mutateAsync: create } = useMutateCreateTrans();
   return (
     <div className="flex gap-2 flex-col   w-full">
       <span className="flex justify-between w-full items-center">
@@ -23,15 +21,6 @@ export const ListTrans = () => {
         <WiseButton
           onClick={() => {
             openDialog("trans", null);
-            console.log("1", 1);
-            return;
-            create({
-              amount: "1000",
-              date: new Date(),
-              desc: "test",
-              idWallet: null,
-              idCategory: null,
-            });
           }}
           size={"sm"}
         >

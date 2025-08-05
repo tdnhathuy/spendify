@@ -8,7 +8,7 @@ import type { TypeSchemaTransaction } from "@/lib/components/dialogs/transaction
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { LabelBlock } from "@/lib/components/shared/label-block";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import type { Wallet } from "@/lib/types";
+import type { IWallet } from "@/lib/types";
 
 export const InputWallet = (
   props: ControllerRenderProps<TypeSchemaTransaction, "wallet">
@@ -16,7 +16,7 @@ export const InputWallet = (
   const { value, onChange } = props;
   const { data = [] } = useQueryWallet();
 
-  const onSelect = (wallet: Wallet) => {
+  const onSelect = (wallet: IWallet) => {
     onChange({ id: wallet.id, label: wallet.name });
   };
 

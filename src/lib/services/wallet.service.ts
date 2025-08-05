@@ -1,18 +1,18 @@
 import { client } from "@/lib/configs";
 import { WalletType } from "@/lib/model";
-import { Response, Wallet } from "@/lib/types";
+import { Response, IWallet } from "@/lib/types";
 
 export const ServiceWallet = {
   get: () =>
     client
       .get("wallet")
-      .json<Response<Wallet[]>>()
+      .json<Response<IWallet[]>>()
       .then((s) => s.data),
 
   create: (json: PayloadCreateWallet) =>
-    client.post("wallet", { json }).json<Response<Wallet>>(),
+    client.post("wallet", { json }).json<Response<IWallet>>(),
   update: ({ id, json }: { id: string; json: PayloadCreateWallet }) =>
-    client.put(`wallet/${id}`, { json }).json<Response<Wallet>>(),
+    client.put(`wallet/${id}`, { json }).json<Response<IWallet>>(),
 };
 
 export interface PayloadCreateWallet {

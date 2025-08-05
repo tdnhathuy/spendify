@@ -1,13 +1,13 @@
-import { DialogValues, Wallet } from "@/lib/types";
+import { DialogValues, IWallet } from "@/lib/types";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 interface Values extends DialogValues {
-  wallet: Wallet | null;
+  wallet: IWallet | null;
 }
   
 interface Actions {
-  setOpen: (open: boolean, wallet?: Wallet) => void;
+  setOpen: (open: boolean, wallet?: IWallet) => void;
 }
 
 type State = { values: Values; actions: Actions };

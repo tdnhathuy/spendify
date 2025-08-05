@@ -1,17 +1,12 @@
+import { Category, Icon } from "@/generated/prisma";
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { CategoryClass, IconClass } from "@/lib/model";
-import { Category } from "@/lib/types";
+import { ICategory } from "@/lib/types";
 
-const fromClass = (
-  category: CategoryClass,
-  icons: IconClass[] = []
-): Category => {
-  const icon = icons.find(
-    (x) => x._id?.toString() === category.idIcon.toString()
-  );
+const fromClass = (category: Category, icons: Icon[] = []): ICategory => {
+  const icon = icons.find((x) => x.id === category.idIcon);
 
   return {
-    id: (category as any)._id.toString(),
+    id: category.id,
     name: category.name,
     type: category.type,
     icon: icon ? DTOIcon.fromIcon(icon) : null,
@@ -19,32 +14,28 @@ const fromClass = (
   };
 };
 
-const fromClasses = (
-  categories: CategoryClass[],
-  icons: IconClass[] = []
-): Category[] => {
-  const listParent = categories.filter((x) => x.idParent === null);
-  const listChildren = categories.filter((x) => x.idParent !== null);
+const fromObjects = (categories: Category[], icons: Icon[]) => {
+  const allParents = categories.filter((x) => x.idParent === null);
+  const allChildren = categories.filter((x) => x.idParent !== null);
 
-  const list = listParent.map((x) => fromClass(x, icons));
-
-  listChildren.forEach((child) => {
-    const idx = list.findIndex(
-      (x) => x.id!.toString() === child.idParent?.toString()
-    );
-
-    if (idx !== -1) {
-      const cate = fromClass(child, icons);
-      const { children, ...rest } = cate;
-      console.log("children", children);
-      list[idx].children?.push(rest);
-    }
+  const result: ICategory[] = allParents.map((x) => {
+    return { ...fromClass(x, icons) };
   });
 
-  return list;
+  result.forEach((parent) => {
+    const listChild = allChildren
+      .filter((x) => x.idParent === parent.id)
+      .map((x) => fromClass(x, icons));
+
+    for (const child of listChild) delete child.children;
+
+    parent.children = listChild;
+  });
+
+  return result;
 };
 
 export const DTOCategory = {
   fromClass,
-  fromClasses,
+  fromObjects,
 };

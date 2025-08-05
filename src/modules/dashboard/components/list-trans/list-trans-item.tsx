@@ -1,13 +1,13 @@
 import { openDialog } from "@/lib/components/dialogs/dialog.store";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { formatMoney } from "@/lib/helpers/func.helper";
-import { Transaction } from "@/lib/types";
+import { ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { AssignCategory } from "@/modules/dashboard/components/list-trans/assign-category";
 import { AssignWallet } from "@/modules/dashboard/components/list-trans/assign-wallet";
 
 interface ListTransItemProps {
-  item: Transaction;
+  item: ITransaction;
 }
 
 export const ListTransItem = ({ item }: ListTransItemProps) => {

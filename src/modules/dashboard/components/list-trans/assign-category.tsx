@@ -3,12 +3,12 @@ import { useMutateAssignCategory } from "@/lib/api/app.mutate";
 import { useQueryCategory } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import type { Category, Transaction } from "@/lib/types";
+import type { ICategory, ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type Props = {
   idTransaction: string;
-  category: Transaction["category"];
+  category: ITransaction["category"];
 };
 
 export const baseStyleTW = cn(
@@ -25,7 +25,7 @@ export const AssignCategory = (props: Props) => {
   const listIncome = data?.filter((x) => x.type === "Income");
   const listExpense = data?.filter((x) => x.type === "Expense");
 
-  const renderItem = (cate: Category) => {
+  const renderItem = (cate: ICategory) => {
     const { idTransaction } = props;
     const idCategory = cate.id;
     return (
@@ -44,7 +44,7 @@ export const AssignCategory = (props: Props) => {
     );
   };
 
-  const renderList = (categories: Category[]) => {
+  const renderList = (categories: ICategory[]) => {
     return (
       <div className="flex cursor-pointer flex-col h-full overflow-y-auto gap-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 divide-y ">
         {categories.map((cate) => {
@@ -53,7 +53,7 @@ export const AssignCategory = (props: Props) => {
               {renderItem(cate)}
 
               <span className=" w-[90%] self-end">
-                {cate.children && renderList(cate.children as Category[])}
+                {cate.children && renderList(cate.children as ICategory[])}
               </span>
             </span>
           );
