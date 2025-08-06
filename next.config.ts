@@ -7,10 +7,6 @@ const nextConfig: NextConfig = {
       new URL("https://cdn-icons-png.flaticon.com/**"),
     ],
   },
-  experimental: {
-    // esmExternals: "loose",
-  },
-  serverExternalPackages: ["mongoose"],
 
   async headers() {
     return [
