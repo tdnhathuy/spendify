@@ -69,15 +69,20 @@ export const IconPicker = ({
   );
 
   return (
-    <Popover>
-      <PopoverTrigger disabled={disabled}>{renderIcon(icon)}</PopoverTrigger>
+    <Popover modal>
+      <PopoverTrigger tabIndex={-1} disabled={disabled}>
+        {renderIcon(icon)}
+      </PopoverTrigger>
 
-      <PopoverContent className="p-2">
+      <PopoverContent className="p-2 pr-1">
         <div
           className={cn(
-            "grid grid-cols-5 overflow-y-scroll gap-6 h-56 pr-4",
+            "grid grid-cols-5 overflow-y-auto gap-4 h-56 overscroll-contain pr-2",
             "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
           )}
+          style={{
+            scrollbarGutter: "stable"
+          }}
         >
           {icons.map((ic: IIcon) => (
             <PopoverClose asChild key={ic.id}>

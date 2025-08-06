@@ -15,7 +15,6 @@ export const GET = createApiHandler(async (req: NextRequest) => {
   });
 
   const result = wallets.map(DTOWallet.fromRawWallet);
-  console.log("result", result);
 
   console.timeEnd("GET WALLET");
   return responseSuccessV2(result);
@@ -27,6 +26,7 @@ export const POST = createApiHandler(async (req: NextRequest) => {
 
   await prisma.wallet.create({
     data: {
+      balance: Number(payload.initBalance),
       name: payload.name,
       type: payload.type,
       idUser: userId!,

@@ -22,9 +22,11 @@ export function openDialog<T extends DialogTypeKey>(
   useStoreDialog.setState({ type, data } as DialogType);
 }
 
-export function closeDialog() {
+export function closeDialog(clearData = false) {
   useStoreDialog.setState({ type: null });
-  // setTimeout(() => {
-  //   useStoreDialog.setState({ data: null });
-  // }, 300);
+  if (clearData) {
+    setTimeout(() => {
+      useStoreDialog.setState({ data: null });
+    }, 300);
+  }
 }
