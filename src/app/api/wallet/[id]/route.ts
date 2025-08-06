@@ -9,7 +9,10 @@ export const PUT = createApiHandler(async (req: NextRequest) => {
   const payload: PayloadCreateWallet = await req.json();
   await prisma.wallet.update({
     where: { id: id! },
-    data: payload,
+    data: {
+      name: payload.name,
+      idIcon: payload.idIcon,
+    },
   });
   return responseSuccessV2([]);
 });

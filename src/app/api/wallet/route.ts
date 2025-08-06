@@ -5,21 +5,20 @@ import type { PayloadCreateWallet } from "@/lib/services";
 import { type NextRequest } from "next/server";
 
 export const GET = createApiHandler(async (req: NextRequest) => {
-  const idUser = req.headers.get("x-user-id");
+  console.time("GET WALLET");
+  const idUser = req.headers.get("x-user-id")!;
 
-  if (idUser) {
-    const { icons = [], wallets = [] } = await prisma.user.findFirstOrThrow({
-      where: { id: idUser },
-      select: {
-        wallets: true,
-        icons: true,
-      },
-    });
+  const wallets = await prisma.wallet.findMany({
+    where: { idUser },
+    include: { icon: { omit: { idUser: true } } },
+    omit: { idUser: true, idIcon: true },
+  });
 
-    const response = DTOWallet.fromObjects(wallets, icons);
-    return responseSuccessV2(response);
-  }
-  return responseSuccessV2([]);
+  const result = wallets.map(DTOWallet.fromRawWallet);
+  console.log("result", result);
+
+  console.timeEnd("GET WALLET");
+  return responseSuccessV2(result);
 });
 
 export const POST = createApiHandler(async (req: NextRequest) => {
