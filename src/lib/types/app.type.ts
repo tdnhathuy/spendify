@@ -33,6 +33,7 @@ export interface BaseCategory {
   name: string;
   type: CategoryType;
   icon: IIcon | null;
+  idParent?: string | null;
 }
 
 export interface ICategory extends BaseCategory {

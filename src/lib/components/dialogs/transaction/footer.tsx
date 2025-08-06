@@ -15,11 +15,13 @@ export const FooterDialogTransaction = () => {
   const form = useFormContext<TypeSchemaTransaction>();
 
   const onClickConfirm = () => {
+    // console.log("form", form.getValues());
+    const { wallet } = form.getValues();
     create({
       amount: "10000",
       date: new Date(),
       desc: "test",
-      idWallet: null,
+      idWallet: wallet?.id || null,
       idCategory: null,
     });
   };

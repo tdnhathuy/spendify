@@ -1,5 +1,6 @@
 import { Icon, Wallet } from "@/generated/prisma";
 import { DTOIcon } from "@/lib/dto/icon.dto";
+import { RawWallet } from "@/lib/server";
 import { IWallet } from "@/lib/types";
 
 const fromObject = (wallet: Wallet, icons: Icon[]): IWallet => {
@@ -19,6 +20,16 @@ const fromObjects = (wallets: Wallet[], icons: Icon[]): IWallet[] => {
 };
 
 export const DTOWallet = {
+  fromRawWallet: (wallet: RawWallet): IWallet | null => {
+    if (!wallet) return null;
+    return {
+      id: wallet.id,
+      name: wallet.name,
+      icon: DTOIcon.fromObject(wallet.icon),
+      type: wallet.type,
+      initBalance: wallet.balance,
+    };
+  },
   fromObject,
   fromObjects,
 };

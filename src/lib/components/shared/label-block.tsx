@@ -7,7 +7,6 @@ type Props = {
   className?: string;
 };
 export const LabelBlock = (props: Props) => {
-  console.log("props", props);
   return (
     <div
       {...props}

@@ -1,14 +1,16 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
-import { CategoryModel, IconModel } from "@/lib/model";
 import { createApiHandler, responseSuccessV2 } from "@/lib/server";
+import { prisma } from "@/lib/server/prisma.server";
 import { NextRequest } from "next/server";
 
 export const GET = createApiHandler(async (req: NextRequest) => {
-  const idUser = req.headers.get("x-user-id");
-  const categories = await CategoryModel.find({ idUser });
-  const icons = await IconModel.find({ idUser });
+  const id = req.headers.get("x-user-id")!;
 
-  const arr = DTOCategory.fromClasses(categories, icons);
-  console.log('arr', arr)
+  const { icons = [], categories = [] } = await prisma.user.findFirstOrThrow({
+    where: { id },
+    select: { categories: true, icons: true },
+  });
+
+  const arr = DTOCategory.fromObjects(categories, icons);
   return responseSuccessV2(arr);
 });

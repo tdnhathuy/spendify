@@ -1,15 +1,15 @@
 import { Refetch, updateQueryData } from "@/lib/api/app.refech";
 import { MutationKeys } from "@/lib/configs";
+import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceUser } from "@/lib/services/user.service";
 import { useMutation } from "@tanstack/react-query";
-import { getSession } from "next-auth/react";
 
 export const useMutateSetup = () => {
   return useMutation({
     mutationKey: [MutationKeys.setupUser],
     mutationFn: async () => {
-      const session = await getSession();
+      const session = await getCachedSession();
       if (!session?.user) {
         throw new Error("User not found");
       }
@@ -49,9 +49,7 @@ export const useMutateAssignCategory = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignCategory],
     mutationFn: ServiceTrans.assignCategory,
-    onSuccess: (newTrans) => {
-      updateQueryData.trans(newTrans);
-    },
+    onSuccess: Refetch.trans,
   });
 };
 

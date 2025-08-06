@@ -15,7 +15,7 @@ import type { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  icon?: IIcon | null;
+  icon: IIcon | null | undefined;
   onChange?: (icon: IIcon) => void;
   disabled?: boolean;
   size?: "xs" | "sm" | "md" | "lg";
