@@ -1,4 +1,4 @@
-import type { CategoryType, WalletType } from "@/lib/model";
+import { CategoryType, WalletType } from "@/generated/prisma";
 
 export interface DialogValues {
   open: boolean;

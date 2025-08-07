@@ -10,7 +10,7 @@ export const WrapperWallet = (props: Props) => {
   return (
     <div
       className={cn(
-        "w-full h-42 flex flex-col  rounded-lg border shadow-2xs bg-white overflow-hidden",
+        "w-full  min-h-fit flex flex-col  rounded-lg border shadow-2xs bg-white overflow-hidden",
         props.className
       )}
       onClick={props.onClick}

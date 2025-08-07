@@ -10,7 +10,7 @@ const fromObject = (wallet: Wallet, icons: Icon[]): IWallet => {
     id: wallet.id,
     icon: icon ? DTOIcon.fromIcon(icon) : null,
     name: wallet.name,
-    initBalance: wallet.balance,
+    initBalance: wallet.initBalance,
     type: wallet.type,
   };
 };
@@ -27,7 +27,7 @@ export const DTOWallet = {
       name: wallet.name,
       icon: DTOIcon.fromObject(wallet.icon),
       type: wallet.type,
-      initBalance: wallet.balance,
+      initBalance: wallet.initBalance,
     };
   },
   fromObject,

@@ -1,41 +1,67 @@
+import { WalletType } from "@/generated/prisma";
+import { openDialog } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
+import { formatMoney } from "@/lib/helpers";
 import { IWallet } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { WrapperWallet } from "@/modules/wallet/components";
-import { useStoreDialogWallet } from "@/modules/wallet/components/wallet-dialog/store";
-import { ArrowRightLeft, SquarePen } from "lucide-react";
+import { BiWallet } from "react-icons/bi";
+import { BsCreditCard } from "react-icons/bs";
+import { FaBitcoin } from "react-icons/fa";
+import { FaCcVisa } from "react-icons/fa6";
 
 interface Props {
   wallet: IWallet;
 }
 
-const btnTW = cn(
-  "px-4 py-1 my-1 rounded-sm text-sm cursor-pointer flex items-center gap-2 ",
-  "hover:bg-gray-100"
-);
+export const WalletIcon: Record<
+  WalletType,
+  (props: { color: string }) => React.ReactNode
+> = {
+  Cash: (props) => <BiWallet color={props.color} size={22} />,
+  Debit: (props) => <BsCreditCard color={props.color} size={22} />,
+  Credit: (props) => <FaCcVisa color={props.color} size={22} />,
+  Crypto: (props) => <FaBitcoin color={props.color} size={22} />,
+};
 
 export const WalletItem = (props: Props) => {
-  const actions = useStoreDialogWallet((s) => s.actions);
-
   const onClick = () => {
-    actions.setOpen(true, props.wallet);
+    openDialog("wallet", props.wallet);
   };
 
   return (
-    <WrapperWallet onClick={onClick}>
-      <div className="flex flex-1 p-4 gap-2 flex-col border-b">
-        <span className="flex items-center gap-2">
-          <IconPicker size="sm" icon={props.wallet.icon} disabled />
-          <span className="text-sm font-bold">{props.wallet.name}</span>
+    <WrapperWallet
+      onClick={onClick}
+      className={cn("bg-gradient-to-t shadow-md border-none cursor-pointer", {
+        "from-green-400 to-green-500": props.wallet.type === "Cash",
+        "from-blue-400 to-blue-500": props.wallet.type === "Debit",
+        "from-violet-400 to-violet-500": props.wallet.type === "Credit",
+        "from-orange-300 to-orange-400": props.wallet.type === "Crypto",
+      })}
+    >
+      <div className="flex flex-1 p-4 gap-4 flex-col ">
+        <span className="flex gap-2">
+          <span className="flex  w-fit p-2 rounded-md bg-white/20">
+            <IconPicker size="sm" icon={props.wallet.icon} disabled />
+          </span>
+
+          <span className="flex flex-1 flex-col  justify-center text-white ">
+            <span className="text-base font-bold">{props.wallet.name}</span>
+            <span className="text-xs ">{props.wallet.type}</span>
+          </span>
+          <span>{WalletIcon[props.wallet.type]({ color: "white" })}</span>
         </span>
 
-        <span className="flex flex-col">
-          <span>Current Balance</span>
-          <span className="text-sm font-bold">{props.wallet.initBalance}</span>
+        <span className="flex flex-col text-white">
+          <span className="font-bold text-xl">
+            {formatMoney(props.wallet.initBalance)}
+          </span>
+
+          <span className="text-xs text-gray-700">Current Balance</span>
         </span>
       </div>
 
-      <div className="flex  gap-2 justify-around">
+      {/* <div className="flex  gap-2 justify-around">
         <button className={btnTW}>
           <SquarePen size={14} />
           <span>Edit</span>
@@ -45,7 +71,7 @@ export const WalletItem = (props: Props) => {
           <ArrowRightLeft size={14} />
           <span>Transfer</span>
         </button>
-      </div>
+      </div> */}
     </WrapperWallet>
   );
 };

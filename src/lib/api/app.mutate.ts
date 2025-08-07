@@ -31,7 +31,7 @@ export const useMutateCreateWallet = () => {
 
 export const useMutateUpdateWallet = () => {
   return useMutation({
-    mutationKey: [MutationKeys.createWallet],
+    mutationKey: [MutationKeys.updateWallet],
     mutationFn: ServiceWallet.update,
     onSuccess: Refetch.wallet,
   });

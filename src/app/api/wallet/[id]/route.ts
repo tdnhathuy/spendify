@@ -11,7 +11,9 @@ export const PUT = createApiHandler(async (req: NextRequest) => {
     where: { id: id! },
     data: {
       name: payload.name,
-      idIcon: payload.idIcon,
+      idIcon: payload.idIcon || null,
+      type: payload.type,
+      initBalance: payload.initBalance,
     },
   });
   return responseSuccessV2([]);

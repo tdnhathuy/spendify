@@ -1,5 +1,5 @@
+import { WalletType } from "@/generated/prisma";
 import { client } from "@/lib/configs";
-import { WalletType } from "@/lib/model";
 import { Response, IWallet } from "@/lib/types";
 
 export const ServiceWallet = {

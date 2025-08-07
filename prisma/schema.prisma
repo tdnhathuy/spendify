@@ -35,7 +35,7 @@ model Icon {
 model Wallet {
   id           String        @id @default(uuid())
   name         String
-  balance      Float         @default(0)
+  initBalance  Float         @default(0)
   type         WalletType
   idUser       String
   idIcon       String?

@@ -1,14 +1,14 @@
 import { WalletType } from "@/generated/prisma";
 import { TypeSchemaWallet } from "@/lib/components/dialogs/wallet/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { Bitcoin, CreditCard, Wallet } from "lucide-react";
+import { WalletIcon } from "@/modules/wallet/components/wallet-item";
 import { useController } from "react-hook-form";
 
 const TYPES = [
-  { id: WalletType.Cash, icon: <Wallet /> },
-  { id: WalletType.Debit, icon: <CreditCard /> },
-  { id: WalletType.Credit, icon: <CreditCard /> },
-  { id: WalletType.Crypto, icon: <Bitcoin /> },
+  { id: WalletType.Cash },
+  { id: WalletType.Debit },
+  { id: WalletType.Credit },
+  { id: WalletType.Crypto },
 ];
 
 export const InputWalletType = () => {
@@ -20,11 +20,11 @@ export const InputWalletType = () => {
         return (
           <WiseButton
             key={type.id}
-            className="flex flex-1 h-12 gap-1 items-center"
+            className="flex flex-1 h-12 gap-2 items-center "
             variant={isActive ? "default" : "outline"}
             onClick={() => field.onChange(type.id)}
           >
-            {type.icon}
+            {WalletIcon[type.id]({ color: isActive ? "white" : "black" })}
             <div>{type.id}</div>
           </WiseButton>
         );

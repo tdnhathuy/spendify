@@ -12,6 +12,7 @@ export const GET = createApiHandler(async (req: NextRequest) => {
     where: { idUser },
     include: { icon: { omit: { idUser: true } } },
     omit: { idUser: true, idIcon: true },
+    orderBy: { createdAt: "asc" },
   });
 
   const result = wallets.map(DTOWallet.fromRawWallet);
@@ -26,11 +27,11 @@ export const POST = createApiHandler(async (req: NextRequest) => {
 
   await prisma.wallet.create({
     data: {
-      balance: Number(payload.initBalance),
+      initBalance: Number(payload.initBalance),
       name: payload.name,
       type: payload.type,
       idUser: userId!,
-      idIcon: payload.idIcon!,
+      idIcon: payload.idIcon || null,
     },
   });
 

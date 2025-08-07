@@ -1,7 +1,10 @@
 import { Dialog, DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMutateCreateWallet } from "@/lib/api/app.mutate";
+import {
+  useMutateCreateWallet,
+  useMutateUpdateWallet,
+} from "@/lib/api/app.mutate";
 import {
   closeDialog,
   useStoreDialog,
@@ -15,30 +18,58 @@ import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { LabelBlock } from "@/lib/components/shared/label-block";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
+import { IWallet } from "@/lib/types";
 import { useForm } from "react-hook-form";
+import { useDidUpdate } from "rooks";
 
 export const DialogWallet = () => {
   const { type, data } = useStoreDialog();
+  console.log("data", data);
 
-  const title = data === null ? "New Wallet" : "Edit Transaction";
+  const isUpdate = data !== null;
+
+  const title = isUpdate ? "Edit Wallet" : "New Wallet";
 
   const form = useForm<TypeSchemaWallet>({
     resolver: resolverWallet,
   });
 
+  useDidUpdate(() => {
+    if (type === "wallet") {
+      const wallet = data as IWallet;
+      form.reset({
+        icon: wallet?.icon?.id ?? "",
+        name: wallet?.name ?? "",
+        initBalance: wallet?.initBalance?.toString() || "",
+        type: wallet?.type || "Cash",
+      });
+    }
+  }, [type, data]);
+
   const { mutateAsync: createWallet } = useMutateCreateWallet();
+  const { mutateAsync: updateWallet } = useMutateUpdateWallet();
 
   const onSubmit = () => {
     const { icon, name, initBalance, type } = form.getValues();
-    createWallet(
-      {
-        idIcon: icon,
-        name,
-        type: type,
-        initBalance: Number(initBalance),
-      },
-      { onSettled: () => closeDialog() }
-    );
+
+    const payload = {
+      idIcon: icon,
+      name,
+      type: type,
+      initBalance: Number(initBalance),
+    };
+
+    if (isUpdate) {
+      updateWallet(
+        {
+          id: data?.id,
+          json: payload,
+        },
+        { onSettled: () => closeDialog() }
+      );
+    } else {
+      createWallet(payload, { onSettled: () => closeDialog() });
+    }
   };
 
   return (
@@ -47,7 +78,6 @@ export const DialogWallet = () => {
         open={type === "wallet"}
         onOpenChange={() => {
           closeDialog(true);
-          //   form.reset({ icon: "", name: "", initBalance: "", type: "Cash" });
         }}
       >
         <WiseDialogContent title={title}>
@@ -55,7 +85,7 @@ export const DialogWallet = () => {
             <span className="bg-gray-100 w-fit p-2 size-14 flex rounded-2xl">
               <IconPicker
                 size="lg"
-                icon={null}
+                icon={(data as IWallet)?.icon ?? null}
                 onChange={(icon) => form.setValue("icon", icon.id)}
               />
             </span>
@@ -65,12 +95,14 @@ export const DialogWallet = () => {
                 className=""
                 autoComplete="off"
                 {...form.register("name")}
+                tabIndex={-1}
               />
             </LabelBlock>
           </div>
 
           <LabelBlock label="Init Balance" className="flex flex-1">
             <Input
+              tabIndex={-1}
               className=""
               autoComplete="off"
               {...form.register("initBalance")}

@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 export const ButtonAddWallet = () => {
   return (
     <WrapperWallet
-      className="flex justify-center items-center cursor-pointer"
+      className="flex justify-center items-center cursor-pointer border-dashed border-2"
       onClick={() => {
         openDialog("wallet", null);
       }}
