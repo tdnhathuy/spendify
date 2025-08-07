@@ -1,12 +1,11 @@
 "use client";
 
-import { useMutateCreateTrans } from "@/lib/api/app.mutate";
 import { useQueryTrans } from "@/lib/api/app.query";
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { ListTransItem } from "@/modules/dashboard/components/list-trans/list-trans-item";
-import { groupBy, map } from "lodash";
-import dayjs from "dayjs";
 import { openDialog } from "@/lib/components/dialogs/dialog.store";
+import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import { ListTransGroup } from "@/modules/dashboard/components/list-trans/list-trans-group";
+import dayjs from "dayjs";
+import { groupBy, map } from "lodash";
 
 export const ListTrans = () => {
   const { data = [] } = useQueryTrans();
@@ -29,19 +28,9 @@ export const ListTrans = () => {
       </span>
 
       <ul className="flex flex-col gap-2 mx-auto bg-white p-4 rounded-sm border">
-        {map(grouped, (item, key) => (
-          <li key={key}>
-            <span className="flex justify-between items-center bg-[#f5f5f6] w-full px-2 py-1 rounded-sm mb-2">
-              {key}
-            </span>
-
-            <ul className=" gap-1 flex flex-col">
-              {item.map((item) => (
-                <ListTransItem key={item.id} item={item} />
-              ))}
-            </ul>
-          </li>
-        ))}
+        {map(grouped, (item, key) => {
+          return <ListTransGroup key={key} data={item} date={key} />;
+        })}
       </ul>
     </div>
   );

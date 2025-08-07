@@ -1,3 +1,7 @@
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+
 export const convertIdFlatIcon = (iconId: string): string => {
   const id = String(iconId);
   let prefix;
@@ -25,4 +29,15 @@ export const formatMoney = (amount: number): string => {
     .format(amount)
     .replace("VND", "")
     .trim();
+};
+
+export const formatTitleDate = (date: string): string => {
+  if (dayjs(date, "DD/MM/YYYY").isSame(dayjs(), "day")) {
+    return "Today";
+  }
+
+  if (dayjs(date, "DD/MM/YYYY").isSame(dayjs().subtract(1, "day"), "day")) {
+    return "Yesterday";
+  }
+  return dayjs(date, "DD/MM/YYYY").format("DD/MM/YYYY");
 };
