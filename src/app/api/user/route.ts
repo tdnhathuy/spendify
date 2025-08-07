@@ -1,18 +1,20 @@
-import { DTOUser, userProfileSelect } from "@/lib/dto/user.dto";
+import { DTOUser } from "@/lib/dto/user.dto";
+import { getProfile } from "@/lib/server";
 import {
   createApiHandler,
   responseSuccessV2,
 } from "@/lib/server/helper.server";
-import { prisma } from "@/lib/server/prisma.server";
 import { NextRequest } from "next/server";
 
 export const GET = createApiHandler(async (req: NextRequest) => {
   const id = req.headers.get("x-user-id")!;
 
-  const profile = await prisma.user.findFirstOrThrow({
-    where: { id },
-    select: userProfileSelect,
-  });
+  console.time("getProfile");
+  const profile = await getProfile(id);
+  console.timeEnd("getProfile");
 
-  return responseSuccessV2(DTOUser.fromObject(profile));
+  const user = DTOUser.fromObject(profile);
+  console.log('user', user)
+
+  return responseSuccessV2(user);
 });

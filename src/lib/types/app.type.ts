@@ -18,6 +18,7 @@ export type IWallet = {
   id: string;
   name: string;
   initBalance: number;
+  currentBalance: number;
   icon: IIcon | null;
   type: WalletType;
 };

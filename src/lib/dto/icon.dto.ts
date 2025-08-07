@@ -1,22 +1,18 @@
-import { Icon } from "@/generated/prisma";
 import { convertIdFlatIcon } from "@/lib/helpers/func.helper";
+import { DBIcon } from "@/lib/server";
 import { IIcon } from "@/lib/types";
 
 export type ObjectIcon = { id: string; code: string } | null;
+
+const fromDB = (icon: DBIcon | null): IIcon | null => {
+  if (!icon) return null;
+
+  return {
+    id: icon.id,
+    code: icon.code,
+    url: convertIdFlatIcon(icon.code),
+  };
+};
 export const DTOIcon = {
-  fromObject: (obj: ObjectIcon): IIcon | null => {
-    if (!obj) return null;
-    return {
-      id: obj.id,
-      code: obj.code,
-      url: convertIdFlatIcon(obj.code),
-    };
-  },
-  fromIcon: (icon: Icon): IIcon => {
-    return {
-      id: icon.id,
-      code: icon.code,
-      url: convertIdFlatIcon(icon.code),
-    };
-  },
+  fromDB,
 };

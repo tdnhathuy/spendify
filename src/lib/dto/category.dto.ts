@@ -1,38 +1,38 @@
-import { Category, Icon } from "@/generated/prisma";
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { RawCategory } from "@/lib/server";
+import { DBCategory } from "@/lib/server";
 import { ICategory } from "@/lib/types";
 
-const fromObjects = (categories: Category[], icons: Icon[]): ICategory[] => {
-  return categories.map((x) => fromObject(x, icons));
-};
-const fromObject = (category: Category, icons: Icon[]): ICategory => {
-  const icon = icons.find((x) => x.id === category.idIcon);
-
-  const result: ICategory = {
+const fromDB = (category: DBCategory | null): ICategory | null => {
+  if (!category) return null;
+  return {
     id: category.id,
     name: category.name,
     type: category.type,
-    icon: icon ? DTOIcon.fromIcon(icon) : null,
+    icon: DTOIcon.fromDB(category.icon),
   };
+};
 
-  if (category.idParent) {
-    result.idParent = category.idParent;
-  }
+const fromDBs = (categories: DBCategory[]): ICategory[] => {
+  const listParent = categories.filter((x) => x.idParent === null);
+  const listChild = categories.filter((x) => x.idParent !== null);
 
-  return result;
+  return listParent.map((x) => ({
+    id: x.id,
+    name: x.name,
+    type: x.type,
+    icon: DTOIcon.fromDB(x.icon),
+    children: listChild
+      .filter((y) => y.idParent === x.id)
+      .map((x) => ({
+        id: x.id,
+        name: x.name,
+        type: x.type,
+        icon: DTOIcon.fromDB(x.icon),
+      })),
+  }));
 };
 
 export const DTOCategory = {
-  fromRawCategory: (category: RawCategory): ICategory | null => {
-    if (!category) return null;
-    return {
-      id: category.id,
-      name: category.name,
-      type: category.type,
-      icon: DTOIcon.fromObject(category.icon),
-    };
-  },
-  fromObject,
-  fromObjects,
+  fromDB,
+  fromDBs,
 };

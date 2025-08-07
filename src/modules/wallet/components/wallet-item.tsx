@@ -54,7 +54,7 @@ export const WalletItem = (props: Props) => {
 
         <span className="flex flex-col text-white">
           <span className="font-bold text-xl">
-            {formatMoney(props.wallet.initBalance)}
+            {formatMoney(props.wallet.currentBalance)}
           </span>
 
           <span className="text-xs text-gray-700">Current Balance</span>

@@ -1,35 +1,33 @@
-import { Icon, Wallet } from "@/generated/prisma";
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { RawWallet } from "@/lib/server";
+import { DBWallet } from "@/lib/server";
 import { IWallet } from "@/lib/types";
 
-const fromObject = (wallet: Wallet, icons: Icon[]): IWallet => {
-  const icon = icons.find((x) => x.id === wallet.idIcon);
+const fromDB = (wallet: DBWallet | null): IWallet | null => {
+  if (!wallet) return null;
+
+  const allIncome = wallet.transactions.filter(
+    (x) => x?.category?.type === "Income"
+  );
+  const allExpense = wallet.transactions.filter(
+    (x) => x?.category?.type === "Expense" || !x?.category?.type
+  );
+
+  const currentBalance =
+    wallet.initBalance +
+    allIncome.reduce((acc, curr) => acc + curr.amount, 0) -
+    allExpense.reduce((acc, curr) => acc + curr.amount, 0);
 
   return {
     id: wallet.id,
-    icon: icon ? DTOIcon.fromIcon(icon) : null,
     name: wallet.name,
-    initBalance: wallet.initBalance,
     type: wallet.type,
+
+    icon: DTOIcon.fromDB(wallet.icon),
+    initBalance: wallet.initBalance,
+    currentBalance: currentBalance,
   };
 };
 
-const fromObjects = (wallets: Wallet[], icons: Icon[]): IWallet[] => {
-  return wallets.map((wallet) => fromObject(wallet, icons));
-};
-
 export const DTOWallet = {
-  fromRawWallet: (wallet: RawWallet): IWallet | null => {
-    if (!wallet) return null;
-    return {
-      id: wallet.id,
-      name: wallet.name,
-      icon: DTOIcon.fromObject(wallet.icon),
-      type: wallet.type,
-      initBalance: wallet.initBalance,
-    };
-  },
-  fromObject,
-  fromObjects,
+  fromDB,
 };

@@ -1,3 +1,4 @@
+import { DTOTrans } from "@/lib/dto/trans.dto";
 import { createApiHandler, responseSuccessV2 } from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
 import { NextRequest } from "next/server";
@@ -10,5 +11,5 @@ export const POST = createApiHandler(async (req: NextRequest) => {
     data: { idWallet },
   });
 
-  return responseSuccessV2(transaction);
+  return responseSuccessV2(DTOTrans.fromDB(transaction as any));
 });

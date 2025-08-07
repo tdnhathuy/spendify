@@ -1,5 +1,9 @@
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import { createApiHandler, responseSuccessV2 } from "@/lib/server";
+import {
+  createApiHandler,
+  responseSuccessV2,
+  selectWallet,
+} from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
 import type { PayloadCreateWallet } from "@/lib/services";
 import { type NextRequest } from "next/server";
@@ -10,12 +14,10 @@ export const GET = createApiHandler(async (req: NextRequest) => {
 
   const wallets = await prisma.wallet.findMany({
     where: { idUser },
-    include: { icon: { omit: { idUser: true } } },
-    omit: { idUser: true, idIcon: true },
-    orderBy: { createdAt: "asc" },
+    select: selectWallet,
   });
 
-  const result = wallets.map(DTOWallet.fromRawWallet);
+  const result = wallets.map(DTOWallet.fromDB);
 
   console.timeEnd("GET WALLET");
   return responseSuccessV2(result);

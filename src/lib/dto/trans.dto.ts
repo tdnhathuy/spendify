@@ -1,29 +1,30 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import { RawTransaction } from "@/lib/server";
+import { DBTransaction } from "@/lib/server";
 import { ITransaction } from "@/lib/types";
 
-const fromObject = (transaction: RawTransaction): ITransaction => {
-  const { wallet } = transaction;
-
-  const category = DTOCategory.fromRawCategory(transaction.category);
+const fromDB = (transaction: DBTransaction): ITransaction => {
+  const category = DTOCategory.fromDB(transaction.category);
   const categoryParent = transaction.category?.parent
-    ? DTOCategory.fromRawCategory(transaction.category?.parent as any)
+    ? DTOCategory.fromDB(transaction.category?.parent as any)
     : category;
+
+  const wallet = DTOWallet.fromDB(transaction.wallet);
 
   const result: ITransaction = {
     id: transaction.id,
     amount: transaction.amount,
     date: transaction.date,
     description: transaction.note,
+
     category: category,
     categoryParent: categoryParent,
-    wallet: DTOWallet.fromRawWallet(wallet),
+    wallet: wallet,
   };
 
   return result;
 };
 
 export const DTOTrans = {
-  fromObject,
+  fromDB,
 };
