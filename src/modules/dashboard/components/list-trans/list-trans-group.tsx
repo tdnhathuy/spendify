@@ -8,6 +8,8 @@ interface Props {
 }
 
 export const ListTransGroup = ({ data = [], date }: Props) => {
+  console.log('data', data)
+  
   const fnCal = (acc: number, item: ITransaction) => acc + item.amount;
 
   const allIncome = data

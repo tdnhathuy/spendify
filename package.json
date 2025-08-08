@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@hookform/resolvers": "^5.1.1",
     "@prisma/client": "6.13.0",
     "@radix-ui/react-dialog": "^1.1.14",
@@ -31,6 +32,8 @@
     "lucide-react": "^0.525.0",
     "next": "15.4.1",
     "next-auth": "5.0.0-beta.29",
+    "prisma-extension-pagination": "^0.7.5",
+    "prisma-generator-fake-data": "^0.15.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.61.0",

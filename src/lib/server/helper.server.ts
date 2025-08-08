@@ -32,10 +32,21 @@ export function createApiHandler<T extends (req: NextRequest) => Promise<any>>(
   }) as T;
 }
 
-export const responseSuccessV2 = (data: any) => {
-  return NextResponse.json({
+export const responseSuccessV2 = (data: any, meta?: any) => {
+  const response: any = {
     status: 200,
     message: "success",
     data,
-  });
+  };
+
+  if (meta) response.meta = meta;
+  return NextResponse.json(response);
+};
+
+export const getParamsPaging = (req: NextRequest) => {
+  const url = new URL(req.url);
+  const page = url.searchParams.get("page") ?? 1;
+  const limit = url.searchParams.get("limit") ?? 5;
+
+  return { page: Number(page), limit: Number(limit) };
 };

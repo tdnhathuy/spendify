@@ -1,5 +1,26 @@
 import { CategoryType, WalletType } from "@/generated/prisma";
 
+export interface ParamsPagination {
+  page?: number;
+  limit?: number;
+}
+
+export interface MetaPaging {
+  isFirstPage: boolean;
+  isLastPage: boolean;
+  previousPage: number | null;
+  currentPage: number;
+  nextPage: number;
+  pageCount: number;
+  totalCount: number;
+}
+export interface ResponsePagination<T> {
+  data: T;
+  message: string;
+  status: number;
+  meta: MetaPaging;
+}
+
 export interface DialogValues {
   open: boolean;
 }

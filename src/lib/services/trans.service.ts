@@ -1,13 +1,16 @@
 import { client } from "@/lib/configs";
-import { Response, ITransaction } from "@/lib/types";
+import {
+  ITransaction,
+  ParamsPagination,
+  Response,
+  ResponsePagination,
+} from "@/lib/types";
 
 export const ServiceTrans = {
-  get: () =>
+  get: (params: ParamsPagination) =>
     client
-      .get("transaction")
-      .json<Response<ITransaction[]>>()
-      .then((s) => s.data)
-      .catch(() => []),
+      .get("transaction", { searchParams: { ...params } })
+      .json<ResponsePagination<ITransaction[]>>(),
 
   create: (json: PayloadCreateTrans) => client.post("transaction", { json }),
 

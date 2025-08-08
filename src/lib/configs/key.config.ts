@@ -3,6 +3,7 @@ export const QueryKeys = {
   getIcon: "getIcon",
   getTrans: "getTrans",
   getCategory: "getCategory",
+  infiniteTrans: "infiniteTrans",
 };
 export const MutationKeys = {
   createWallet: "createWallet",
