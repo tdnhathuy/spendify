@@ -8,6 +8,6 @@ export const GET = createApiHandler(async (req: NextRequest) => {
 
   const icons = await prisma.icon.findMany({ where: { idUser } });
 
-  const arr = icons.map(DTOIcon.fromIcon);
+  const arr = icons.map(DTOIcon.fromDB);
   return responseSuccessV2(arr);
 });

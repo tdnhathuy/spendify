@@ -9,6 +9,7 @@ const client = ky.create({
           request.headers.set("Accept", "application/json");
           request.headers.set("Content-Type", "application/json");
           const session = await getCachedSession();
+          console.log('session?.user?.accessToken', session?.user?.accessToken)
           request.headers.set(
             "Authorization",
             `Bearer ${session?.user?.accessToken}`

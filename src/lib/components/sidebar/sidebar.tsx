@@ -46,6 +46,12 @@ export function AppSidebar() {
             icon={<CircleUserRound />}
             label="Profile"
           />
+
+          <SidebarButton
+            href={"/debug"}
+            icon={<CircleUserRound />}
+            label="Debug"
+          />
         </SidebarGroup>
       </SidebarContent>
 

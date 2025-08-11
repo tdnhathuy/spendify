@@ -10,7 +10,11 @@ import dayjs from "dayjs";
 import { groupBy, map } from "lodash";
 
 export const ListTrans = () => {
-  const { fetchNextPage, listData: data } = usePaging({
+  const {
+    fetchNextPage,
+    listData: data,
+    isFetching,
+  } = usePaging({
     key: QueryKeys.infiniteTrans,
     service: ServiceTrans.get,
   });
@@ -23,8 +27,12 @@ export const ListTrans = () => {
     <div className="flex gap-2 flex-col w-full">
       <span className="flex justify-between w-full items-center">
         <h1 className="font-semibold text-xl">List Transaction</h1>
-        <WiseButton onClick={() => fetchNextPage()} size={"sm"}>
-          Next Page
+        <WiseButton
+          onClick={() => fetchNextPage()}
+          size={"sm"}
+          disabled={isFetching}
+        >
+          {isFetching ? "Loading..." : "Next Page"}
         </WiseButton>
 
         <WiseButton
