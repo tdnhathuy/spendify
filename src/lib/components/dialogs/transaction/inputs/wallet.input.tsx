@@ -30,7 +30,7 @@ export const InputWallet = (
           className="flex flex-1 cursor-pointer items-center gap-2 w-full"
         >
           <LabelBlock label="Wallet">
-            <InputOption icon={iconWallet} label={value?.label || ""} />
+            <InputOption icon={iconWallet ?? null} label={value?.label || ""} />
           </LabelBlock>
         </PopoverTrigger>
 

@@ -8,11 +8,6 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
-generator generator {
-  provider = "prisma-generator-fake-data"
-  output   = "../types/fake-data.ts"
-}
-
 model User {
   id           String        @id @default(uuid())
   email        String        @unique

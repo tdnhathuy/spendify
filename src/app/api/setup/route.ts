@@ -14,7 +14,7 @@ const clearData = async (id: string) => {
   await prisma.user.delete({ where: { id } });
 };
 
-const secret = process.env.AUTH_SECRET;
+const secret = process.env.AUTH_SECRET!;
 export const POST = async (req: NextRequest) => {
   const token = await getToken({ req, secret });
 
@@ -40,7 +40,7 @@ export const POST = async (req: NextRequest) => {
     type: "Income" as CategoryType,
   }));
 
-  await prisma.category.createMany({ data: defaultIncome });
+  await prisma.category.createMany({ data: defaultIncome as any });
 
   for (const parent of defaultExpenseCategory) {
     const result = await prisma.category.create({
@@ -49,7 +49,7 @@ export const POST = async (req: NextRequest) => {
         idUser: user.id,
         idIcon: userIcons.find((x) => x.code === parent.idIcon)?.id,
         type: "Expense" as CategoryType,
-      },
+      } as any,
     });
 
     for (const child of parent.children) {
@@ -60,7 +60,7 @@ export const POST = async (req: NextRequest) => {
           idParent: result.id,
           idIcon: userIcons.find((x) => x.code === child.idIcon)?.id,
           type: "Expense" as CategoryType,
-        },
+        } as any,
       });
     }
   }

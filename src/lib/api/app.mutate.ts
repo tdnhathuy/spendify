@@ -1,4 +1,4 @@
-import { Refetch, updateQueryData } from "@/lib/api/app.refech";
+import { Refetch } from "@/lib/api/app.refech";
 import { MutationKeys } from "@/lib/configs";
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";

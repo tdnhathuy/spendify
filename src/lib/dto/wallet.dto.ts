@@ -25,6 +25,7 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
     icon: DTOIcon.fromDB(wallet.icon),
     initBalance: wallet.initBalance,
     currentBalance: currentBalance,
+    includeInReport: wallet.includeInReport,
   };
 };
 

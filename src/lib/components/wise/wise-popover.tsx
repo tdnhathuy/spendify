@@ -10,8 +10,8 @@ export const WisePopoverContent = (props: Props) => {
   return (
     <PopoverContent
       className={cn("px-2 py-1 rounded-sm", props.className)}
-      align={props.align}
-      side={props.side}
+      align={props.align ?? "center"}
+      side={props.side ?? "bottom"}
     >
       {props.children}
     </PopoverContent>

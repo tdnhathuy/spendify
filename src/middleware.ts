@@ -39,7 +39,7 @@ export default auth(async (request) => {
   // Các API riêng của app phải có token, nếu không 401
   const token = await getToken({
     req: request,
-    secret: process.env.AUTH_SECRET,
+    secret: process.env.AUTH_SECRET!,
   });
 
   if (!token) {

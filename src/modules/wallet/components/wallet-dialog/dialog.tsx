@@ -31,7 +31,7 @@ export const DialogWallet = () => {
       form.reset({
         name: wallet?.name || "",
         initBalance: wallet?.initBalance.toString() || "",
-        icon: wallet?.icon || undefined,
+        icon: wallet?.icon || { id: "", url: "", code: "" },
       });
     }
   }, [values.open]);

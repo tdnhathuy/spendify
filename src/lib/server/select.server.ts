@@ -30,6 +30,7 @@ export const selectWallet = {
   transactions: {
     select: { id: true, amount: true, category: { select: { type: true } } },
   },
+  includeInReport: true,
 } satisfies Prisma.WalletSelect;
 
 export const selectTrans = {
