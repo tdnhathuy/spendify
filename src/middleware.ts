@@ -46,6 +46,8 @@ export default auth(async (request) => {
     secret: process.env.AUTH_SECRET!,
   });
 
+  console.log("-------token-----------\n", token);
+
   if (!token) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
