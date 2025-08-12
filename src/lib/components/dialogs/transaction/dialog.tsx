@@ -38,18 +38,15 @@ export const DialogTrans = () => {
         category,
         wallet,
       } = data || {};
-      console.log("category?.type", category?.type);
 
       form.reset({
         amount: amount.toString(),
         desc: description || "",
         date: date,
         category: category?.id
-          ? { id: data?.category?.id, label: data?.category?.name }
-          : undefined,
-        wallet: wallet?.id
-          ? { id: wallet?.id, label: wallet?.name }
-          : undefined,
+          ? { id: category?.id, label: category?.name }
+          : null,
+        wallet: wallet?.id ? { id: wallet?.id, label: wallet?.name } : null,
         type: category?.type || "Expense",
       });
     }

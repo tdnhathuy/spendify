@@ -18,5 +18,8 @@ export const GET = createApiHandler(async (req: NextRequest) => {
 
   console.timeEnd("GET CATEGORY");
 
-  return responseSuccessV2(DTOCategory.fromDBs(categories));
+  const result = DTOCategory.fromDBs(categories);
+  console.log("result ----", result);
+
+  return responseSuccessV2(result);
 });

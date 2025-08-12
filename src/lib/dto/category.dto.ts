@@ -13,8 +13,8 @@ const fromDB = (category: DBCategory | null): ICategory | null => {
 };
 
 const fromDBs = (categories: DBCategory[]): ICategory[] => {
-  const listParent = categories.filter((x) => x.idParent === null);
-  const listChild = categories.filter((x) => x.idParent !== null);
+  const listParent = categories.filter((x) => x.parent === null);
+  const listChild = categories.filter((x) => x.parent !== null);
 
   return listParent.map((x) => ({
     id: x.id,
@@ -22,7 +22,7 @@ const fromDBs = (categories: DBCategory[]): ICategory[] => {
     type: x.type,
     icon: DTOIcon.fromDB(x.icon),
     children: listChild
-      .filter((y) => y.idParent === x.id)
+      .filter((y) => y.parent?.id === x.id)
       .map((x) => ({
         id: x.id,
         name: x.name,
