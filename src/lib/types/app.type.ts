@@ -42,6 +42,7 @@ export type IWallet = {
   currentBalance: number;
   icon: IIcon | null;
   type: WalletType;
+  includeInReport: boolean;
 };
 
 export type IIcon = {

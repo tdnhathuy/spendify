@@ -1,5 +1,8 @@
-import { CategoryType, WalletType } from "../src/generated/prisma";
-import { faker } from "@faker-js/faker";
+import { CategoryType, WalletType } from '../src/generated/prisma';
+import { faker } from '@faker-js/faker';
+import Decimal from 'decimal.js';
+
+
 
 export function fakeUser() {
   return {
@@ -35,12 +38,7 @@ export function fakeIconComplete() {
 export function fakeWallet() {
   return {
     name: faker.person.fullName(),
-    type: faker.helpers.arrayElement([
-      WalletType.Cash,
-      WalletType.Debit,
-      WalletType.Credit,
-      WalletType.Crypto,
-    ] as const),
+    type: faker.helpers.arrayElement([WalletType.Cash, WalletType.Debit, WalletType.Credit, WalletType.Crypto] as const),
     updatedAt: faker.date.anytime(),
   };
 }
@@ -49,25 +47,18 @@ export function fakeWalletComplete() {
     id: faker.string.uuid(),
     name: faker.person.fullName(),
     initBalance: 0,
-    type: faker.helpers.arrayElement([
-      WalletType.Cash,
-      WalletType.Debit,
-      WalletType.Credit,
-      WalletType.Crypto,
-    ] as const),
+    type: faker.helpers.arrayElement([WalletType.Cash, WalletType.Debit, WalletType.Credit, WalletType.Crypto] as const),
     idUser: faker.string.uuid(),
     idIcon: undefined,
     createdAt: new Date(),
     updatedAt: faker.date.anytime(),
+    includeInReport: true,
   };
 }
 export function fakeCategory() {
   return {
     name: faker.person.fullName(),
-    type: faker.helpers.arrayElement([
-      CategoryType.Income,
-      CategoryType.Expense,
-    ] as const),
+    type: faker.helpers.arrayElement([CategoryType.Income, CategoryType.Expense] as const),
     updatedAt: faker.date.anytime(),
   };
 }
@@ -78,10 +69,7 @@ export function fakeCategoryComplete() {
     idUser: faker.string.uuid(),
     idIcon: undefined,
     idParent: undefined,
-    type: faker.helpers.arrayElement([
-      CategoryType.Income,
-      CategoryType.Expense,
-    ] as const),
+    type: faker.helpers.arrayElement([CategoryType.Income, CategoryType.Expense] as const),
     createdAt: new Date(),
     updatedAt: faker.date.anytime(),
   };
