@@ -12,9 +12,13 @@ export const config = {
 
 export default auth(async (request) => {
   const url = request.nextUrl.clone();
+  console.log("url", url);
 
   // Skip NextAuth own routes completely
-  if (url.pathname.startsWith("/api/auth")) {
+  if (
+    url.pathname.startsWith("/api/auth") ||
+    url.pathname.startsWith("/api/hook")
+  ) {
     return NextResponse.next();
   }
 
