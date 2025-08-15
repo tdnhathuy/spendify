@@ -9,16 +9,16 @@ interface Params<T> {
 export const usePaging = <T>({ key, service }: Params<T>) => {
   const query = useInfiniteQuery({
     queryKey: [key],
-    initialPageParam: { page: 1, limit: 5 },
+    initialPageParam: { page: 1, limit: 10 },
     queryFn: ({ pageParam }) => service(pageParam),
     getNextPageParam: ({ meta }) => {
-      return meta.isLastPage ? undefined : { page: meta.nextPage, limit: 5 };
+      return meta.isLastPage ? undefined : { page: meta.nextPage, limit: 10 };
     },
     select: (data) => ({
       list: data.pages.flatMap((page) => page.data),
       meta: data.pages[data.pages.length - 1].meta,
     }),
-    placeholderData: { pageParams: [{ page: 1, limit: 5 }], pages: [] },
+    placeholderData: { pageParams: [{ page: 1, limit: 10 }], pages: [] },
   });
 
   const listData = (query.data?.list ?? []).flat();

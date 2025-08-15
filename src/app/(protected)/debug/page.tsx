@@ -10,13 +10,9 @@ export default function DebugPage() {
           const trans = await client.get("transaction", {
             prefixUrl: "http://localhost:3000/api/",
           });
-          console.log("trans", trans);
         } catch (error) {
           console.log("error", error);
         }
-        // await prisma.transaction.deleteMany({});
-        // console.log("e", e);
-        // console.log("1", 1);
       }}
     >
       <WiseButton type="submit">Clear all Transaction</WiseButton>

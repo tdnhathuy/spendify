@@ -38,21 +38,14 @@ export default auth(async (request) => {
     return NextResponse.next();
   }
 
-  // -------------- API ROUTES -------------
-  // Các API riêng của app phải có token, nếu không 401
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET!,
-  });
-
-  console.log("-------token-----------\n", token);
+  const token = request.auth!;
 
   if (!token) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  request.headers.set("x-user-email", String(token.email ?? ""));
-  request.headers.set("x-user-token", String(token.accessToken ?? ""));
+  request.headers.set("x-user-email", String(token.user.email ?? ""));
+  request.headers.set("x-user-token", String(token.user.accessToken ?? ""));
 
   return NextResponse.next({ request });
 });

@@ -1,14 +1,16 @@
-import { createApiHandler, prisma, responseSuccessV2 } from "@/lib/server";
+import {
+  createApi,
+  createApiHandler,
+  prisma,
+  responseSuccess,
+} from "@/lib/server";
 
 export interface DashboardInfo {
   income: number;
   expense: number;
 }
 
-export const GET = createApiHandler(async (req) => {
-  const idUser = req.headers.get("x-user-id")!;
-  console.log("idUser", idUser);
-
+export const GET = createApi(async ({ idUser }) => {
   const wallets = await prisma.wallet.findMany({
     where: {
       idUser,
@@ -22,14 +24,6 @@ export const GET = createApiHandler(async (req) => {
         },
       },
     },
-    // include: {
-    //   transactions: {
-    //     select: {
-    //       amount: true,
-    //       category: { select: { type: true } },
-    //     },
-    //   },
-    // },
   });
 
   const trans = wallets.map((x) => x.transactions).flat();
@@ -40,14 +34,13 @@ export const GET = createApiHandler(async (req) => {
   };
 
   trans.forEach((x) => {
-    if (x.category?.type === "Expense") {
-      result.expense += Math.abs(x.amount);
-    } else {
+    if (x.category?.type === "Income" && x.amount > 0) {
       result.income += Math.abs(x.amount);
+    } else {
+      result.expense += Math.abs(x.amount);
     }
   });
 
-  console.log("trans", trans);
-
-  return responseSuccessV2(result);
+  console.log("result", result);
+  return responseSuccess(result);
 });

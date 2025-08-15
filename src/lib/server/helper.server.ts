@@ -1,38 +1,51 @@
+import "server-only";
+
 import { prisma } from "@/lib/server/prisma.server";
 import { NextRequest, NextResponse } from "next/server";
 
-export function createSafeModel<T>(
-  modelName: string,
-  modelBuilder: () => T
-): T {
-  // Kiểm tra biến global có tồn tại chưa
-  const globalKey = `__typegoose_${modelName}`;
-  if ((globalThis as any)[globalKey])
-    return (globalThis as any)[globalKey] as T;
-  const model = modelBuilder();
-  if (process.env.NODE_ENV !== "production")
-    (globalThis as any)[globalKey] = model;
-  return model;
-}
+export type HandlerCtx = {
+  timing<T>(name: string, fn: () => Promise<T>): Promise<T>;
+  idUser: string;
+};
 
-export function createApiHandler<T extends (req: NextRequest) => Promise<any>>(
-  handler: T
-): T {
-  return (async (req: NextRequest) => {
-    await prisma.$connect();
+type Handler = (req: NextRequest, ctx: HandlerCtx) => Promise<NextResponse>;
 
-    const email = req.headers.get("x-user-email");
+type HandlerV2 = (payload: {
+  request: NextRequest;
+  timing<T>(name: string, fn: () => Promise<T>): Promise<T>;
+  idUser: string;
+}) => Promise<NextResponse>;
+
+export const timing = async <T>(name: string, fn: () => Promise<T>) => {
+  const label = `====${name}====`;
+  console.time(label);
+  return await fn().finally(() => {
+    console.timeEnd(label);
+  });
+};
+
+export function createApi(handler: HandlerV2) {
+  return async (request: NextRequest) => {
+    const t = timing;
+
+    let idUser: string = "";
+    const email = request.headers.get("x-user-email");
     if (email) {
-      const info = await prisma.user.findFirst({ where: { email } });
-      if (!info) throw new Error("User not found");
-      req.headers.set("x-user-id", info.id ?? "");
+      const u = await prisma.user.findUnique({ where: { email } });
+      if (!u)
+        return NextResponse.json(
+          { message: "User not found" },
+          { status: 404 }
+        );
+      idUser = u.id;
     }
 
-    return handler(req);
-  }) as T;
+    const res = await handler({ request, timing: t, idUser });
+    return res;
+  };
 }
 
-export const responseSuccessV2 = (data: any, meta?: any) => {
+export const responseSuccess = (data: any, meta?: any) => {
   const response: any = {
     status: 200,
     message: "success",

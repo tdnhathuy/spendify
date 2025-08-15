@@ -1,41 +1,39 @@
 import { DTOWallet } from "@/lib/dto/wallet.dto";
 import {
-  createApiHandler,
-  responseSuccessV2,
+  createApi,
+  responseSuccess,
   selectWallet,
+  timing,
 } from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
 import type { PayloadCreateWallet } from "@/lib/services";
 import { type NextRequest } from "next/server";
 
-export const GET = createApiHandler(async (req: NextRequest) => {
-  console.time("GET WALLET");
-  const idUser = req.headers.get("x-user-id")!;
-
-  const wallets = await prisma.wallet.findMany({
-    where: { idUser },
-    select: selectWallet,
+export const GET = createApi(async ({ idUser }) => {
+  const wallets = await timing("GET WALLET", () => {
+    return prisma.wallet.findMany({
+      where: { idUser },
+      select: selectWallet,
+    });
   });
 
   const result = wallets.map(DTOWallet.fromDB);
 
-  console.timeEnd("GET WALLET");
-  return responseSuccessV2(result);
+  return responseSuccess(result);
 });
 
-export const POST = createApiHandler(async (req: NextRequest) => {
-  const userId = req.headers.get("x-user-id");
-  const payload: PayloadCreateWallet = await req.json();
+export const POST = createApi(async ({ idUser, request }) => {
+  const payload: PayloadCreateWallet = await request.json();
 
   await prisma.wallet.create({
     data: {
+      idUser,
       initBalance: Number(payload.initBalance),
       name: payload.name,
       type: payload.type,
-      idUser: userId!,
       idIcon: payload.idIcon || null,
     },
   });
 
-  return responseSuccessV2([]);
+  return responseSuccess([]);
 });

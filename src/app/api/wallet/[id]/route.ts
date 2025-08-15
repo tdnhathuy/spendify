@@ -1,12 +1,11 @@
-import { createApiHandler, responseSuccessV2 } from "@/lib/server";
+import { createApi, responseSuccess } from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
 import { PayloadCreateWallet } from "@/lib/services";
-import { NextRequest } from "next/server";
 
-export const PUT = createApiHandler(async (req: NextRequest) => {
-  const id = req.nextUrl.pathname.split("/").pop();
+export const PUT = createApi(async ({ request }) => {
+  const id = request.nextUrl.pathname.split("/").pop();
 
-  const payload: PayloadCreateWallet = await req.json();
+  const payload: PayloadCreateWallet = await request.json();
   await prisma.wallet.update({
     where: { id: id! },
     data: {
@@ -16,5 +15,5 @@ export const PUT = createApiHandler(async (req: NextRequest) => {
       initBalance: payload.initBalance,
     },
   });
-  return responseSuccessV2([]);
+  return responseSuccess([]);
 });

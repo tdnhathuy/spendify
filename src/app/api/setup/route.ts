@@ -1,7 +1,7 @@
 import { CategoryType } from "@/generated/prisma";
 import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
 import { flatIcon } from "@/lib/configs/cdn.config";
-import { responseSuccessV2 } from "@/lib/server";
+import { responseSuccess } from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
 import { values } from "lodash";
 import { getToken } from "next-auth/jwt";
@@ -11,6 +11,7 @@ const clearData = async (id: string) => {
   await prisma.icon.deleteMany({ where: { idUser: id } });
   await prisma.category.deleteMany({ where: { idUser: id } });
   await prisma.wallet.deleteMany({ where: { idUser: id } });
+  await prisma.transaction.deleteMany({ where: { idUser: id } });
   await prisma.user.delete({ where: { id } });
 };
 
@@ -18,7 +19,7 @@ const secret = process.env.AUTH_SECRET!;
 export const POST = async (req: NextRequest) => {
   const token = await getToken({ req, secret });
 
-  if (!token) return responseSuccessV2([]);
+  if (!token) return responseSuccess([]);
   const { email, name } = token as { email: string; name: string };
 
   const info = await prisma.user.findFirst({ where: { email } });
@@ -65,5 +66,5 @@ export const POST = async (req: NextRequest) => {
     }
   }
 
-  return responseSuccessV2([]);
+  return responseSuccess([]);
 };

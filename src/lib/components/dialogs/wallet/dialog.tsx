@@ -24,7 +24,6 @@ import { useDidUpdate } from "rooks";
 
 export const DialogWallet = () => {
   const { type, data } = useStoreDialog();
-  console.log("data", data);
 
   const isUpdate = data !== null;
 

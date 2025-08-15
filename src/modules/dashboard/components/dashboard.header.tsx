@@ -21,8 +21,6 @@ export const HeaderDashboard = () => {
     },
   });
 
-  console.log("data", data);
-
   return (
     <div className="flex flex-col gap-4 w-full">
       <Popover>
