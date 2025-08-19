@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ParamsPagination, ResponsePagination } from "@/lib/types";
+import { PropsLoadMore } from "@/lib/components/shared/loader-paging";
 
 interface Params<T> {
   key: string;
@@ -23,5 +24,12 @@ export const usePaging = <T>({ key, service }: Params<T>) => {
 
   const listData = (query.data?.list ?? []).flat();
 
-  return { ...query, listData };
+  const loaderProps: PropsLoadMore = {
+    isFetching: query.isFetching,
+    isFetchingNextPage: query.isFetchingNextPage,
+    hasNextPage: query.hasNextPage ?? false,
+    fetchNextPage: query.fetchNextPage,
+  };
+
+  return { ...query, listData, loaderProps };
 };

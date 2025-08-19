@@ -1,8 +1,7 @@
 "use client";
 
 import { usePaging } from "@/hooks/use-paging";
-import { openDialog } from "@/lib/components/dialogs/dialog.store";
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import { LoaderPaging } from "@/lib/components/shared/loader-paging";
 import { QueryKeys } from "@/lib/configs";
 import { ServiceTrans } from "@/lib/services";
 import { ListTransGroup } from "@/modules/dashboard/components/list-trans/list-trans-group";
@@ -10,11 +9,7 @@ import dayjs from "dayjs";
 import { groupBy, map } from "lodash";
 
 export const ListTrans = () => {
-  const {
-    fetchNextPage,
-    listData: data,
-    isFetching,
-  } = usePaging({
+  const { listData: data, loaderProps } = usePaging({
     key: QueryKeys.infiniteTrans,
     service: ServiceTrans.get,
   });
@@ -49,6 +44,7 @@ export const ListTrans = () => {
         {map(grouped, (item, key) => {
           return <ListTransGroup key={key} data={item} date={key} />;
         })}
+        <LoaderPaging {...loaderProps} />
       </ul>
     </div>
   );
