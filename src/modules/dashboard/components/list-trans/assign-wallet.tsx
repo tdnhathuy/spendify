@@ -25,7 +25,7 @@ export const AssignWallet = (props: Props) => {
   };
   return (
     <Popover modal>
-      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+      <PopoverTrigger asChild>
         <WrapperAssignTrigger title={title}>
           <IconPicker icon={wallet?.icon} size="xs" disabled />
         </WrapperAssignTrigger>

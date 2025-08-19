@@ -19,7 +19,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
   return (
     <div
       className="flex gap-2 w-full px-0 hover:bg-gray-100 py-2 rounded-sm "
-      onClick={() => openDialog("trans", item)}
+      // onClick={() => openDialog("trans", item)}
     >
       <span className="bg-gray-100 p-2 flex rounded-full w-fit h-fit ">
         <IconPicker icon={item.categoryParent?.icon} disabled size="sm" />

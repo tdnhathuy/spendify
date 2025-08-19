@@ -3,8 +3,10 @@ import { useQueryCategory } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import type { ICategory, ITransaction } from "@/lib/types";
+import React, { forwardRef } from "react";
 import { cn } from "@/lib/utils";
-import { Popover, PopoverClose, PopoverTrigger } from "@radix-ui/react-popover";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 type Props = {
   idTransaction: string;
@@ -26,7 +28,7 @@ export const AssignCategory = (props: Props) => {
     return (
       <PopoverClose
         asChild
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent) => {
           e.stopPropagation();
           assignCategory({ idTransaction, idCategory });
         }}
@@ -59,7 +61,7 @@ export const AssignCategory = (props: Props) => {
 
   return (
     <Popover modal>
-      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+      <PopoverTrigger asChild>
         <WrapperAssignTrigger title={title}>
           <IconPicker icon={props.category?.icon} size="xs" disabled />
         </WrapperAssignTrigger>
@@ -73,16 +75,25 @@ export const AssignCategory = (props: Props) => {
   );
 };
 
-export const WrapperAssignTrigger = (props: {
-  children: React.ReactNode;
-  className?: string;
-  title?: string;
-}) => {
+// eslint-disable-next-line react/display-name
+export const WrapperAssignTrigger = forwardRef<
+  HTMLSpanElement,
+  {
+    children: React.ReactNode;
+    className?: string;
+    title?: string;
+  } & React.HTMLAttributes<HTMLSpanElement>
+>((props, ref) => {
   return (
     <span
+      {...props}
+      ref={ref}
+      role="button"
+      tabIndex={0}
       className={cn(
         "flex items-center gap-1 cursor-pointer font-semibold",
-        " gap-1",
+        "px-2 py-px rounded select-none",
+        "gap-1 hover:bg-gray-300",
         props.className
       )}
     >
@@ -90,4 +101,4 @@ export const WrapperAssignTrigger = (props: {
       <span className="line-clamp-1 truncate">{props.title}</span>
     </span>
   );
-};
+});
