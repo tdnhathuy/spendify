@@ -12,6 +12,7 @@ export const WisePopoverContent = (props: Props) => {
       className={cn("px-2 py-1 rounded-sm", props.className)}
       align={props.align ?? "center"}
       side={props.side ?? "bottom"}
+      onClick={(e) => e.stopPropagation()}
     >
       {props.children}
     </PopoverContent>

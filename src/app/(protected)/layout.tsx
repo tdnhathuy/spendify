@@ -1,4 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/lib/components/sidebar/sidebar";
 
 export default function ProtectedLayout({
@@ -8,8 +8,14 @@ export default function ProtectedLayout({
 }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main className="flex bg-[#fbfbfb] p-4 w-full flex-1">{children}</main>
+      <div className="flex min-h-svh w-full">
+        <AppSidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-[#fbfbfb] p-4 sm:p-6 px-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))] pb-[max(16px,env(safe-area-inset-bottom))]">
+            <div className="mx-auto w-full max-w-screen-md">{children}</div>
+          </main>
+        </div>
+      </div>
     </SidebarProvider>
   );
 }

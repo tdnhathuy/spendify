@@ -25,7 +25,9 @@ export const useMutateCreateWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.createWallet],
     mutationFn: ServiceWallet.create,
-    onSuccess: Refetch.wallet,
+    onSuccess: () => {
+      Refetch.wallet();
+    },
   });
 };
 
@@ -49,7 +51,10 @@ export const useMutateAssignCategory = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignCategory],
     mutationFn: ServiceTrans.assignCategory,
-    onSuccess: Refetch.trans,
+    onSuccess: async () => {
+      await Refetch.trans();
+      await Refetch.category();
+    },
   });
 };
 

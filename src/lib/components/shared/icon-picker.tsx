@@ -51,21 +51,23 @@ export const IconPicker = ({
   };
 
   const renderIcon = (icon: IIcon) => (
-    <Image
-      draggable={false}
-      key={icon.id}
-      alt={icon.code}
-      src={icon.url}
-      width={40}
-      height={40}
-      className={cn("size-8 ", {
+    <div
+      className={cn("relative w-full aspect-square", {
         "size-6": size === "sm",
         "size-8": size === "md",
         "size-10": size === "lg",
         "size-3": size === "xs",
         "cursor-pointer": !disabled,
       })}
-    />
+    >
+      <Image
+        draggable={false}
+        key={icon.id}
+        alt={icon.code}
+        src={icon.url}
+        fill
+      />
+    </div>
   );
 
   return (
@@ -81,7 +83,7 @@ export const IconPicker = ({
             "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
           )}
           style={{
-            scrollbarGutter: "stable"
+            scrollbarGutter: "stable",
           }}
         >
           {icons.map((ic: IIcon) => (

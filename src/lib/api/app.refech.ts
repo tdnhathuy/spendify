@@ -7,16 +7,3 @@ export const Refetch = {
   category: () => queryClient.refetchQueries({ queryKey: [getCategory] }),
   trans: () => queryClient.refetchQueries({ queryKey: [getTrans] }),
 };
-
-export const updateQueryData = {
-  trans: (newTrans: ITransaction) => {
-    queryClient.setQueryData([QueryKeys.getTrans], (old: ITransaction[]) => {
-      return old.map((item) => {
-        if (item.id === newTrans.id) {
-          return newTrans;
-        }
-        return item;
-      });
-    });
-  },
-};

@@ -57,10 +57,18 @@ export async function POST(req: NextRequest) {
         select: { id: true },
       });
 
+      const NAMES: Record<string, string> = {
+        "VCBDigibank@info.vietcombank.com.vn": "VCB",
+        "tpbank@tpb.com.vn": "TPB",
+        "HSBC Vietnam": "HSBC",
+      };
+
       const name = from?.value[0]?.name || from?.value[0]?.address || "";
-      const note = `Auto transaction from email ${dayjs(date).format(
-        "DD/MM/YYYY"
-      )} from ${name}`;
+
+      const finalName = NAMES[name] || name;
+      const dateStr = dayjs(date).format("DD/MM/YYYY");
+
+      const note = `Auto transaction from email ${dateStr} from ${finalName}`;
 
       await prisma.transaction.create({
         data: {

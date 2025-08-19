@@ -21,7 +21,7 @@ export const ListTransGroup = ({ data = [], date }: Props) => {
     .reduce(fnCal, 0);
 
   return (
-    <div className="w-lg">
+    <div className="w-full">
       <span className="flex items-center bg-[#f5f5f6] w-full px-4 py-1 rounded-sm mb-2 justify-between">
         <span className="font-semibold">{formatTitleDate(date)}</span>
 
