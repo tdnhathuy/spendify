@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       const finalName = NAMES[name] || name;
       const dateStr = dayjs(date).format("DD/MM/YYYY");
 
-      const note = `Auto transaction from email ${dateStr} from ${finalName}`;
+      const note = `Sync transaction ${dateStr} from ${finalName}`;
 
       await prisma.transaction.create({
         data: {
