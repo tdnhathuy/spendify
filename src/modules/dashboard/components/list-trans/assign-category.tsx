@@ -1,20 +1,15 @@
-import { Popover, PopoverClose, PopoverTrigger } from "@radix-ui/react-popover";
 import { useMutateAssignCategory } from "@/lib/api/app.mutate";
 import { useQueryCategory } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import type { ICategory, ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Popover, PopoverClose, PopoverTrigger } from "@radix-ui/react-popover";
 
 type Props = {
   idTransaction: string;
   category: ITransaction["category"];
 };
-
-export const baseStyleTW = cn(
-  "w-fit cursor-pointer flex font-semibold text-xs px-2 rounded-xs py-px items-center gap-2",
-  "hover:bg-gray-300"
-);
 
 export const AssignCategory = (props: Props) => {
   const { data = [] } = useQueryCategory();
@@ -36,9 +31,9 @@ export const AssignCategory = (props: Props) => {
           assignCategory({ idTransaction, idCategory });
         }}
       >
-        <span className="flex gap-2 items-center text-xs font-medium cursor-pointer">
+        <span className="flex gap-2 items-center text-xs font-medium cursor-pointer ">
           <IconPicker size="sm" disabled icon={cate.icon} />
-          <span>{cate.name}</span>
+          <span className="line-clamp-1 ">{cate.name}</span>
         </span>
       </PopoverClose>
     );
@@ -64,15 +59,10 @@ export const AssignCategory = (props: Props) => {
 
   return (
     <Popover modal>
-      <PopoverTrigger
-        asChild
-        className={baseStyleTW}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div>
+      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+        <WrapperAssignTrigger title={title}>
           <IconPicker icon={props.category?.icon} size="xs" disabled />
-          <span>{title}</span>
-        </div>
+        </WrapperAssignTrigger>
       </PopoverTrigger>
 
       <WisePopoverContent className="grid h-72 grid-cols-2 gap-4 w-96 ">
@@ -80,5 +70,24 @@ export const AssignCategory = (props: Props) => {
         {renderList(listIncome)}
       </WisePopoverContent>
     </Popover>
+  );
+};
+
+export const WrapperAssignTrigger = (props: {
+  children: React.ReactNode;
+  className?: string;
+  title?: string;
+}) => {
+  return (
+    <span
+      className={cn(
+        "flex items-center gap-1 cursor-pointer font-semibold",
+        " gap-1",
+        props.className
+      )}
+    >
+      {props.children}
+      <span className="line-clamp-1 truncate">{props.title}</span>
+    </span>
   );
 };

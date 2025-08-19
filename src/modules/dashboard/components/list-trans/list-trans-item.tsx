@@ -18,7 +18,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
 
   return (
     <div
-      className="flex gap-2 w-full px-4 hover:bg-gray-100 py-2 rounded-sm "
+      className="flex gap-2 w-full px-0 hover:bg-gray-100 py-2 rounded-sm "
       onClick={() => openDialog("trans", item)}
     >
       <span className="bg-gray-100 p-2 flex rounded-full w-fit h-fit ">
@@ -28,7 +28,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
       <span className="flex flex-1 flex-col text-xs gap-1 ">
         <h1 className=" font-semibold text-sm">{category}</h1>
 
-        <span className="flex flex-row items-center gap-1">
+        <span className="flex flex-col items-start gap-1 xs:flex-row xs:gap-2 ">
           <AssignCategory idTransaction={item.id} category={item.category} />
           <AssignWallet idTransaction={item.id} wallet={item.wallet} />
         </span>

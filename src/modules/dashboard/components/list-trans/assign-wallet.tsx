@@ -1,11 +1,11 @@
-import { PopoverClose } from "@radix-ui/react-popover";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { useMutateAssignWallet } from "@/lib/api/app.mutate";
 import { useQueryWallet } from "@/lib/api/app.query";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import type { IWallet } from "@/lib/types";
-import { baseStyleTW } from "@/modules/dashboard/components/list-trans/assign-category";
+import { WrapperAssignTrigger } from "@/modules/dashboard/components/list-trans/assign-category";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 interface Props {
   wallet?: IWallet | null;
@@ -25,15 +25,10 @@ export const AssignWallet = (props: Props) => {
   };
   return (
     <Popover modal>
-      <PopoverTrigger
-        asChild
-        className={baseStyleTW}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div>
+      <PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+        <WrapperAssignTrigger title={title}>
           <IconPicker icon={wallet?.icon} size="xs" disabled />
-          <span>{title}</span>
-        </div>
+        </WrapperAssignTrigger>
       </PopoverTrigger>
 
       <WisePopoverContent className="flex flex-col">
