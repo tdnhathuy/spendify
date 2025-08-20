@@ -31,5 +31,10 @@ export const usePaging = <T>({ key, service }: Params<T>) => {
     fetchNextPage: query.fetchNextPage,
   };
 
-  return { ...query, listData, loaderProps };
+  return {
+    ...query,
+    listData,
+    loaderProps,
+    isFirstLoading: query.isFetching && !query.isFetchingNextPage,
+  };
 };
