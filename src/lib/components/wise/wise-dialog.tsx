@@ -34,7 +34,7 @@ type WiseDialogContentProps = {
 export const WiseDialogContent = (props: WiseDialogContentProps) => {
   const classTitle = props.headerProps?.className || "";
   return (
-    <DialogContent className={cn("py-4", props.className)}>
+    <DialogContent className={cn("py-4 -translate-y-[75%]", props.className)} >
       <DialogHeader {...props.headerProps}>
         {props.title ? (
           <DialogTitle className={cn(classTitle, "")}>

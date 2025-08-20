@@ -1,12 +1,19 @@
+"use client";
+
+import { openDialog } from "@/lib/components/dialogs";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import { Plus } from "lucide-react";
 
-export const DashboardNav = () => {
+export const DashboardTabBar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background px-2 pt-2 border-b h-16 lg:hidden flex  justify-between ">
-      <div className="font-semibold">Dashboard</div>
-
-      <WiseButton className="h-6 text-xs" variant={"outline"} size={"sm"}>
-        Create
+    <nav className="fixed bottom-0 bg-white shadow-2xl left-0 right-0 p-2 border-t lg:hidden flex gap-2 justify-center items-center">
+      <WiseButton
+        className="size-8 text-xs"
+        variant={"outline"}
+        size={"icon"}
+        onClick={() => openDialog("trans", null)}
+      >
+        <Plus />
       </WiseButton>
     </nav>
   );

@@ -62,7 +62,7 @@ export const DialogTrans = () => {
             render={({ field }) => {
               return (
                 <LabelBlock label="Amount">
-                  <Input {...field} />
+                  <Input {...field} autoComplete="off" />
                 </LabelBlock>
               );
             }}

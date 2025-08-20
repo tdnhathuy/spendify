@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useQueryTrans = (params: ParamsPagination) => {
   return useQuery({
-    queryKey: [QueryKeys.getTrans],
+    queryKey: [QueryKeys.getTrans, params],
     queryFn: () => ServiceTrans.get(params),
   });
 };

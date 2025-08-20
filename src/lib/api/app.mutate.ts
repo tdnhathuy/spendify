@@ -53,7 +53,6 @@ export const useMutateAssignCategory = () => {
     mutationFn: ServiceTrans.assignCategory,
     onSuccess: async () => {
       await Refetch.trans();
-      await Refetch.category();
     },
   });
 };
