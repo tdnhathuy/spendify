@@ -121,6 +121,14 @@
   }
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  overflow-y: scroll;
+}
+
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
 }

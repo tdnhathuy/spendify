@@ -22,7 +22,7 @@ export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar();
 
   return (
-    <Sidebar className=" sticky top-0 right-0 text-white" collapsible="icon">
+    <Sidebar className="fixed top-0 right-0 text-white" collapsible="icon">
       <AppSidebarHeader />
 
       <SidebarContent className="bg-sidebar-foreground">
