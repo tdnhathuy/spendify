@@ -1,3 +1,4 @@
+"use client";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { formatMoney } from "@/lib/helpers/func.helper";
@@ -19,7 +20,6 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
   return (
     <div
       className="flex gap-2 w-full px-0 hover:bg-gray-100 py-2 rounded-sm "
-      // onClick={() => openDialog("trans", item)}
       onClick={() => dialogs.open("assign-category", item)}
     >
       <span className="bg-gray-100 p-2 flex rounded-full w-fit h-fit ">
@@ -30,8 +30,8 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
         <h1 className=" font-semibold text-sm">{category}</h1>
 
         <span className="flex flex-col items-start gap-1 xs:flex-row xs:gap-2 ">
-          <AssignCategory idTransaction={item.id} category={item.category} />
-          <AssignWallet idTransaction={item.id} wallet={item.wallet} />
+          <AssignCategory transaction={item} />
+          <AssignWallet transaction={item} />
         </span>
 
         <span className="text-xs  text-gray-500 line-clamp-2 ">

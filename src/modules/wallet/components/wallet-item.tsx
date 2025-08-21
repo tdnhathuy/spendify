@@ -11,6 +11,7 @@ import { FaCcVisa } from "react-icons/fa6";
 
 interface Props {
   wallet: IWallet;
+  onClick?: (wallet: IWallet) => void;
 }
 
 export const WalletIcon: Record<
@@ -24,7 +25,9 @@ export const WalletIcon: Record<
 };
 
 export const WalletItem = (props: Props) => {
-  const onClick = () => {};
+  const onClick = props.onClick
+    ? () => props.onClick?.(props.wallet)
+    : () => {};
 
   return (
     <WrapperWallet
