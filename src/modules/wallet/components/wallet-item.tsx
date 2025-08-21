@@ -1,5 +1,4 @@
 import { WalletType } from "@/generated/prisma";
-import { openDialog } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { formatMoney } from "@/lib/helpers";
 import { IWallet } from "@/lib/types";
@@ -25,9 +24,7 @@ export const WalletIcon: Record<
 };
 
 export const WalletItem = (props: Props) => {
-  const onClick = () => {
-    openDialog("wallet", props.wallet);
-  };
+  const onClick = () => {};
 
   return (
     <WrapperWallet

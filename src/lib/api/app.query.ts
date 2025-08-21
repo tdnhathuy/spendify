@@ -11,10 +11,16 @@ export const useQueryTrans = (params: ParamsPagination) => {
 };
 
 export const useQueryCategory = () => {
-  return useQuery({
+  const query = useQuery({
     queryKey: [QueryKeys.getCategory],
     queryFn: ServiceCategory.get,
   });
+
+  return {
+    ...query,
+    income: query.data?.filter((item) => item.type === "Income") || [],
+    expense: query.data?.filter((item) => item.type === "Expense") || [],
+  };
 };
 
 export const useQueryWallet = () => {

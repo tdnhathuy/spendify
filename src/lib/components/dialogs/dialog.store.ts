@@ -1,32 +1,63 @@
-import { ICategory, ITransaction, IWallet } from "@/lib/types";
+// dialogs.ts
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
+import type { ICategory, ITransaction, IWallet } from "@/lib/types";
 
-// 1. Định nghĩa Discriminated Union
-export type DialogType =
-  | { type: null; data: null }
-  | { type: "trans"; data: ITransaction }
-  | { type: "wallet"; data: IWallet }
-  | { type: "category"; data: ICategory };
+type DialogMap = {
+  trans: ITransaction;
+  wallet: IWallet;
+  category: ICategory;
+  "assign-category": ITransaction;
+  "assign-wallet": ITransaction;
+};
 
-export type DialogTypeKey = DialogType["type"];
+type DialogsState<M extends Record<string, any>> = {
+  open: Partial<Record<keyof M, boolean>>;
+  data: Partial<{ [K in keyof M]: M[K] | null }>;
+};
 
-export const useStoreDialog = create<DialogType>(() => ({
-  type: null,
-  data: null,
+const useStore = create<DialogsState<DialogMap>>(() => ({
+  open: {},
+  data: {},
 }));
 
-export function openDialog<T extends DialogTypeKey>(
-  type: T,
-  data: Extract<DialogType, { type: T }>["data"] | null
-) {
-  useStoreDialog.setState({ type, data } as DialogType);
+function open<K extends keyof DialogMap>(key: K, payload: DialogMap[K]) {
+  useStore.setState((s) => ({
+    open: { ...s.open, [key]: true },
+    data: { ...s.data, [key]: payload },
+  }));
 }
 
-export function closeDialog(clearData = false) {
-  useStoreDialog.setState({ type: null });
-  if (clearData) {
-    setTimeout(() => {
-      useStoreDialog.setState({ data: null });
-    }, 300);
-  }
+function close<K extends keyof DialogMap>(key: K, clear = false) {
+  useStore.setState((s) => ({
+    open: { ...s.open, [key]: false },
+    data: clear ? { ...s.data, [key]: null as any } : s.data,
+  }));
 }
+
+function closeAll(clear = false) {
+  useStore.setState((s) => ({
+    open: Object.fromEntries(Object.keys(s.open).map((k) => [k, false])) as any,
+    data: clear ? {} : s.data,
+  }));
+}
+
+export function useDialog<K extends keyof DialogMap>(
+  key: K
+): { isOpen: boolean; data: DialogMap[K] | null } {
+  return useStore(
+    useShallow(
+      (s) =>
+        ({
+          isOpen: Boolean(s.open[key]),
+          data: (s.data[key] ?? null) as DialogMap[K] | null,
+        } as const)
+    )
+  );
+}
+
+function useAnyOpen() {
+  return useStore((s) => Object.values(s.open).some(Boolean));
+}
+
+export const dialogs = { useDialog, useAnyOpen, open, close, closeAll };

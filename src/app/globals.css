@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./css/scrollbar.css";
+@import "./css/loader.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -130,10 +132,6 @@ body {
   overflow-y: scroll;
 }
 
-@plugin 'tailwind-scrollbar' {
-  nocompatible: true;
-}
-
 @theme {
   --breakpoint-xxs: 320px; /* iPhone SE, Galaxy Fold */
   --breakpoint-xs: 376px; /* iPhone X, Pixel 4a */
@@ -147,24 +145,4 @@ body {
   /* laptop trở lên */
   --breakpoint-2xl: 1280px;
   --breakpoint-3xl: 1536px;
-}
-
-.loader {
-  width: fit-content;
-  font-size: 40px;
-  font-family: monospace;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #0000;
-  -webkit-text-stroke: 1px #000;
-  background: conic-gradient(#000 0 0) 0/1ch 100% no-repeat text;
-  animation: l14 1.5s steps(7, jump-none) infinite alternate;
-}
-.loader:before {
-  content: "Loading";
-}
-@keyframes l14 {
-  to {
-    background-position: 100%;
-  }
 }

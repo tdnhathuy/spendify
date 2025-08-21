@@ -13,6 +13,7 @@ export const updateQueryTransaction = (trans: ITransaction) => {
           const index = page.data.findIndex((x) => x.id === trans.id);
           if (index !== -1) {
             page.data[index] = trans;
+            break;
           }
         }
       });
