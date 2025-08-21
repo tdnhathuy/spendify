@@ -8,11 +8,8 @@ export type HandlerCtx = {
   idUser: string;
 };
 
-type Handler = (req: NextRequest, ctx: HandlerCtx) => Promise<NextResponse>;
-
 type HandlerV2 = (payload: {
   request: NextRequest;
-  timing<T>(name: string, fn: () => Promise<T>): Promise<T>;
   idUser: string;
 }) => Promise<NextResponse>;
 
@@ -26,8 +23,6 @@ export const timing = async <T>(name: string, fn: () => Promise<T>) => {
 
 export function createApi(handler: HandlerV2) {
   return async (request: NextRequest) => {
-    const t = timing;
-
     let idUser: string = "";
     const email = request.headers.get("x-user-email");
     if (email) {
@@ -38,10 +33,16 @@ export function createApi(handler: HandlerV2) {
           { status: 404 }
         );
       idUser = u.id;
+      return await handler({
+        idUser: u.id,
+        request,
+      });
     }
 
-    const res = await handler({ request, timing: t, idUser });
-    return res;
+    return await handler({
+      request,
+      idUser: "6bdb5088-1831-44ee-af45-9909955df7b7",
+    });
   };
 }
 

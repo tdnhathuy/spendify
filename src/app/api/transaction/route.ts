@@ -9,22 +9,20 @@ import { prisma } from "@/lib/server/prisma.server";
 import type { PayloadCreateTrans } from "@/lib/services";
 import { NextResponse } from "next/server";
 
-export const GET = createApi(async ({ idUser, timing: t, request }) => {
+export const GET = createApi(async ({ idUser, request }) => {
   const { page, limit } = getParamsPaging(request);
 
-  const [trans, meta] = await t("GET TRANSACTION", () =>
-    prisma.transaction
-      .paginate({
-        where: { idUser },
-        select: selectTrans,
-        orderBy: [{ date: "desc" }, { id: "desc" }],
-      })
-      .withPages({
-        limit: Number(limit),
-        page: Number(page),
-        includePageCount: true,
-      })
-  );
+  const [trans, meta] = await prisma.transaction
+    .paginate({
+      where: { idUser },
+      select: selectTrans,
+      orderBy: [{ date: "desc" }, { id: "desc" }],
+    })
+    .withPages({
+      limit: Number(limit),
+      page: Number(page),
+      includePageCount: true,
+    });
 
   const arr = trans.map(DTOTrans.fromDB);
 
