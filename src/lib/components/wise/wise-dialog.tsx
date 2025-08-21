@@ -35,6 +35,7 @@ type WiseDialogContentProps = {
   footer?: React.ReactNode;
   className?: string;
   ctnClassName?: string;
+  headerClassName?: string;
 };
 export const WiseDialogContent = (props: WiseDialogContentProps) => {
   const { title = "Title Dialog", desc = "" } = props;
@@ -51,7 +52,10 @@ export const WiseDialogContent = (props: WiseDialogContentProps) => {
     >
       <DialogHeader
         {...props.headerProps}
-        className="border-b p-2  px-4 relative gap-0"
+        className={cn(
+          "border-b p-2 px-4 relative gap-0",
+          props.headerClassName
+        )}
       >
         <DialogTitle
           className={cn("text-base font-semibold text-left", classTitle)}
