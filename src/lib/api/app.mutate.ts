@@ -1,5 +1,6 @@
 import { Refetch } from "@/lib/api/app.refech";
 import { MutationKeys } from "@/lib/configs";
+import { updateQueryTransaction } from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceUser } from "@/lib/services/user.service";
@@ -51,9 +52,7 @@ export const useMutateAssignCategory = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignCategory],
     mutationFn: ServiceTrans.assignCategory,
-    onSuccess: async () => {
-      await Refetch.trans();
-    },
+    onSuccess: updateQueryTransaction,
   });
 };
 
@@ -61,6 +60,6 @@ export const useMutateAssignWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignWallet],
     mutationFn: ServiceTrans.assignWallet,
-    onSuccess: Refetch.trans,
+    onSuccess: updateQueryTransaction,
   });
 };
