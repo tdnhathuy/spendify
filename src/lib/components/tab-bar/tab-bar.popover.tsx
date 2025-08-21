@@ -1,4 +1,6 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { dialogs } from "@/lib/components/dialogs";
+import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
@@ -10,7 +12,14 @@ export const PopoverTabBar = () => {
       </PopoverTrigger>
 
       <WisePopoverContent>
-        <span>Add Wallet</span>
+        <WiseButton
+          onClick={() => {
+            dialogs.open("trans", null);
+          }}
+          className="w-full"
+        >
+          Create Trans
+        </WiseButton>
       </WisePopoverContent>
     </Popover>
   );

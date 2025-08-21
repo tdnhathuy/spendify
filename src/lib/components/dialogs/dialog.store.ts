@@ -21,7 +21,7 @@ const useStore = create<DialogsState<DialogMap>>(() => ({
   data: {},
 }));
 
-function open<K extends keyof DialogMap>(key: K, payload: DialogMap[K]) {
+function open<K extends keyof DialogMap>(key: K, payload: DialogMap[K] | null) {
   useStore.setState((s) => ({
     open: { ...s.open, [key]: true },
     data: { ...s.data, [key]: payload },

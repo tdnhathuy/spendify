@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { AssignCategory } from "@/modules/dashboard/components/list-trans/assign-category";
 import { AssignWallet } from "@/modules/dashboard/components/list-trans/assign-wallet";
 import { PopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover";
+import { useDidUpdate } from "rooks";
 
 interface ListTransItemProps {
   item: ITransaction;
@@ -14,8 +15,11 @@ interface ListTransItemProps {
 
 export const ListTransItem = ({ item }: ListTransItemProps) => {
   const category = item.categoryParent?.name || "Uncategorized";
-
   const isIncome = item.categoryParent?.type === "Income";
+
+  useDidUpdate(() => {
+    dialogs.open("trans", item);
+  }, [item]);
 
   return (
     <div
@@ -26,7 +30,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
         <IconPicker icon={item.categoryParent?.icon} disabled size="sm" />
       </span>
 
-      <span className="flex flex-1 flex-col text-xs gap-1 ">
+      <span className="flex flex-1 flex-col text-xs gap-1">
         <h1 className=" font-semibold text-sm">{category}</h1>
 
         <span className="flex flex-col items-start gap-1 xs:flex-row xs:gap-2 ">

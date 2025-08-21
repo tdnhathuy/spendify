@@ -41,3 +41,20 @@ export const formatTitleDate = (date: string): string => {
   }
   return dayjs(date, "DD/MM/YYYY").format("DD/MM/YYYY");
 };
+
+export const formatDate = (date: string | Date): string => {
+  return dayjs(date).format("DD/MM/YYYY");
+};
+
+export const formatOption = <T>(
+  object: T | null | undefined,
+  keyId: keyof T,
+  keyLabel: keyof T
+): { id: string; label: string } => {
+  if (!object) return { id: "", label: "" };
+
+  return {
+    id: object[keyId]?.toString() || "null",
+    label: object[keyLabel]?.toString() || "null",
+  };
+};
