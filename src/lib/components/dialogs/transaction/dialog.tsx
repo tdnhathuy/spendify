@@ -23,6 +23,10 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { PiNotePencil } from "react-icons/pi";
 import { useDidUpdate } from "rooks";
+import {
+  DialogRowInfo,
+  PropsDialogRowInfo,
+} from "@/lib/components/dialogs/components/dialog-row-info";
 
 export const DialogTrans = () => {
   const { isOpen, data } = useDialog("trans");
@@ -47,7 +51,7 @@ export const DialogTrans = () => {
 
   const { amount, category, wallet, type, desc, date = new Date() } = watch();
 
-  const INFOs: PropsRowInfo[] = [
+  const INFOs: PropsDialogRowInfo[] = [
     {
       icon: <Wallet />,
       label: "Wallet",
@@ -118,44 +122,11 @@ export const DialogTrans = () => {
 
           <div className="p-2 px-4 gap-2 flex flex-col">
             {INFOs.map((info) => (
-              <RowInfo key={info.label} {...info} />
+              <DialogRowInfo key={info.label} {...info} />
             ))}
           </div>
         </WiseDialogContent>
       </Form>
     </Dialog>
-  );
-};
-
-interface PropsRowInfo {
-  icon: ReactElement;
-  label: string;
-  value: string | ReactElement;
-  onClick?: () => void;
-}
-const RowInfo = (props: PropsRowInfo) => {
-  const { icon, label, value, onClick } = props;
-  return (
-    <span
-      className={cn("flex items-center gap-2 ", onClick && "cursor-pointer")}
-      onClick={onClick}
-    >
-      <span className="bg-gray-100 p-2 w-8 h-8 flex justify-center items-center rounded-sm text-xl">
-        {icon}
-      </span>
-
-      <span className="flex flex-col text-base">
-        <span className="font-semibold text-xs">{label}</span>
-        {isValidElement(value) ? (
-          <span className="text-xs font-medium break-all text-gray-500">
-            {value}
-          </span>
-        ) : (
-          <span className="text-xs font-medium break-all text-gray-500">
-            {value}
-          </span>
-        )}
-      </span>
-    </span>
   );
 };

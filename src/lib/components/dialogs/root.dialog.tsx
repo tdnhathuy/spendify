@@ -1,7 +1,7 @@
 import { DialogAssignCategory } from "@/lib/components/dialogs/assign-category/dialog";
 import { DialogAssignWallet } from "@/lib/components/dialogs/assign-wallet/dialog";
 import { DialogTrans } from "@/lib/components/dialogs/transaction";
-import { DialogWallet } from "@/modules/wallet/components/wallet-dialog/dialog";
+import { DialogWallet } from "@/lib/components/dialogs/wallet/dialog";
 
 export const RootDialog = () => {
   return (

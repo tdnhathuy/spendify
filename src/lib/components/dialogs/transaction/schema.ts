@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
-const schemaOption = z.object({
+export const schemaOption = z.object({
   id: z.string(),
   label: z.string(),
 });

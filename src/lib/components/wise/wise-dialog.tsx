@@ -44,6 +44,8 @@ export const WiseDialogContent = (props: WiseDialogContentProps) => {
 
   return (
     <DialogContent
+      tabIndex={-1}
+      autoFocus={false}
       showCloseButton={false}
       className={cn(
         "-translate-y-[75%] p-0 gap-0 flex flex-col overflow-hidden",

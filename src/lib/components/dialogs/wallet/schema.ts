@@ -1,11 +1,13 @@
+import { schemaOption } from "@/lib/components/dialogs/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
 export const schemaWallet = z.object({
   name: z.string(),
-  icon: z.string(),
+  icon: schemaOption,
   type: z.enum(["Cash", "Debit", "Credit", "Crypto"]),
   initBalance: z.string(),
+  currentBalance: z.string(),
 });
 
 export const resolverWallet = zodResolver(schemaWallet);
