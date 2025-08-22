@@ -42,7 +42,8 @@ export const DialogCreateWallet = () => {
           title="Create Wallet"
           desc="Add a new account to manage your finances"
           footer={<FooterDialogCreateWallet />}
-          className="gap-4"
+          className="gap-4 py-8"
+          ctnClassName="-translate-y-[60%]"
         >
           <span className="mx-auto bg-gray-100 flex  justify-center items-center p-3 rounded-md border shadow">
             <IconPicker
@@ -80,7 +81,8 @@ interface PropsWrapperInput {
   icon: React.ReactElement;
   label: string;
 }
-const WrapperInput = (props: PropsWrapperInput) => {
+
+export const WrapperInput = (props: PropsWrapperInput) => {
   return (
     <div className="flex flex-col gap-1">
       <span className="flex items-center gap-2 text-sm font-semibold">

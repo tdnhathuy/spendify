@@ -51,6 +51,10 @@ model Wallet {
   updatedAt       DateTime      @updatedAt
   includeInReport Boolean       @default(true)
 
+  cardNumber            String?
+  cardStatementPassword String?
+  cardStatementDate     DateTime?
+
   @@index([idUser])
   @@index([idIcon])
 }
