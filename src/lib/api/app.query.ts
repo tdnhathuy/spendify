@@ -29,3 +29,11 @@ export const useQueryWallet = () => {
     queryFn: ServiceWallet.get,
   });
 };
+
+export const useQueryWalletDetail = (idWallet: string) => {
+  return useQuery({
+    queryKey: [QueryKeys.getWalletDetail, idWallet],
+    queryFn: () => ServiceWallet.getDetail(idWallet),
+    enabled: !!idWallet,
+  });
+};

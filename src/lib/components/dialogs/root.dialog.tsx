@@ -2,7 +2,7 @@ import { DialogAssignCategory } from "@/lib/components/dialogs/assign-category/d
 import { DialogAssignWallet } from "@/lib/components/dialogs/assign-wallet/dialog";
 import { DialogCreateWallet } from "@/lib/components/dialogs/create-wallet/dialog";
 import { DialogTrans } from "@/lib/components/dialogs/transaction";
-import { DialogWallet } from "@/lib/components/dialogs/wallet/dialog";
+import { DialogWallet } from "@/lib/components/dialogs/wallet-detail/dialog";
 
 export const RootDialog = () => {
   return (

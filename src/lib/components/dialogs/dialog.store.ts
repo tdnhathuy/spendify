@@ -5,7 +5,7 @@ import type { ICategory, ITransaction, IWallet } from "@/lib/types";
 
 type DialogMap = {
   trans: ITransaction;
-  wallet: IWallet;
+  wallet: { idWallet: string };
   category: ICategory;
   "assign-category": ITransaction;
   "assign-wallet": ITransaction;

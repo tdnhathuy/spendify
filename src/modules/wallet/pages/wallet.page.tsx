@@ -3,7 +3,6 @@
 import { dialogs } from "@/lib/components/dialogs";
 import { ButtonAddWallet } from "@/modules/wallet/components/add-wallet.button";
 import { ListWallet } from "@/modules/wallet/components/list-wallet";
-import { DialogWallet } from "@/modules/wallet/components/wallet-dialog/dialog";
 
 export const PageWallet = () => {
   return (
@@ -13,9 +12,11 @@ export const PageWallet = () => {
       <div className="grid grid-cols-1 xxs:grid-cols-2 lg:grid-cols-3 gap-2 w-full">
         <ButtonAddWallet />
 
-        <ListWallet onClick={(wallet) => dialogs.open("wallet", wallet)} />
-
-        <DialogWallet />
+        <ListWallet
+          onClick={async (wallet) => {
+            dialogs.open("wallet", { idWallet: wallet.id });
+          }}
+        />
       </div>
     </div>
   );

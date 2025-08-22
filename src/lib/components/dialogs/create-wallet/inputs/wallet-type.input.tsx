@@ -1,15 +1,16 @@
 import { WalletType } from "@/generated/prisma";
-import { TypeSchemaCreateWallet } from "@/lib/components/dialogs/create-wallet/inputs/schema";
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { useController } from "react-hook-form";
-import { Input } from "@/components/ui/input";
 import { WrapperInput } from "@/lib/components/dialogs/create-wallet/dialog";
+import { TypeSchemaCreateWallet } from "@/lib/components/dialogs/create-wallet/schema";
+import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import { WiseTextInput } from "@/lib/components/wise/wise-text-input";
+import { useController, useFormContext } from "react-hook-form";
 import { CiCreditCard1 } from "react-icons/ci";
 
 const TYPEs: WalletType[] = ["Cash", "Credit", "Debit", "Crypto"];
 
 export const InputWalletType = () => {
   const { field } = useController<TypeSchemaCreateWallet>({ name: "type" });
+  const form = useFormContext<TypeSchemaCreateWallet>();
   const isShowCardInfo = field.value === "Credit" || field.value === "Debit";
 
   return (
@@ -33,10 +34,10 @@ export const InputWalletType = () => {
       {isShowCardInfo && (
         <div className="grid grid-cols-2 gap-3">
           <WrapperInput icon={<CiCreditCard1 />} label="Card Number">
-            <Input />
+            <WiseTextInput {...form.register("cardNumber")} />
           </WrapperInput>
-          <WrapperInput icon={<CiCreditCard1 />} label="Card Password">
-            <Input />
+          <WrapperInput icon={<CiCreditCard1 />} label="Password Statement">
+            <WiseTextInput {...form.register("cardStatementPassword")} />
           </WrapperInput>
         </div>
       )}

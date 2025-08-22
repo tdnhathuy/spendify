@@ -4,7 +4,7 @@ import { FooterDialogCreateWallet } from "@/lib/components/dialogs/create-wallet
 import {
   resolverCreateWallet as resolver,
   TypeSchemaCreateWallet,
-} from "@/lib/components/dialogs/create-wallet/inputs/schema";
+} from "@/lib/components/dialogs/create-wallet/schema";
 import { InputWalletType } from "@/lib/components/dialogs/create-wallet/inputs/wallet-type.input";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
@@ -42,7 +42,7 @@ export const DialogCreateWallet = () => {
           title="Create Wallet"
           desc="Add a new account to manage your finances"
           footer={<FooterDialogCreateWallet />}
-          className="gap-4 py-8"
+          className="gap-4 py-8 "
           ctnClassName="-translate-y-[60%]"
         >
           <span className="mx-auto bg-gray-100 flex  justify-center items-center p-3 rounded-md border shadow">

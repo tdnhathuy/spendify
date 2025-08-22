@@ -45,6 +45,13 @@ export type IWallet = {
   includeInReport: boolean;
 };
 
+export interface IWalletDetail extends IWallet {
+  cardNumber: string | null;
+  cardStatementPassword: string | null;
+  cardStatementDate: Date | null;
+  totalTransaction: number;
+}
+
 export type IIcon = {
   id: string;
   code: string;

@@ -1,5 +1,5 @@
 import { WalletType } from "@/generated/prisma";
-import { TypeSchemaWallet } from "@/lib/components/dialogs/wallet/schema";
+import { TypeSchemaWallet } from "@/lib/components/dialogs/wallet-detail/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { WalletIcon } from "@/modules/wallet/components/wallet-item";
 import { useController } from "react-hook-form";

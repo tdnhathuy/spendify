@@ -1,6 +1,6 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { DBWallet } from "@/lib/server";
-import { IWallet } from "@/lib/types";
+import { DBWallet, DBWalletDetail } from "@/lib/server";
+import { IWallet, IWalletDetail } from "@/lib/types";
 
 const fromDB = (wallet: DBWallet | null): IWallet | null => {
   if (!wallet) return null;
@@ -29,6 +29,27 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
   };
 };
 
+const fromDBDetail = (wallet: DBWalletDetail): IWalletDetail | null => {
+  if (!wallet) return null;
+
+  return {
+    // ...fromDB(wallet),
+    cardNumber: wallet.cardNumber,
+    cardStatementPassword: wallet.cardStatementPassword,
+    cardStatementDate: wallet.cardStatementDate,
+    totalTransaction: wallet.transactions.length,
+
+    id: wallet.id,
+    name: wallet.name,
+    initBalance: wallet.initBalance,
+    currentBalance: wallet.initBalance,
+    icon: DTOIcon.fromDB(wallet.icon),
+    type: wallet.type,
+    includeInReport: wallet.includeInReport,
+  };
+};
+
 export const DTOWallet = {
   fromDB,
+  fromDBDetail,
 };

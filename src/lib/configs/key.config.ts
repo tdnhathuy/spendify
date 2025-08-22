@@ -5,6 +5,7 @@ export const QueryKeys = {
   getCategory: "getCategory",
   infiniteTrans: "infiniteTrans",
   getReport: "getReport",
+  getWalletDetail: "getWalletDetail",
 };
 export const MutationKeys = {
   createWallet: "createWallet",

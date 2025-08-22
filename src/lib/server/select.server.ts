@@ -33,6 +33,13 @@ export const selectWallet = {
   includeInReport: true,
 } satisfies Prisma.WalletSelect;
 
+export const selectWalletDetail = {
+  ...selectWallet,
+  cardNumber: true,
+  cardStatementDate: true,
+  cardStatementPassword: true,
+} satisfies Prisma.WalletSelect;
+
 export const selectTrans = {
   id: true,
   amount: true,
@@ -54,6 +61,9 @@ export type DBCategory = Prisma.CategoryGetPayload<{
   select: typeof selectCategory;
 }>;
 export type DBWallet = Prisma.WalletGetPayload<{ select: typeof selectWallet }>;
+export type DBWalletDetail = Prisma.WalletGetPayload<{
+  select: typeof selectWalletDetail;
+}>;
 export type DBIcon = Prisma.IconGetPayload<{ select: typeof selectIcon }>;
 export type DBTransaction = Prisma.TransactionGetPayload<{
   select: typeof selectTrans;

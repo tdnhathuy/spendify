@@ -43,7 +43,11 @@ export const formatTitleDate = (date: string): string => {
   return dayjs(date, "DD/MM/YYYY").format("DD/MM/YYYY");
 };
 
-export const formatDate = (date: string | Date): string => {
+export const formatDate = (
+  date?: string | Date | null,
+  defaultValue: string | null = null
+): string | null => {
+  if (!date) return defaultValue;
   return dayjs(date).format("DD/MM/YYYY");
 };
 

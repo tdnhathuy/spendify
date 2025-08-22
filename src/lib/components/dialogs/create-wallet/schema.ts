@@ -1,4 +1,3 @@
-import { IIcon } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
@@ -14,6 +13,10 @@ export const schemaCreateWallet = z.object({
 
   icon: schemaIcon.nullable(),
   type: z.enum(["Cash", "Debit", "Credit", "Crypto"]),
+
+  cardNumber: z.string().optional(),
+  cardStatementPassword: z.string().optional(),
+  cardStatementDate: z.string().optional(),
 });
 
 export const resolverCreateWallet = zodResolver(schemaCreateWallet);
