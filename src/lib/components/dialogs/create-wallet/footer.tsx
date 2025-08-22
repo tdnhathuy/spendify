@@ -1,17 +1,22 @@
+import { useMutateCreateWallet } from "@/lib/api/app.mutate";
 import { TypeSchemaCreateWallet } from "@/lib/components/dialogs/create-wallet/inputs/schema";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { FieldErrors, useFormContext } from "react-hook-form";
 
 export const FooterDialogCreateWallet = () => {
-  const { handleSubmit, watch, formState } =
-    useFormContext<TypeSchemaCreateWallet>();
-  watch();
-
+  const { handleSubmit, formState } = useFormContext<TypeSchemaCreateWallet>();
   const { isValid } = formState;
 
+  const { mutate: createWallet } = useMutateCreateWallet();
+
   const onSubmit = (data: TypeSchemaCreateWallet) => {
-    console.log("data", data);
+    createWallet({
+      name: data.name,
+      initBalance: Number(data.initBalance),
+      idIcon: data.icon?.id ?? "",
+      type: data.type,
+    });
   };
 
   const onError = (errors: FieldErrors<TypeSchemaCreateWallet>) => {
