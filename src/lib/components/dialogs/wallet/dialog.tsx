@@ -23,13 +23,11 @@ export const DialogWallet = () => {
       icon: formatOption(data?.icon, "code", "url"),
       type: data?.type || "Cash",
       initBalance: data?.initBalance.toString() || "",
-      // currentBalance: data?.currentBalance.toString() || "1",
-      currentBalance: "12",
+      currentBalance: Number(data?.currentBalance || 0),
     });
   }, [data]);
 
   const { name, icon, type, initBalance, currentBalance } = form.watch();
-  console.log("currentBalance", currentBalance);
 
   return (
     <Dialog open={isOpen} onOpenChange={() => dialogs.close("wallet", true)}>

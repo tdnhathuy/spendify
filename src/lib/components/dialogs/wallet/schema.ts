@@ -7,7 +7,7 @@ export const schemaWallet = z.object({
   icon: schemaOption,
   type: z.enum(["Cash", "Debit", "Credit", "Crypto"]),
   initBalance: z.string(),
-  currentBalance: z.string(),
+  currentBalance: z.number(),
 });
 
 export const resolverWallet = zodResolver(schemaWallet);

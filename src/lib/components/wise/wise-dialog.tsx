@@ -65,11 +65,11 @@ export const WiseDialogContent = (props: WiseDialogContentProps) => {
           {title}
         </DialogTitle>
 
-        {desc && (
-          <DialogDescription className="text-xs text-left">
-            {desc}
-          </DialogDescription>
-        )}
+        <DialogDescription
+          className={cn("text-xs text-left", !desc && "sr-only")}
+        >
+          {desc}
+        </DialogDescription>
 
         <DialogClose
           tabIndex={-1}

@@ -18,11 +18,12 @@ export const compareId = (obj1: any, obj2: any): boolean => {
 };
 
 export const formatMoney = (amount: number): string => {
+  const isNegative = amount < 0;
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
     minimumFractionDigits: 0,
-    signDisplay: "never",
+    signDisplay: isNegative ? "always" : "never",
     currencyDisplay: "code",
     currencySign: "accounting",
   })

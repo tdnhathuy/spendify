@@ -1,10 +1,5 @@
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import {
-  createApi,
-  responseSuccess,
-  selectWallet,
-  timing,
-} from "@/lib/server";
+import { createApi, responseSuccess, selectWallet, timing } from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
 import type { PayloadCreateWallet } from "@/lib/services";
 import { type NextRequest } from "next/server";

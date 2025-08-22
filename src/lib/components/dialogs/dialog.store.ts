@@ -9,6 +9,7 @@ type DialogMap = {
   category: ICategory;
   "assign-category": ITransaction;
   "assign-wallet": ITransaction;
+  "create-wallet": null;
 };
 
 type DialogsState<M extends Record<string, any>> = {
