@@ -9,6 +9,7 @@ import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { ICategory } from "@/lib/types";
 import { useState } from "react";
+import { useDidUpdate } from "rooks";
 
 export const DialogAssignCategory = () => {
   const { isOpen, data } = useDialog("assign-category");
@@ -16,9 +17,14 @@ export const DialogAssignCategory = () => {
   const [mode, setMode] = useState<CategoryType>(
     data?.category?.type || "Expense"
   );
+
   const { income, expense } = useQueryCategory();
 
   const listCategory = mode === "Income" ? income : expense;
+
+  useDidUpdate(() => {
+    setMode(data?.category?.type || "Expense");
+  }, [data]);
 
   const { mutate: assignCategory } = useMutateAssignCategory();
 
@@ -32,7 +38,10 @@ export const DialogAssignCategory = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => dialogs.close("assign-category")}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => dialogs.close("assign-category", true)}
+    >
       <WiseDialogContent
         title="Assign Category"
         footer={<FooterDialogAssignCategory />}

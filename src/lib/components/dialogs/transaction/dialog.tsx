@@ -4,7 +4,7 @@ import { FooterDialogTransaction } from "@/lib/components/dialogs/transaction/fo
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { formatDate, formatMoney, formatOption } from "@/lib/helpers";
 import { Wallet } from "lucide-react";
-import { ReactElement } from "react";
+import { isValidElement, ReactElement } from "react";
 import {
   IoArrowDownCircle,
   IoArrowUpCircle,
@@ -18,6 +18,7 @@ import {
   resolverTransaction,
   TypeSchemaTransaction,
 } from "@/lib/components/dialogs/transaction/schema";
+import { DatePicker } from "@/lib/components/shared/date-picker";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { PiNotePencil } from "react-icons/pi";
@@ -36,19 +37,49 @@ export const DialogTrans = () => {
       amount: String(data.amount),
       category: formatOption(data.category, "id", "name"),
       wallet: formatOption(data.wallet, "id", "name"),
+      type: data?.category?.type || "Expense",
+      date: new Date(data.date),
+      desc: data.description || "",
     });
   }, [data]);
 
-  const { getValues } = form;
+  const { watch } = form;
 
-  const {
-    amount,
-    category,
-    wallet,
-    type,
-    desc,
-    date = new Date(),
-  } = getValues();
+  const { amount, category, wallet, type, desc, date = new Date() } = watch();
+
+  const INFOs: PropsRowInfo[] = [
+    {
+      icon: <Wallet />,
+      label: "Wallet",
+      value: wallet?.label || "Unassigned",
+      onClick: () => dialogs.open("assign-wallet", data),
+    },
+    {
+      icon: <TbCategory />,
+      label: "Category",
+      value: category?.label || "Unassigned",
+      onClick: () => dialogs.open("assign-category", data),
+    },
+    {
+      icon: <IoCalendar />,
+      label: "Date",
+      value: (
+        <DatePicker
+          value={date}
+          onChange={(date) => {
+            form.setValue("date", date);
+          }}
+        >
+          {formatDate(date)}
+        </DatePicker>
+      ),
+    },
+    {
+      icon: <PiNotePencil />,
+      label: "Note",
+      value: desc || "Unassigned",
+    },
+  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={() => dialogs.close("trans")}>
@@ -64,19 +95,19 @@ export const DialogTrans = () => {
             className={cn(
               "flex flex-col  justify-center items-center border-t border-b py-2",
               {
-                "text-green-400": data?.category?.type !== "Expense",
-                "text-red-400": data?.category?.type === "Expense",
+                "text-green-400": type !== "Expense",
+                "text-red-400": type === "Expense",
               }
             )}
           >
             <span className={cn("flex items-center gap-2 text-xl")}>
-              {data?.category?.type !== "Expense" ? (
+              {type !== "Expense" ? (
                 <IoArrowUpCircle className="text-2xl" />
               ) : (
                 <IoArrowDownCircle className="text-2xl" />
               )}
               <span className="uppercase font-semibold text-gray-500">
-                {data?.category?.type}
+                {type}
               </span>
             </span>
 
@@ -86,30 +117,9 @@ export const DialogTrans = () => {
           </span>
 
           <div className="p-2 px-4 gap-2 flex flex-col">
-            <RowInfo
-              icon={<Wallet />}
-              label="Wallet"
-              value={wallet?.label || "Unassigned"}
-              onClick={() => dialogs.open("assign-wallet", data)}
-            />
-            <RowInfo
-              icon={<TbCategory />}
-              label="Category"
-              value={data?.category?.name || "Unassigned"}
-              onClick={() => dialogs.open("assign-category", data)}
-            />
-
-            <RowInfo
-              icon={<IoCalendar />}
-              label="Date"
-              value={formatDate(date)}
-            />
-
-            <RowInfo
-              icon={<PiNotePencil />}
-              label="Note"
-              value={data?.description || "Unassigned"}
-            />
+            {INFOs.map((info) => (
+              <RowInfo key={info.label} {...info} />
+            ))}
           </div>
         </WiseDialogContent>
       </Form>
@@ -117,12 +127,13 @@ export const DialogTrans = () => {
   );
 };
 
-const RowInfo = (props: {
+interface PropsRowInfo {
   icon: ReactElement;
   label: string;
-  value: string;
+  value: string | ReactElement;
   onClick?: () => void;
-}) => {
+}
+const RowInfo = (props: PropsRowInfo) => {
   const { icon, label, value, onClick } = props;
   return (
     <span
@@ -135,9 +146,15 @@ const RowInfo = (props: {
 
       <span className="flex flex-col text-base">
         <span className="font-semibold text-xs">{label}</span>
-        <span className="text-xs font-medium break-all text-gray-500">
-          {value}
-        </span>
+        {isValidElement(value) ? (
+          <span className="text-xs font-medium break-all text-gray-500">
+            {value}
+          </span>
+        ) : (
+          <span className="text-xs font-medium break-all text-gray-500">
+            {value}
+          </span>
+        )}
       </span>
     </span>
   );
