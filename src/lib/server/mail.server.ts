@@ -1,5 +1,8 @@
 import { AddressObject, simpleParser } from "mailparser";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 function b64urlToBuffer(input: unknown) {
   if (typeof input !== "string")
     throw new Error("raw_base64url must be a string");

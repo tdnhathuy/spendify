@@ -1,5 +1,4 @@
-import { getMail, parseMail } from "@/lib/helpers";
-import { prisma } from "@/lib/server";
+import { getMail, parseMail, prisma } from "@/lib/server";
 import { Prompt } from "@/lib/server/ai.server";
 import dayjs from "dayjs";
 import { NextRequest, NextResponse } from "next/server";
