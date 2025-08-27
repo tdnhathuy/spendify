@@ -18,8 +18,23 @@ model User {
   icons        Icon[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  syncConfig   SyncConfig[]
 
   @@index([email])
+}
+
+model SyncConfig {
+  id        String   @id @default(uuid())
+  idUser    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [idUser], references: [id])
+
+  fromEmail String
+  toWallet  Wallet @relation(fields: [walletId], references: [id])
+  walletId  String
+
+  @@index([idUser])
 }
 
 model Icon {
@@ -54,6 +69,7 @@ model Wallet {
   cardNumber            String?
   cardStatementPassword String?
   cardStatementDate     DateTime?
+  SyncConfig            SyncConfig[]
 
   @@index([idUser])
   @@index([idIcon])
