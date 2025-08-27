@@ -45,7 +45,8 @@ export async function POST(req: NextRequest) {
     if (typeof raw_base64url === "string" && raw_base64url.length > 0) {
       const buf = b64urlToBuffer(raw_base64url);
       const mail = await simpleParser(buf);
-      const { from, date = "" } = mail;
+      const { from, date = "", to } = mail;
+      console.log("to", to);
       const textLike = mail.text || String(mail.html || "");
 
       const amount = extractAmountVND(textLike);
@@ -69,7 +70,6 @@ export async function POST(req: NextRequest) {
       const dateStr = dayjs(date).format("DD/MM/YYYY");
 
       const note = `Sync transaction ${dateStr} from ${finalName}`;
-
       await prisma.transaction.create({
         data: {
           amount: amount ?? 0,
@@ -78,6 +78,14 @@ export async function POST(req: NextRequest) {
           createdAt: new Date(),
           updatedAt: new Date(),
           user: { connect: { id: userId.id } },
+          infoSync: {
+            create: {
+              emailProvider: name,
+              emailReceived: (to as any).text,
+              emailTitle: mail.subject || "",
+              idUser: userId.id,
+            },
+          },
         },
       });
 

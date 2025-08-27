@@ -95,9 +95,27 @@ model Transaction {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
+  infoSync TransactionInfoSync?
+
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])
   @@index([idCategory])
+}
+
+model TransactionInfoSync {
+  id        String   @id @default(uuid())
+  idUser    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  emailProvider String
+  emailReceived String
+  emailTitle    String
+
+  idTransaction String      @unique
+  transaction   Transaction @relation(fields: [idTransaction], references: [id])
+
+  @@index([idUser])
 }
 
 enum CategoryType {
