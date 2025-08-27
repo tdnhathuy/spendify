@@ -1,20 +1,10 @@
-// app/api/hook-email/route.ts
+import { getMail, parseMail } from "@/lib/helpers";
 import { prisma } from "@/lib/server";
 import dayjs from "dayjs";
-import { simpleParser } from "mailparser";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-// Decode base64url -> Buffer (có bổ sung padding)
-function b64urlToBuffer(input: unknown) {
-  if (typeof input !== "string")
-    throw new Error("raw_base64url must be a string");
-  const s = input.replace(/\s+/g, "").replace(/-/g, "+").replace(/_/g, "/");
-  const pad = (4 - (s.length % 4)) % 4;
-  return Buffer.from(s + "=".repeat(pad), "base64");
-}
 
 function extractAmountVND(text: string) {
   const m = text.match(/([-+]?\d{1,3}(?:[.,]\d{3})+|\d+)\s*(vnd|vnđ|₫|đ)/i);
@@ -32,30 +22,33 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const {
-    message_id,
-    raw_base64url,
-    transport,
-    headers,
-    body: basicBody,
-  } = body;
+  const { message_id, raw_base64url } = body;
 
   try {
-    // 1) Nhánh chuẩn: có raw_base64url (Apps Script dùng format:'raw')
     if (typeof raw_base64url === "string" && raw_base64url.length > 0) {
-      const buf = b64urlToBuffer(raw_base64url);
-      const mail = await simpleParser(buf);
+      const mail = await parseMail(raw_base64url);
+      console.log('mail', mail.html)
       const { from, date = "", to } = mail;
-      console.log("to", to);
       const textLike = mail.text || String(mail.html || "");
 
       const amount = extractAmountVND(textLike);
 
+      const emailFrom = getMail(from);
+      const emailTo = getMail(to);
+
       const email = "tdn.huyz@gmail.com";
 
-      const userId = await prisma.user.findUniqueOrThrow({
+      const { id, syncConfig } = await prisma.user.findUniqueOrThrow({
         where: { email },
-        select: { id: true },
+        select: {
+          id: true,
+          syncConfig: {
+            select: {
+              fromEmail: true,
+              walletId: true,
+            },
+          },
+        },
       });
 
       const NAMES: Record<string, string> = {
@@ -63,6 +56,10 @@ export async function POST(req: NextRequest) {
         "tpbank@tpb.com.vn": "TPB",
         "HSBC Vietnam": "HSBC",
       };
+
+      const walletId = syncConfig.find(
+        (item) => item.fromEmail === emailFrom
+      )?.walletId;
 
       const name = from?.value[0]?.name || from?.value[0]?.address || "";
 
@@ -77,13 +74,15 @@ export async function POST(req: NextRequest) {
           date: new Date(date),
           createdAt: new Date(),
           updatedAt: new Date(),
-          user: { connect: { id: userId.id } },
+          user: { connect: { id } },
+          ...(walletId && { wallet: { connect: { id: walletId } } }),
+
           infoSync: {
             create: {
-              emailProvider: name,
-              emailReceived: (to as any).text,
+              emailProvider: emailFrom,
+              emailReceived: emailTo,
               emailTitle: mail.subject || "",
-              idUser: userId.id,
+              idUser: id,
             },
           },
         },
@@ -98,31 +97,6 @@ export async function POST(req: NextRequest) {
         amount,
       });
     }
-
-    // 2) Fallback: payload “gmailapp_basic” (không có raw)
-    if (transport === "gmailapp_basic" && basicBody) {
-      const textLike = basicBody.text || basicBody.html || "";
-      const amount = extractAmountVND(textLike);
-      return NextResponse.json({
-        ok: true,
-        via: "gmailapp_basic",
-        messageId: message_id,
-        subject: headers?.subject,
-        from: headers?.from,
-        amount,
-      });
-    }
-
-    // 3) Thiếu dữ liệu
-    console.error("hook-email bad payload", {
-      hasRaw: typeof raw_base64url,
-      transport,
-      keys: Object.keys(body || {}),
-    });
-    return NextResponse.json(
-      { ok: false, error: "Missing raw_base64url or unsupported payload" },
-      { status: 400 }
-    );
   } catch (e: any) {
     console.error("hook-email error", e?.message || e);
     return NextResponse.json({ ok: false }, { status: 500 });

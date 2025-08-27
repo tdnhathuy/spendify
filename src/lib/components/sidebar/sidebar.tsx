@@ -48,6 +48,12 @@ export function AppSidebar() {
           />
 
           <SidebarButton
+            href={"/config-sync"}
+            icon={<CircleUserRound />}
+            label="Config Sync"
+          />
+
+          <SidebarButton
             href={"/debug"}
             icon={<CircleUserRound />}
             label="Debug"
