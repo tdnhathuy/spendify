@@ -1,6 +1,9 @@
 import { Refetch } from "@/lib/api/app.refech";
 import { MutationKeys } from "@/lib/configs";
-import { updateQueryTransaction } from "@/lib/helpers/query.helper";
+import {
+  deleteQueryTransaction,
+  updateQueryTransaction,
+} from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceUser } from "@/lib/services/user.service";
@@ -64,3 +67,10 @@ export const useMutateAssignWallet = () => {
   });
 };
 
+export const useMutateDeleteTrans = (idTrans: string) => {
+  return useMutation({
+    mutationKey: [MutationKeys.deleteTransaction, idTrans],
+    mutationFn: ServiceTrans.delete,
+    onSuccess: () => deleteQueryTransaction(idTrans),
+  });
+};

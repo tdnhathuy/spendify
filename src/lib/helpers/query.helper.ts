@@ -20,3 +20,20 @@ export const updateQueryTransaction = (trans: ITransaction) => {
     }
   );
 };
+
+export const deleteQueryTransaction = (id: string) => {
+  queryClient.setQueryData(
+    [QueryKeys.infiniteTrans],
+    (old: InfiniteData<ResponsePagination<ITransaction[]>>) => {
+      return produce(old, (draft) => {
+        for (const page of draft.pages) {
+          const index = page.data.findIndex((x) => x.id === id);
+          if (index !== -1) {
+            page.data.splice(index, 1);
+            break;
+          }
+        }
+      });
+    }
+  );
+};

@@ -1,4 +1,5 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { useMutateDeleteTrans } from "@/lib/api/app.mutate";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import { ITransaction } from "@/lib/types";
 import { PopoverClose } from "@radix-ui/react-popover";
@@ -12,8 +13,10 @@ interface Props {
 }
 
 export const PopoverListTrans = ({ transaction }: Props) => {
-  const onDelete = () => {
-    console.log("onDelete", onDelete);
+  const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
+
+  const onDelete = async () => {
+    await deleteTrans(transaction.id);
   };
 
   const onTransfer = () => {

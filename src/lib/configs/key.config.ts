@@ -14,4 +14,5 @@ export const MutationKeys = {
   createTransaction: "createTransaction",
   assignCategory: "assignCategory",
   assignWallet: "assignWallet",
+  deleteTransaction: "deleteTransaction",
 };

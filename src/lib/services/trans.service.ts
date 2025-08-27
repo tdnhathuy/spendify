@@ -14,6 +14,9 @@ export const ServiceTrans = {
 
   create: (json: PayloadCreateTrans) => client.post("transaction", { json }),
 
+  delete: (id: string) =>
+    client.delete(`transaction/${id}`).json<Response<boolean>>(),
+
   assignCategory: (json: PayloadAssignCategory) =>
     client
       .post("transaction/assign-category", { json })
