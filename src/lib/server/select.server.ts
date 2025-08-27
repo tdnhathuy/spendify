@@ -40,13 +40,21 @@ export const selectWalletDetail = {
   cardStatementPassword: true,
 } satisfies Prisma.WalletSelect;
 
+export const selectInfoSync = {
+  id: true,
+  emailProvider: true,
+  emailReceived: true,
+  emailTitle: true,
+} satisfies Prisma.TransactionInfoSyncSelect;
+
 export const selectTrans = {
   id: true,
   amount: true,
-  category: { select: selectCategory },
-  wallet: { select: selectWallet },
   note: true,
   date: true,
+  category: { select: selectCategory },
+  wallet: { select: selectWallet },
+  infoSync: { select: selectInfoSync },
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

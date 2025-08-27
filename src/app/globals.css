@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "./css/scrollbar.css";
 @import "./css/loader.css";
+@import "./css/input.css";
 
 @custom-variant dark (&:is(.dark *));
 

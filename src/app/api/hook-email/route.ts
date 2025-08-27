@@ -1,15 +1,11 @@
 import { getMail, parseMail } from "@/lib/helpers";
 import { prisma } from "@/lib/server";
+import { Prompt } from "@/lib/server/ai.server";
 import dayjs from "dayjs";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function extractAmountVND(text: string) {
-  const m = text.match(/([-+]?\d{1,3}(?:[.,]\d{3})+|\d+)\s*(vnd|vnđ|₫|đ)/i);
-  return m ? parseInt(m[1].replace(/[^\d-]/g, ""), 10) : null;
-}
 
 export async function POST(req: NextRequest) {
   let body: any;
@@ -27,11 +23,9 @@ export async function POST(req: NextRequest) {
   try {
     if (typeof raw_base64url === "string" && raw_base64url.length > 0) {
       const mail = await parseMail(raw_base64url);
-      console.log('mail', mail.html)
       const { from, date = "", to } = mail;
-      const textLike = mail.text || String(mail.html || "");
 
-      const amount = extractAmountVND(textLike);
+      const amount = await Prompt.extractAmount(String(mail.html || ""));
 
       const emailFrom = getMail(from);
       const emailTo = getMail(to);

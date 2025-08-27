@@ -10,6 +10,7 @@ type DialogMap = {
   "assign-category": ITransaction;
   "assign-wallet": ITransaction;
   "create-wallet": null;
+  "create-trans": null;
 };
 
 type DialogsState<M extends Record<string, any>> = {
@@ -22,7 +23,10 @@ const useStore = create<DialogsState<DialogMap>>(() => ({
   data: {},
 }));
 
-function open<K extends keyof DialogMap>(key: K, payload: DialogMap[K] | null) {
+function open<K extends keyof DialogMap>(
+  key: K,
+  payload?: DialogMap[K] | null
+) {
   useStore.setState((s) => ({
     open: { ...s.open, [key]: true },
     data: { ...s.data, [key]: payload },

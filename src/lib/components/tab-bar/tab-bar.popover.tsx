@@ -14,7 +14,7 @@ export const PopoverTabBar = () => {
       <WisePopoverContent>
         <WiseButton
           onClick={() => {
-            dialogs.open("trans", null);
+            dialogs.open("trans");
           }}
           className="w-full"
         >

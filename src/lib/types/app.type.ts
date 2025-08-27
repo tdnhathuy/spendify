@@ -88,4 +88,8 @@ export interface ITransaction {
   wallet: IWallet | null;
   date: Date;
   description: string | null;
+
+  infoSync: IInfoSync | null;
 }
+
+export interface IInfoSync {}

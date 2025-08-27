@@ -4,7 +4,6 @@ import { FooterDialogTransaction } from "@/lib/components/dialogs/transaction/fo
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { formatDate, formatMoney, formatOption } from "@/lib/helpers";
 import { Wallet } from "lucide-react";
-import { isValidElement, ReactElement } from "react";
 import {
   IoArrowDownCircle,
   IoArrowUpCircle,
@@ -15,6 +14,10 @@ import { TbCategory } from "react-icons/tb";
 
 import { Form } from "@/components/ui/form";
 import {
+  DialogRowInfo,
+  PropsDialogRowInfo,
+} from "@/lib/components/dialogs/components/dialog-row-info";
+import {
   resolverTransaction,
   TypeSchemaTransaction,
 } from "@/lib/components/dialogs/transaction/schema";
@@ -23,13 +26,10 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { PiNotePencil } from "react-icons/pi";
 import { useDidUpdate } from "rooks";
-import {
-  DialogRowInfo,
-  PropsDialogRowInfo,
-} from "@/lib/components/dialogs/components/dialog-row-info";
 
 export const DialogTrans = () => {
   const { isOpen, data } = useDialog("trans");
+  console.log('data', data)
 
   const form = useForm<TypeSchemaTransaction>({
     resolver: resolverTransaction,
@@ -81,6 +81,11 @@ export const DialogTrans = () => {
     {
       icon: <PiNotePencil />,
       label: "Note",
+      value: desc || "Unassigned",
+    },
+    {
+      icon: <PiNotePencil />,
+      label: "Note2",
       value: desc || "Unassigned",
     },
   ];

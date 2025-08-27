@@ -1,11 +1,8 @@
 "use client";
 import { DashboardInfo } from "@/app/api/dashboard/route";
-import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { client, QueryKeys } from "@/lib/configs";
 import { formatMoney } from "@/lib/helpers";
 import { ResponsePagination } from "@/lib/types/app.type";
-import { FilterTrans } from "@/modules/dashboard/components/filter/trans.filter";
 import { CardStats } from "@/modules/dashboard/components/stats.card";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingDown, TrendingUp, WalletMinimal } from "lucide-react";
@@ -23,15 +20,6 @@ export const HeaderDashboard = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      {/* <Popover>
-        <PopoverTrigger asChild>
-          <WiseButton className="w-fit" size="sm">
-            Filter
-          </WiseButton>
-        </PopoverTrigger>
-        <FilterTrans />
-      </Popover> */}
-
       <div className="flex w-full h-fit gap-2">
         <CardStats
           title="Balance"
