@@ -21,6 +21,12 @@ export const selectCategory = {
   },
 } satisfies Prisma.CategorySelect;
 
+export const selectWalletSimple = {
+  id: true,
+  name: true,
+  icon: { select: selectIcon },
+} satisfies Prisma.WalletSelect;
+
 export const selectWallet = {
   id: true,
   icon: { select: selectIcon },
@@ -54,6 +60,13 @@ export const selectInfoSync = {
   emailTitle: true,
 } satisfies Prisma.TransactionInfoSyncSelect;
 
+export const selectTransfer = {
+  id: true,
+  amount: true,
+  fromWallet: { select: selectWalletSimple },
+  toWallet: { select: selectWalletSimple },
+} satisfies Prisma.TransferSelect;
+
 export const selectTrans = {
   id: true,
   amount: true,
@@ -62,6 +75,7 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
+  transfer: { select: selectTransfer },
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {
@@ -76,12 +90,20 @@ export type DBCategory = Prisma.CategoryGetPayload<{
   select: typeof selectCategory;
 }>;
 export type DBWallet = Prisma.WalletGetPayload<{ select: typeof selectWallet }>;
+
+export type DBWalletSimple = Prisma.WalletGetPayload<{
+  select: typeof selectWalletSimple;
+}>;
+
 export type DBWalletDetail = Prisma.WalletGetPayload<{
   select: typeof selectWalletDetail;
 }>;
 export type DBIcon = Prisma.IconGetPayload<{ select: typeof selectIcon }>;
 export type DBTransaction = Prisma.TransactionGetPayload<{
   select: typeof selectTrans;
+}>;
+export type DBTransfer = Prisma.TransferGetPayload<{
+  select: typeof selectTransfer;
 }>;
 
 export const getProfile = (idUser: string) =>

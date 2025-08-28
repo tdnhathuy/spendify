@@ -9,6 +9,18 @@ export const POST = createApi(async ({ idUser, request }) => {
       fromWalletId: payload.idWalletFrom,
       toWalletId: payload.idWalletTo,
       amount: Number(payload.amount),
+      transaction: {
+        create: {
+          idUser,
+          amount: Number(payload.amount),
+          date: new Date(),
+          note: "Transfer",
+          idWallet: null,
+          idCategory: null,
+          idIcon: null,
+          
+        },
+      },
     },
   });
   return responseSuccess(true);

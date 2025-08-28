@@ -91,6 +91,8 @@ model Transfer {
   fromWallet Wallet @relation("TransferFromWallet", fields: [fromWalletId], references: [id])
   toWallet   Wallet @relation("TransferToWallet", fields: [toWalletId], references: [id])
 
+  transaction Transaction?
+
   @@index([idUser])
   @@index([fromWalletId])
   @@index([toWalletId])
@@ -133,6 +135,10 @@ model Transaction {
   updatedAt  DateTime  @updatedAt
 
   infoSync TransactionInfoSync?
+
+  // ⬇️ thêm @unique để đảm bảo 1 Transfer chỉ map tới 1 Transaction
+  idTransfer String?   @unique
+  transfer   Transfer? @relation(fields: [idTransfer], references: [id])
 
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])

@@ -45,6 +45,12 @@ export type IWallet = {
   includeInReport: boolean;
 };
 
+export type IWalletSimple = {
+  id: string;
+  name: string;
+  icon: IIcon | null;
+};
+
 export interface IWalletDetail extends IWallet {
   cardNumber: string | null;
   cardStatementPassword: string | null;
@@ -90,6 +96,14 @@ export interface ITransaction {
   description: string | null;
 
   infoSync: IInfoSync | null;
+  transfer: ITransfer | null;
+}
+
+export interface ITransfer {
+  id: string;
+  amount: number;
+  fromWallet: IWalletSimple;
+  toWallet: IWalletSimple;
 }
 
 export interface IInfoSync {}
