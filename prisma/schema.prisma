@@ -19,6 +19,7 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   syncConfig   SyncConfig[]
+  Transfer     Transfer[]
 
   @@index([email])
 }
@@ -70,9 +71,29 @@ model Wallet {
   cardStatementPassword String?
   cardStatementDate     DateTime?
   SyncConfig            SyncConfig[]
+  TransferFromWallet    Transfer[]   @relation("TransferFromWallet")
+  TransferToWallet      Transfer[]   @relation("TransferToWallet")
 
   @@index([idUser])
   @@index([idIcon])
+}
+
+model Transfer {
+  id           String   @id @default(uuid())
+  idUser       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  fromWalletId String
+  toWalletId   String
+  amount       Float
+
+  user       User   @relation(fields: [idUser], references: [id])
+  fromWallet Wallet @relation("TransferFromWallet", fields: [fromWalletId], references: [id])
+  toWallet   Wallet @relation("TransferToWallet", fields: [toWalletId], references: [id])
+
+  @@index([idUser])
+  @@index([fromWalletId])
+  @@index([toWalletId])
 }
 
 model Category {

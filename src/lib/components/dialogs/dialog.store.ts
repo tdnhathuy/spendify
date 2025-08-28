@@ -12,6 +12,7 @@ type DialogMap = {
   "create-wallet": IWalletDetail;
   "create-trans": null;
   "create-config-sync": null;
+  transfer: null;
 };
 
 type DialogsState<M extends Record<string, any>> = {

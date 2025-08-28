@@ -16,7 +16,7 @@ import { Form } from "@/components/ui/form";
 import {
   RowInfoDialog,
   PropsDialogRowInfo,
-} from "@/lib/components/dialogs/components/dialog-row-info";
+} from "@/lib/components/dialog-row-info";
 import {
   resolverTransaction,
   TypeSchemaTransaction,
@@ -29,7 +29,6 @@ import { useDidUpdate } from "rooks";
 
 export const DialogTrans = () => {
   const { isOpen, data } = useDialog("trans");
-  console.log('data', data)
 
   const form = useForm<TypeSchemaTransaction>({
     resolver: resolverTransaction,

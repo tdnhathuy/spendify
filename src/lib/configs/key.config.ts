@@ -18,4 +18,5 @@ export const MutationKeys = {
   assignWallet: "assignWallet",
   deleteTransaction: "deleteTransaction",
   createConfigSync: "createConfigSync",
+  createTransfer: "createTransfer",
 };

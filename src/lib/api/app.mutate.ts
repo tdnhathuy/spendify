@@ -8,6 +8,7 @@ import {
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
+import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
 import { IWallet } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
@@ -98,5 +99,12 @@ export const useMutateCreateConfigSync = () => {
         queryKey: [QueryKeys.getConfigSync],
       });
     },
+  });
+};
+
+export const useMutateCreateTransfer = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.createTransfer],
+    mutationFn: ServiceTransfer.transfer,
   });
 };

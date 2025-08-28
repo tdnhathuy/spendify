@@ -5,6 +5,7 @@ import {
   DialogCreateTrans,
   DialogCreateWallet,
   DialogTrans,
+  DialogTransfer,
   DialogWallet,
 } from "./index";
 
@@ -18,6 +19,7 @@ export const RootDialog = () => {
       <DialogCreateWallet />
       <DialogCreateTrans />
       <DialogCreateConfigSync />
+      <DialogTransfer />
     </>
   );
 };

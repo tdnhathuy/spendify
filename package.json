@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm gen:api && next dev --turbopack",
-    "build": "pnpm gen:api &&next build",
+    "build": "pnpm gen:api && next build",
     "start": "next start",
     "lint": "next lint",
     "gen:api": "tsx scripts/gen-api-routes.ts"

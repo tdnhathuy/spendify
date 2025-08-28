@@ -2,7 +2,7 @@
 import { Dialog } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { useQueryWalletDetail } from "@/lib/api/app.query";
-import { RowInfoDialog } from "@/lib/components/dialogs/components/dialog-row-info";
+import { RowInfoDialog } from "@/lib/components/dialog-row-info";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { FooterDialogWalletDetail } from "@/lib/components/dialogs/wallet-detail/footer";
 import {
