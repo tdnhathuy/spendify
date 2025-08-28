@@ -1,24 +1,23 @@
+import { apiPath } from "@/generated/api-routes.gen";
 import { WalletType } from "@/generated/prisma";
-import { client } from "@/lib/configs";
-import { Response, IWallet, IWalletDetail } from "@/lib/types";
+import { api } from "@/lib/configs";
+import { IWallet, IWalletDetail } from "@/lib/types";
 
 export const ServiceWallet = {
-  get: () =>
-    client
-      .get("wallet")
-      .json<Response<IWallet[]>>()
-      .then((s) => s.data),
+  get: () => api<IWallet[]>("get", "wallet"),
 
   create: (json: PayloadCreateWallet) =>
-    client.post("wallet", { json }).json<Response<IWallet>>(),
-  update: ({ id, json }: { id: string; json: PayloadCreateWallet }) =>
-    client.put(`wallet/${id}`, { json }).json<Response<IWallet>>(),
+    api<IWallet>("post", "wallet", { json }),
 
-  getDetail: (idWallet: string) =>
-    client
-      .get(`wallet/${idWallet}`)
-      .json<Response<IWalletDetail>>()
-      .then((s) => s.data),
+  update: ({ id, json }: { id: string; json: PayloadCreateWallet }) => {
+    const url = apiPath.wallet.id(id);
+    return api<IWallet>("put", url, { json });
+  },
+
+  getDetail: (idWallet: string) => {
+    const url = apiPath.wallet.id(idWallet);
+    return api<IWalletDetail>("get", url);
+  },
 };
 
 export interface PayloadCreateWallet {

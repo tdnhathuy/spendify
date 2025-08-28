@@ -8,7 +8,7 @@ export const GET = createApi(async ({ idUser }) => {
 });
 
 export const POST = createApi(async ({ request, idUser }) => {
-  const body = (await request.json()) as { walletId: string; email: string };
+  const body = (await request.json()) as PayloadCreateConfigSync;
   console.log("body", body);
 
   await prisma.syncConfig.create({
@@ -21,3 +21,8 @@ export const POST = createApi(async ({ request, idUser }) => {
 
   return responseSuccess(true);
 });
+
+export interface PayloadCreateConfigSync {
+  walletId: string;
+  email: string;
+}

@@ -93,3 +93,12 @@ export interface ITransaction {
 }
 
 export interface IInfoSync {}
+
+export interface IConfigSync {
+  id: string;
+  createdAt: string;
+  fromEmail: string;
+  idUser: string;
+  updatedAt: string;
+  walletId: string;
+}

@@ -1,5 +1,7 @@
+import { ApiRoute } from "@/generated/api-routes.gen";
 import { getCachedSession } from "@/lib/helpers/session.helper";
-import ky from "ky";
+import { Response } from "@/lib/types";
+import ky, { KyInstance, Options } from "ky";
 const client = ky.create({
   prefixUrl: "api",
   hooks: {
@@ -20,5 +22,14 @@ const client = ky.create({
     ],
   },
 });
+
+export async function api<T>(
+  method: "get" | "post" | "put" | "delete",
+  url: ApiRoute,
+  options?: Options
+): Promise<T> {
+  const x = await client[method](url, options).json<Response<T>>();
+  return x.data;
+}
 
 export { client };

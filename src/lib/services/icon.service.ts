@@ -1,10 +1,6 @@
-import { client } from "@/lib/configs";
-import { IIcon, Response } from "@/lib/types";
+import { api } from "@/lib/configs";
+import { IIcon } from "@/lib/types";
 
 export const ServiceIcon = {
-  get: () =>
-    client
-      .get("icon")
-      .json<Response<IIcon[]>>()
-      .then((res) => res.data),
+  get: () => api<IIcon[]>("get", "icon"),
 };

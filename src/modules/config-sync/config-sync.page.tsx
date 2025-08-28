@@ -1,14 +1,18 @@
 "use client";
 
-import { client } from "@/lib/configs";
+import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ConfigTable } from "@/modules/config-sync/components/config-table";
 import { useQuery } from "@tanstack/react-query";
 
 export const PageConfigSync = () => {
-  const { data } = useQuery({
+  const { data = [] } = useQuery({
     queryKey: ["config"],
-    queryFn: () => client.get("config-sync").json(),
+    queryFn: ServiceConfigSync.get,
   });
-  console.log("data", data);
-  return <ConfigTable />;
+
+  return (
+    <div>
+      <ConfigTable />
+    </div>
+  );
 };

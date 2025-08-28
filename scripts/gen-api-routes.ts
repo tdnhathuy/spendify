@@ -1,0 +1,175 @@
+// scripts/gen-api-routes.ts
+import fg from "fast-glob";
+import { relative } from "node:path";
+import { writeFileSync } from "node:fs";
+import prettier from "prettier";
+
+const ROOT = process.cwd();
+const API_DIR = "src/app/api";
+
+// Tree node: group can contain children and an optional "__self" leaf
+type RouteNode =
+  | { type: "leaf"; path: string; dynParams: string[] }
+  | { type: "group"; children: Record<string, RouteNode> };
+
+function toSegments(file: string) {
+  const rel = relative(`${ROOT}/${API_DIR}`, file).replace(/\\/g, "/");
+  return rel.split("/").slice(0, -1); // drop "route.ts"
+}
+
+function makeLeaf(fullPath: string, lastSeg: string): RouteNode {
+  const dynParams: string[] = [];
+  const dynRe = /\[+\.{0,3}([^\]]+)\]+/g;
+  let m;
+  while ((m = dynRe.exec(lastSeg))) dynParams.push(m[1]);
+  return { type: "leaf", path: fullPath, dynParams };
+}
+
+function ensureGroup(node: RouteNode | undefined): {
+  type: "group";
+  children: Record<string, RouteNode>;
+} {
+  if (!node) return { type: "group", children: {} };
+  if (node.type === "group") return node;
+  // convert existing leaf into group with "__self"
+  return { type: "group", children: { __self: node } };
+}
+
+function setDeep(
+  tree: Record<string, RouteNode>,
+  segments: string[],
+  fullPath: string
+) {
+  let node: Record<string, RouteNode> = tree;
+
+  for (let i = 0; i < segments.length; i++) {
+    const seg = segments[i];
+    const isLast = i === segments.length - 1;
+
+    if (isLast) {
+      const existing = node[seg];
+      if (!existing) {
+        node[seg] = makeLeaf(fullPath, seg);
+      } else if (existing.type === "leaf") {
+        node[seg] = existing;
+      } else {
+        existing.children.__self = makeLeaf(fullPath, seg);
+        node[seg] = existing;
+      }
+    } else {
+      node[seg] = ensureGroup(node[seg]);
+      const g = node[seg] as {
+        type: "group";
+        children: Record<string, RouteNode>;
+      };
+      node = g.children;
+    }
+  }
+}
+
+function segmentToTsKey(seg: string) {
+  const m = seg.match(/\[+\.{0,3}(.+?)\]+/);
+  if (m) return m[1];
+  // turn dashes/spaces into underscores for nicer property names
+  return seg.replace(/[- ]+/g, "_");
+}
+
+function buildPathTemplate(segments: string[]) {
+  const parts = segments.map((s) => {
+    if (/^\[\[?\.\.\..+\]\]$/.test(s)) return "${slug.join('/')}";
+    if (/^\[.+\]$/.test(s)) return "${" + segmentToTsKey(s) + "}";
+    return s;
+  });
+  // no "/api/" prefix
+  return parts.join("/");
+}
+
+function paramsSignature(seg: string) {
+  if (/^\[\[?\.\.\..+\]\]$/.test(seg)) return "slug: string[]";
+  if (/^\[.+\]$/.test(seg)) return `${segmentToTsKey(seg)}: string`;
+  return null;
+}
+
+function generate(tree: Record<string, RouteNode>, base: string[] = []) {
+  const entries = Object.entries(tree);
+  const lines: string[] = ["{"];
+
+  // sort: __self first, then static, then dynamic
+  entries.sort(([a], [b]) => {
+    if (a === "__self") return -1;
+    if (b === "__self") return 1;
+    const ad = a.startsWith("[") ? 1 : 0;
+    const bd = b.startsWith("[") ? 1 : 0;
+    return ad - bd || a.localeCompare(b);
+  });
+
+  for (const [seg, node] of entries) {
+    if (seg === "__self") {
+      // folder's own route: expose as "$"
+      const segments = base;
+      const params = segments.map(paramsSignature).filter(Boolean).join(", ");
+      const tpl = buildPathTemplate(segments);
+      if (params.length)
+        lines.push(`$: (${params}) => \`${tpl}\` as ApiRoute,`);
+      else lines.push(`$: () => \`${tpl}\` as ApiRoute,`);
+      continue;
+    }
+
+    const key = /^[\w$]+$/.test(segmentToTsKey(seg))
+      ? segmentToTsKey(seg)
+      : JSON.stringify(segmentToTsKey(seg));
+
+    if (node.type === "group") {
+      lines.push(`${key}: ${generate(node.children, [...base, seg])},`);
+    } else {
+      const segments = [...base, seg];
+      const params = segments.map(paramsSignature).filter(Boolean).join(", ");
+      const tpl = buildPathTemplate(segments);
+      if (params.length) {
+        lines.push(`${key}: (${params}) => \`${tpl}\` as ApiRoute,`);
+      } else {
+        lines.push(`${key}: () => \`${tpl}\` as ApiRoute,`);
+      }
+    }
+  }
+  lines.push("} as const");
+  return lines.join("\n");
+}
+
+async function main() {
+  const files = await fg([`${API_DIR}/**/route.ts`], { dot: false });
+  const tree: Record<string, RouteNode> = {};
+
+  for (const f of files) {
+    const segs = toSegments(f);
+    setDeep(tree, segs, segs.join("/"));
+  }
+
+  // build ApiRoute union first so it's available for assertions below
+  const routeUnions: string[] = [];
+  for (const f of files) {
+    const segs = toSegments(f);
+    const u = segs.map((s) => (/^\[.*\]$/.test(s) ? "${string}" : s)).join("/");
+    routeUnions.push("`" + u + "`");
+  }
+  const unionCode = `export type ApiRoute = ${routeUnions.sort().join(" | ")};`;
+
+  const objectCode = `export const apiPath = ${generate(tree)};`;
+
+  const out = `// ⚠️ AUTO-GENERATED. Do not edit.
+// Generated by scripts/gen-api-routes.ts
+
+${unionCode}
+
+${objectCode}
+`;
+
+  const formatted = await prettier.format(out, { parser: "typescript" });
+  writeFileSync("src/generated/api-routes.gen.ts", formatted);
+  console.log("✓ wrote src/generated/api-routes.gen.ts");
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

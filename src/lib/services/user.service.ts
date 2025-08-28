@@ -1,8 +1,8 @@
-import { client } from "@/lib/configs";
+import { api } from "@/lib/configs";
 
 export const ServiceUser = {
-  setup: (json: PayloadSetupUser) => client.post("setup", { json }).json(),
-  getInfo: () => client.get("user").json(),
+  setup: (json: PayloadSetupUser) => api("post", "setup", { json }),
+  getInfo: () => api("get", "user"),
 };
 
 export interface PayloadSetupUser {
