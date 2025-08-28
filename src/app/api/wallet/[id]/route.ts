@@ -31,6 +31,14 @@ export const PUT = createApi(async ({ request, idUser }) => {
   return responseSuccess(DTOWallet.fromDB(wallet));
 });
 
+export const DELETE = createApi(async ({ idUser, request }) => {
+  const idWallet = request.nextUrl.pathname.split("/").pop()!;
+  const response = await prisma.wallet.delete({
+    where: { id: idWallet, idUser },
+  });
+  return responseSuccess(true);
+});
+
 export const GET = createApi(async ({ idUser, request }) => {
   const id = request.nextUrl.pathname.split("/").pop()!;
 

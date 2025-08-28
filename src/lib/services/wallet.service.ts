@@ -13,6 +13,10 @@ export const ServiceWallet = {
     const url = apiPath.wallet.id(payload.id);
     return api<IWallet>("put", url, { json: payload });
   },
+  delete: (idWallet: string) => {
+    const url = apiPath.wallet.id(idWallet);
+    return api<IWallet>("delete", url);
+  },
 
   getDetail: (idWallet: string) => {
     const url = apiPath.wallet.id(idWallet);

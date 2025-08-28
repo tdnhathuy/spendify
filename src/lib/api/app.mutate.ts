@@ -35,6 +35,14 @@ export const useMutateCreateWallet = () => {
   });
 };
 
+export const useMutateDeleteWallet = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.deleteWallet],
+    mutationFn: ServiceWallet.delete,
+    onSuccess: Refetch.wallet,
+  });
+};
+
 export const useMutateUpdateWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.updateWallet],

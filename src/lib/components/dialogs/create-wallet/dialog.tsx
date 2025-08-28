@@ -48,6 +48,7 @@ export const DialogCreateWallet = () => {
           footer={<FooterDialogCreateWallet />}
           className="gap-4 py-8 "
           ctnClassName="-translate-y-[60%]"
+          footerProps={{ className: "flex sm:justify-between" }}
         >
           <span className="mx-auto bg-gray-100 flex  justify-center items-center p-3 rounded-md border shadow">
             <IconPicker

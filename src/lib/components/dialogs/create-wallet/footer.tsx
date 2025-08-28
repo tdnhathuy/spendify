@@ -1,25 +1,33 @@
 import {
   useMutateCreateWallet,
+  useMutateDeleteWallet,
   useMutateUpdateWallet,
 } from "@/lib/api/app.mutate";
-import { keyQueryWalletDetail } from "@/lib/api/app.query";
 import { TypeSchemaCreateWallet } from "@/lib/components/dialogs/create-wallet/schema";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { queryClient } from "@/lib/configs";
 import { FieldErrors, useFormContext } from "react-hook-form";
 
 export const FooterDialogCreateWallet = () => {
-  const { isOpen, data } = dialogs.useDialog("create-wallet");
+  const { data } = dialogs.useDialog("create-wallet");
 
   const { handleSubmit, formState } = useFormContext<TypeSchemaCreateWallet>();
   const { isValid } = formState;
 
-  const { mutateAsync: createWallet } = useMutateCreateWallet();
-  const { mutateAsync: updateWallet } = useMutateUpdateWallet();
+  const { mutateAsync: createWallet, isPending: isCreating } =
+    useMutateCreateWallet();
+  const { mutateAsync: updateWallet, isPending: isUpdating } =
+    useMutateUpdateWallet();
+  const { mutateAsync: deleteWallet, isPending: isDeleting } =
+    useMutateDeleteWallet();
 
   const isUpdate = !!data;
   const titleButton = isUpdate ? "Update" : "Create";
+
+  const onClickDelete = async () => {
+    await deleteWallet(data?.id ?? "");
+    dialogs.closeAll();
+  };
 
   const onSubmit = async (form: TypeSchemaCreateWallet) => {
     if (isUpdate) {
@@ -57,21 +65,36 @@ export const FooterDialogCreateWallet = () => {
 
   return (
     <>
-      <WiseButton
-        size="sm"
-        variant={"outline"}
-        onClick={() => dialogs.close("create-wallet")}
-      >
-        Cancel
-      </WiseButton>
+      {isUpdate ? (
+        <WiseButton
+          size="sm"
+          variant={"destructive"}
+          onClick={onClickDelete}
+          disabled={isDeleting}
+        >
+          Delete
+        </WiseButton>
+      ) : (
+        <span></span>
+      )}
 
-      <WiseButton
-        size="sm"
-        onClick={handleSubmit(onSubmit, onError)}
-        disabled={!isValid}
-      >
-        {titleButton}
-      </WiseButton>
+      <div className="flex gap-2">
+        <WiseButton
+          size="sm"
+          variant={"outline"}
+          onClick={() => dialogs.close("create-wallet")}
+        >
+          Cancel
+        </WiseButton>
+
+        <WiseButton
+          size="sm"
+          onClick={handleSubmit(onSubmit, onError)}
+          disabled={!isValid || isCreating || isUpdating || isDeleting}
+        >
+          {titleButton}
+        </WiseButton>
+      </div>
     </>
   );
 };
