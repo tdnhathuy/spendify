@@ -8,6 +8,7 @@ import {
   TypeSchemaConfigSync,
 } from "@/lib/components/dialogs/create-config-sync/schema";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
+import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
@@ -28,6 +29,7 @@ export const DialogCreateConfigSync = () => {
   const onSelectWallet = (wallet: IWallet) => {
     setOpenPopover(false);
     form.setValue("wallet", formatOption(wallet, "id", "name"));
+    wallet.icon && form.setValue("icon", wallet.icon);
   };
 
   const { wallet } = form.getValues();
@@ -40,11 +42,30 @@ export const DialogCreateConfigSync = () => {
         <WiseDialogContent
           title="Create Config Sync"
           footer={<FooterDialogCreateConfigSync />}
+          className="flex flex-row gap-2 py-8"
         >
-          <WiseTextInput type="email" placeholder="Email" />
+          <WiseTextInput
+            type="email"
+            placeholder="Email"
+            {...form.register("email")}
+          />
 
           <Popover open={openPopover} onOpenChange={setOpenPopover}>
-            <PopoverTrigger>{wallet ? wallet?.label : "1"}</PopoverTrigger>
+            <PopoverTrigger
+              asChild
+              className="w-48  flex justify-center border border-gray-200 rounded-md cursor-pointer"
+            >
+              <span className="flex flex-row gap-2 items-center font-semibold text-sm">
+                {wallet ? (
+                  <>
+                    <IconPicker icon={form.getValues("icon")} size="sm" />
+                    {wallet ? wallet?.label : "1"}
+                  </>
+                ) : (
+                  "Select Wallet"
+                )}
+              </span>
+            </PopoverTrigger>
 
             <WisePopoverContent className="gap-2 flex flex-col">
               {wallets.map((wallet) => {

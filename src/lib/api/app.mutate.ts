@@ -7,6 +7,7 @@ import {
 } from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
+import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ServiceUser } from "@/lib/services/user.service";
 import { IWallet } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
@@ -85,5 +86,17 @@ export const useMutateDeleteTrans = (idTrans: string) => {
     mutationKey: [MutationKeys.deleteTransaction, idTrans],
     mutationFn: ServiceTrans.delete,
     onSuccess: () => deleteQueryTransaction(idTrans),
+  });
+};
+
+export const useMutateCreateConfigSync = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.createConfigSync],
+    mutationFn: ServiceConfigSync.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.getConfigSync],
+      });
+    },
   });
 };

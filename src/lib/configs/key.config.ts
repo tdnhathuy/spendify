@@ -6,6 +6,7 @@ export const QueryKeys = {
   infiniteTrans: "infiniteTrans",
   getReport: "getReport",
   getWalletDetail: "getWalletDetail",
+  getConfigSync: "getConfigSync",
 };
 export const MutationKeys = {
   createWallet: "createWallet",
@@ -16,4 +17,5 @@ export const MutationKeys = {
   assignCategory: "assignCategory",
   assignWallet: "assignWallet",
   deleteTransaction: "deleteTransaction",
+  createConfigSync: "createConfigSync",
 };

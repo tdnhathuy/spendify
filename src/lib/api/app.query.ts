@@ -1,5 +1,6 @@
 import { QueryKeys } from "@/lib/configs";
 import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
+import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ParamsPagination } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -39,5 +40,12 @@ export const useQueryWalletDetail = (idWallet: string) => {
     queryKey: keyQueryWalletDetail(idWallet),
     queryFn: () => ServiceWallet.getDetail(idWallet),
     enabled: !!idWallet,
+  });
+};
+
+export const useQueryConfigSync = () => {
+  return useQuery({
+    queryKey: [QueryKeys.getConfigSync],
+    queryFn: ServiceConfigSync.get,
   });
 };
