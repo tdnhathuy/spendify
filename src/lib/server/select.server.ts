@@ -40,6 +40,13 @@ export const selectWalletDetail = {
   cardStatementPassword: true,
 } satisfies Prisma.WalletSelect;
 
+export const selectConfigSync = {
+  id: true,
+  fromEmail: true,
+  walletId: true,
+  toWallet: { select: selectWallet },
+} satisfies Prisma.SyncConfigSelect;
+
 export const selectInfoSync = {
   id: true,
   emailProvider: true,

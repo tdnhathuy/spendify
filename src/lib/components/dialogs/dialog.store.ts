@@ -11,6 +11,7 @@ type DialogMap = {
   "assign-wallet": ITransaction;
   "create-wallet": null;
   "create-trans": null;
+  "create-config-sync": null;
 };
 
 type DialogsState<M extends Record<string, any>> = {

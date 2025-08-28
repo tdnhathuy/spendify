@@ -11,7 +11,7 @@ const TYPES = [
   { id: WalletType.Crypto },
 ];
 
-export const InputWalletType = () => {
+export const InputWalletTypeV2 = () => {
   const { field } = useController<TypeSchemaWallet>({ name: "type" });
   return (
     <div className="flex gap-2">

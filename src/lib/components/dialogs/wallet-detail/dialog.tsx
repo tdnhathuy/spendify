@@ -2,7 +2,7 @@
 import { Dialog } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { useQueryWalletDetail } from "@/lib/api/app.query";
-import { DialogRowInfo } from "@/lib/components/dialogs/components/dialog-row-info";
+import { RowInfoDialog } from "@/lib/components/dialogs/components/dialog-row-info";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { FooterDialogWalletDetail } from "@/lib/components/dialogs/wallet-detail/footer";
 import {
@@ -78,24 +78,24 @@ export const DialogWallet = () => {
               </span>
 
               <div className="p-4 gap-2 flex flex-col">
-                <DialogRowInfo icon={<Wallet />} label="Wallet" value={name} />
-                <DialogRowInfo icon={<Wallet />} label="Wallet" value={type} />
-                <DialogRowInfo
+                <RowInfoDialog icon={<Wallet />} label="Wallet" value={name} />
+                <RowInfoDialog icon={<Wallet />} label="Wallet" value={type} />
+                <RowInfoDialog
                   icon={<Wallet />}
                   label="Card Number"
                   value={cardNumber || ""}
                 />
-                <DialogRowInfo
+                <RowInfoDialog
                   icon={<Wallet />}
                   label="Card Statement Password"
                   value={cardStatementPassword || ""}
                 />
-                <DialogRowInfo
+                <RowInfoDialog
                   icon={<Wallet />}
                   label="Initial Balance"
                   value={formatMoney(initBalance)}
                 />
-                <DialogRowInfo
+                <RowInfoDialog
                   icon={<Wallet />}
                   label="Total Transaction"
                   value={totalTransaction + ""}

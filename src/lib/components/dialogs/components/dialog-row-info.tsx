@@ -7,7 +7,7 @@ export interface PropsDialogRowInfo {
   value: string | ReactElement;
   onClick?: () => void;
 }
-export const DialogRowInfo = (props: PropsDialogRowInfo) => {
+export const RowInfoDialog = (props: PropsDialogRowInfo) => {
   const { icon, label, value, onClick } = props;
   return (
     <span

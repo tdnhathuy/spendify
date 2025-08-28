@@ -14,7 +14,7 @@ import { TbCategory } from "react-icons/tb";
 
 import { Form } from "@/components/ui/form";
 import {
-  DialogRowInfo,
+  RowInfoDialog,
   PropsDialogRowInfo,
 } from "@/lib/components/dialogs/components/dialog-row-info";
 import {
@@ -127,7 +127,7 @@ export const DialogTrans = () => {
 
           <div className="p-2 px-4 gap-2 flex flex-col">
             {INFOs.map((info) => (
-              <DialogRowInfo key={info.label} {...info} />
+              <RowInfoDialog key={info.label} {...info} />
             ))}
           </div>
         </WiseDialogContent>

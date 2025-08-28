@@ -1,15 +1,31 @@
-import { createApi, prisma, responseSuccess } from "@/lib/server";
+import { DTOWallet } from "@/lib/dto/wallet.dto";
+import {
+  createApi,
+  prisma,
+  responseSuccess,
+  selectConfigSync,
+  selectWallet,
+} from "@/lib/server";
+import { IConfigSync } from "@/lib/types";
 
 export const GET = createApi(async ({ idUser }) => {
-  const config = await prisma.syncConfig.findMany({
+  const response = await prisma.syncConfig.findMany({
     where: { idUser },
+    select: selectConfigSync,
   });
-  return responseSuccess(config);
+
+  const configs: IConfigSync[] = response.map((item) => ({
+    id: item.id,
+    idUser: idUser,
+    fromEmail: item.fromEmail,
+    toWallet: item.toWallet.id,
+    wallet: DTOWallet.fromDB(item.toWallet)!,
+  }));
+  return responseSuccess(configs);
 });
 
 export const POST = createApi(async ({ request, idUser }) => {
   const body = (await request.json()) as PayloadCreateConfigSync;
-  console.log("body", body);
 
   await prisma.syncConfig.create({
     data: {
