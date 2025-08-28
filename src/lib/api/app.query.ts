@@ -30,9 +30,13 @@ export const useQueryWallet = () => {
   });
 };
 
+export const keyQueryWalletDetail = (idWallet: string) => {
+  return [QueryKeys.getWalletDetail, idWallet];
+};
+
 export const useQueryWalletDetail = (idWallet: string) => {
   return useQuery({
-    queryKey: [QueryKeys.getWalletDetail, idWallet],
+    queryKey: keyQueryWalletDetail(idWallet),
     queryFn: () => ServiceWallet.getDetail(idWallet),
     enabled: !!idWallet,
   });

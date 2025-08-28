@@ -17,17 +17,21 @@ import { PiMoney } from "react-icons/pi";
 import { useDidUpdate } from "rooks";
 
 export const DialogCreateWallet = () => {
-  const { isOpen } = dialogs.useDialog("create-wallet");
+  const { isOpen, data } = dialogs.useDialog("create-wallet");
+  console.log("data", data);
 
   const form = useForm<TypeSchemaCreateWallet>({ resolver });
+
+  const title = data ? "Edit Wallet" : "Create Wallet";
+  const subtitle = data ? "Edit your wallet" : "Add a new account";
 
   useDidUpdate(() => {
     if (isOpen) {
       form.reset({
-        icon: null,
-        initBalance: "",
-        name: "",
-        type: "Cash",
+        icon: data?.icon ?? null,
+        initBalance: data?.initBalance?.toString() ?? "",
+        name: data?.name ?? "",
+        type: data?.type || "Cash",
       });
     }
   }, [isOpen]);
@@ -39,8 +43,8 @@ export const DialogCreateWallet = () => {
     >
       <Form {...form}>
         <WiseDialogContent
-          title="Create Wallet"
-          desc="Add a new account to manage your finances"
+          title={title}
+          desc={subtitle}
           footer={<FooterDialogCreateWallet />}
           className="gap-4 py-8 "
           ctnClassName="-translate-y-[60%]"

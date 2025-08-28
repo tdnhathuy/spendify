@@ -9,15 +9,19 @@ export const ServiceWallet = {
   create: (json: PayloadCreateWallet) =>
     api<IWallet>("post", "wallet", { json }),
 
-  update: ({ id, json }: { id: string; json: PayloadCreateWallet }) => {
-    const url = apiPath.wallet.id(id);
-    return api<IWallet>("put", url, { json });
+  update: (payload: PayloadUpdateWallet) => {
+    const url = apiPath.wallet.id(payload.id);
+    return api<IWallet>("put", url, { json: payload });
   },
 
   getDetail: (idWallet: string) => {
     const url = apiPath.wallet.id(idWallet);
     return api<IWalletDetail>("get", url);
   },
+};
+
+export type PayloadUpdateWallet = PayloadCreateWallet & {
+  id: string;
 };
 
 export interface PayloadCreateWallet {

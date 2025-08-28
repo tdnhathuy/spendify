@@ -1,5 +1,6 @@
+import { keyQueryWalletDetail } from "@/lib/api/app.query";
 import { Refetch } from "@/lib/api/app.refech";
-import { MutationKeys } from "@/lib/configs";
+import { MutationKeys, queryClient, QueryKeys } from "@/lib/configs";
 import {
   deleteQueryTransaction,
   updateQueryTransaction,
@@ -7,6 +8,7 @@ import {
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceUser } from "@/lib/services/user.service";
+import { IWallet } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 
 export const useMutateSetup = () => {
@@ -29,9 +31,7 @@ export const useMutateCreateWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.createWallet],
     mutationFn: ServiceWallet.create,
-    onSuccess: () => {
-      Refetch.wallet();
-    },
+    onSuccess: Refetch.wallet,
   });
 };
 
@@ -39,7 +39,12 @@ export const useMutateUpdateWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.updateWallet],
     mutationFn: ServiceWallet.update,
-    onSuccess: Refetch.wallet,
+    onSuccess: (newWallet: IWallet) => {
+      Refetch.wallet();
+      queryClient.invalidateQueries({
+        queryKey: keyQueryWalletDetail(newWallet.id),
+      });
+    },
   });
 };
 

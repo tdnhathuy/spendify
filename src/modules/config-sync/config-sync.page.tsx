@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { dialogs } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { PageHeader } from "@/lib/components/shared/page-header";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
@@ -25,8 +26,14 @@ export const PageConfigSync = () => {
       {/* <ConfigTable /> */}
       <PageHeader
         title="Config Sync"
-        // description="Config Sync"
-        rightComponent={<WiseButton size={"sm"}>Add</WiseButton>}
+        rightComponent={
+          <WiseButton
+            size={"sm"}
+            onClick={() => dialogs.open("create-config-sync")}
+          >
+            Add
+          </WiseButton>
+        }
       />
 
       <Table>

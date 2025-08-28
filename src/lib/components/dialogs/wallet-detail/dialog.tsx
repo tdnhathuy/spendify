@@ -58,7 +58,7 @@ export const DialogWallet = () => {
           title="Wallet Detail"
           headerClassName="border-b-0"
           className="p-0"
-          footer={<FooterDialogWalletDetail />}
+          footer={<FooterDialogWalletDetail walletDetail={detail} />}
           ctnClassName="w-[420px] h-[70%] -translate-y-[60%]"
         >
           {isLoading ? (

@@ -1,7 +1,7 @@
 // dialogs.ts
+import type { ICategory, ITransaction, IWalletDetail } from "@/lib/types";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
-import type { ICategory, ITransaction, IWallet } from "@/lib/types";
 
 type DialogMap = {
   trans: ITransaction;
@@ -9,7 +9,7 @@ type DialogMap = {
   category: ICategory;
   "assign-category": ITransaction;
   "assign-wallet": ITransaction;
-  "create-wallet": null;
+  "create-wallet": IWalletDetail;
   "create-trans": null;
   "create-config-sync": null;
 };
@@ -57,7 +57,7 @@ export function useDialog<K extends keyof DialogMap>(
         ({
           isOpen: Boolean(s.open[key]),
           data: (s.data[key] ?? null) as DialogMap[K] | null,
-        } as const)
+        }) as const
     )
   );
 }
