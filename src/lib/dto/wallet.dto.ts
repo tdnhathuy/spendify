@@ -13,9 +13,9 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
   );
 
   const currentBalance =
-    wallet.initBalance +
-    allIncome.reduce((acc, curr) => acc + curr.amount, 0) -
-    allExpense.reduce((acc, curr) => acc + curr.amount, 0);
+    wallet.initBalance.toNumber() +
+    allIncome.reduce((acc, curr) => acc + curr.amount.toNumber(), 0) -
+    allExpense.reduce((acc, curr) => acc + curr.amount.toNumber(), 0);
 
   return {
     id: wallet.id,
@@ -23,7 +23,7 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
     type: wallet.type,
 
     icon: DTOIcon.fromDB(wallet.icon),
-    initBalance: wallet.initBalance,
+    initBalance: wallet.initBalance.toNumber(),
     currentBalance: currentBalance,
     includeInReport: wallet.includeInReport,
   };
@@ -41,8 +41,8 @@ const fromDBDetail = (wallet: DBWalletDetail): IWalletDetail | null => {
 
     id: wallet.id,
     name: wallet.name,
-    initBalance: wallet.initBalance,
-    currentBalance: wallet.initBalance,
+    initBalance: wallet.initBalance.toNumber(),
+    currentBalance: wallet.initBalance.toNumber(),
     icon: DTOIcon.fromDB(wallet.icon),
     type: wallet.type,
     includeInReport: wallet.includeInReport,

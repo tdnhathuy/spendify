@@ -29,12 +29,15 @@ model SyncConfig {
   idUser    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [idUser], references: [id])
+  user      User     @relation(fields: [idUser], references: [id], onDelete: Cascade)
 
   fromEmail String
-  toWallet  Wallet? @relation(fields: [walletId], references: [id])
-  walletId  String?
+  provider  String @default("gmail")
 
+  toWallet Wallet? @relation(fields: [walletId], references: [id], onDelete: SetNull)
+  walletId String?
+
+  @@unique([idUser, provider, fromEmail, walletId])
   @@index([idUser])
 }
 
@@ -43,7 +46,7 @@ model Icon {
   code         String?
   url          String?
   idUser       String
-  user         User          @relation(fields: [idUser], references: [id])
+  user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
   wallets      Wallet[]
   categories   Category[]
   transactions Transaction[]
@@ -58,12 +61,12 @@ model Icon {
 model Wallet {
   id              String        @id @default(uuid())
   name            String
-  initBalance     Float         @default(0)
+  initBalance     Decimal       @default(0) @db.Decimal(19, 4)
   type            WalletType
   idUser          String
   idIcon          String?
-  user            User          @relation(fields: [idUser], references: [id])
-  icon            Icon?         @relation(fields: [idIcon], references: [id])
+  user            User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  icon            Icon?         @relation(fields: [idIcon], references: [id], onDelete: SetNull)
   transactions    Transaction[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -76,6 +79,7 @@ model Wallet {
   TransferFromWallet    Transfer[]   @relation("TransferFromWallet")
   TransferToWallet      Transfer[]   @relation("TransferToWallet")
 
+  @@unique([idUser, name])
   @@index([idUser])
   @@index([idIcon])
 }
@@ -87,9 +91,9 @@ model Transfer {
   updatedAt    DateTime @updatedAt
   fromWalletId String
   toWalletId   String
-  amount       Float
+  amount       Decimal  @db.Decimal(19, 4)
 
-  user       User   @relation(fields: [idUser], references: [id])
+  user       User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
   fromWallet Wallet @relation("TransferFromWallet", fields: [fromWalletId], references: [id])
   toWallet   Wallet @relation("TransferToWallet", fields: [toWalletId], references: [id])
 
@@ -100,6 +104,9 @@ model Transfer {
   @@index([toWalletId])
 }
 
+// NOTE: Nên thêm CHECK ở migration SQL để tránh chuyển cùng một ví:
+// ALTER TABLE "Transfer" ADD CONSTRAINT transfer_from_to_diff CHECK ("fromWalletId" <> "toWalletId");
+
 model Category {
   id           String        @id @default(uuid())
   name         String
@@ -107,14 +114,15 @@ model Category {
   idIcon       String?
   idParent     String?
   type         CategoryType
-  user         User          @relation(fields: [idUser], references: [id])
-  icon         Icon?         @relation(fields: [idIcon], references: [id])
-  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id])
+  user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  icon         Icon?         @relation(fields: [idIcon], references: [id], onDelete: SetNull)
+  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id], onDelete: SetNull)
   children     Category[]    @relation("CategoryToCategory")
   transactions Transaction[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
+  @@unique([idUser, name, type])
   @@index([idUser])
   @@index([idParent])
   @@index([type])
@@ -126,13 +134,13 @@ model Transaction {
   idWallet   String?
   idCategory String?
   idIcon     String?
-  amount     Float
+  amount     Decimal   @db.Decimal(19, 4)
   note       String?
   date       DateTime  @default(now())
-  user       User      @relation(fields: [idUser], references: [id])
-  wallet     Wallet?   @relation(fields: [idWallet], references: [id])
-  category   Category? @relation(fields: [idCategory], references: [id])
-  icon       Icon?     @relation(fields: [idIcon], references: [id])
+  user       User      @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  wallet     Wallet?   @relation(fields: [idWallet], references: [id], onDelete: SetNull)
+  category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)
+  icon       Icon?     @relation(fields: [idIcon], references: [id], onDelete: SetNull)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
@@ -140,11 +148,13 @@ model Transaction {
 
   // ⬇️ thêm @unique để đảm bảo 1 Transfer chỉ map tới 1 Transaction
   idTransfer String?   @unique
-  transfer   Transfer? @relation(fields: [idTransfer], references: [id])
+  transfer   Transfer? @relation(fields: [idTransfer], references: [id], onDelete: SetNull)
 
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])
   @@index([idCategory])
+  @@index([idUser, idWallet, date(sort: Desc)])
+  @@index([idUser, idCategory, date(sort: Desc)])
 }
 
 model TransactionInfoSync {
@@ -154,12 +164,14 @@ model TransactionInfoSync {
   updatedAt DateTime @updatedAt
 
   emailProvider String
-  emailReceived String
+  providerMsgId String
+  emailReceived DateTime
   emailTitle    String
 
   idTransaction String      @unique
-  transaction   Transaction @relation(fields: [idTransaction], references: [id])
+  transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
 
+  @@unique([idUser, emailProvider, providerMsgId])
   @@index([idUser])
 }
 

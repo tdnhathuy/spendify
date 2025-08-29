@@ -17,7 +17,7 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
 
   const result: ITransaction = {
     id: transaction.id,
-    amount: transaction.amount,
+    amount: transaction.amount.toNumber(),
     date: transaction.date,
     description: transaction.note,
 

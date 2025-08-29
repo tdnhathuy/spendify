@@ -29,10 +29,10 @@ export const GET = createApi(async ({ idUser }) => {
   };
 
   trans.forEach((x) => {
-    if (x.category?.type === "Income" && x.amount > 0) {
-      result.income += Math.abs(x.amount);
+    if (x.category?.type === "Income" && x.amount.toNumber() > 0) {
+      result.income += Math.abs(x.amount.toNumber());
     } else {
-      result.expense += Math.abs(x.amount);
+      result.expense += Math.abs(x.amount.toNumber());
     }
   });
 

@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
               emailReceived: emailTo,
               emailTitle: mail.subject || "",
               idUser: id,
+              providerMsgId: message_id || mail.messageId,
             },
           },
         },

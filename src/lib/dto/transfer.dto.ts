@@ -11,7 +11,7 @@ export const DTOTransfer = {
 
     return {
       id: transfer.id,
-      amount: transfer.amount,
+      amount: transfer.amount.toNumber(),
       fromWallet: fromWallet!,
       toWallet: toWallet!,
     };
