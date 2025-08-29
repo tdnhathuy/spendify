@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Props {
-  icon: IIcon | null | undefined;
+  icon: IIcon | undefined | null;
   onChange?: (icon: IIcon) => void;
   disabled?: boolean;
   size?: "xs" | "sm" | "md" | "lg";
@@ -57,8 +57,8 @@ export const IconPicker = ({
       <Image
         draggable={false}
         key={icon.id}
-        alt={icon.code}
-        src={icon.url}
+        alt={icon.code || icon.url || ""}
+        src={icon.url || ""}
         fill
       />
     </div>

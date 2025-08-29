@@ -19,4 +19,5 @@ export const MutationKeys = {
   deleteTransaction: "deleteTransaction",
   createConfigSync: "createConfigSync",
   createTransfer: "createTransfer",
+  updateConfigSync: "updateConfigSync",
 };

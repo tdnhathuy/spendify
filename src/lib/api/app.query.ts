@@ -54,6 +54,7 @@ export const useQueryConfigSync = () => {
     queryFn: ServiceConfigSync.get,
   });
 };
+
 export const useQueryIcon = (disabled = false) => {
   return useQuery({
     queryKey: [QueryKeys.getIcon],

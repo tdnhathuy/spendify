@@ -4,6 +4,7 @@
 export type ApiRoute =
   | `auth/${string}`
   | `category`
+  | `config-sync/${string}`
   | `config-sync`
   | `dashboard`
   | `hook-email`
@@ -24,7 +25,10 @@ export const apiPath = {
     nextauth: (nextauth: string) => `auth/${nextauth}` as ApiRoute,
   } as const,
   category: () => `category` as ApiRoute,
-  config_sync: () => `config-sync` as ApiRoute,
+  config_sync: {
+    $: () => `config-sync` as ApiRoute,
+    id: (id: string) => `config-sync/${id}` as ApiRoute,
+  } as const,
   dashboard: () => `dashboard` as ApiRoute,
   hook_email: () => `hook-email` as ApiRoute,
   icon: () => `icon` as ApiRoute,

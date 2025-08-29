@@ -4,6 +4,7 @@ import { prisma } from "@/lib/server/prisma.server";
 export const selectIcon = {
   id: true,
   code: true,
+  url: true,
 } satisfies Prisma.IconSelect;
 
 export const selectCategory = {
@@ -48,6 +49,7 @@ export const selectWalletDetail = {
 
 export const selectConfigSync = {
   id: true,
+  idUser: true,
   fromEmail: true,
   walletId: true,
   toWallet: { select: selectWallet },
@@ -95,10 +97,15 @@ export type DBWalletSimple = Prisma.WalletGetPayload<{
   select: typeof selectWalletSimple;
 }>;
 
+export type DBSyncConfig = Prisma.SyncConfigGetPayload<{
+  select: typeof selectConfigSync;
+}>;
+
 export type DBWalletDetail = Prisma.WalletGetPayload<{
   select: typeof selectWalletDetail;
 }>;
 export type DBIcon = Prisma.IconGetPayload<{ select: typeof selectIcon }>;
+
 export type DBTransaction = Prisma.TransactionGetPayload<{
   select: typeof selectTrans;
 }>;

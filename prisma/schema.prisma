@@ -32,15 +32,16 @@ model SyncConfig {
   user      User     @relation(fields: [idUser], references: [id])
 
   fromEmail String
-  toWallet  Wallet @relation(fields: [walletId], references: [id])
-  walletId  String
+  toWallet  Wallet? @relation(fields: [walletId], references: [id])
+  walletId  String?
 
   @@index([idUser])
 }
 
 model Icon {
   id           String        @id @default(uuid())
-  code         String
+  code         String?
+  url          String?
   idUser       String
   user         User          @relation(fields: [idUser], references: [id])
   wallets      Wallet[]
@@ -48,6 +49,7 @@ model Icon {
   transactions Transaction[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  type         IconType      @default(FlatIcon)
 
   @@index([idUser])
   @@index([code])
@@ -171,4 +173,11 @@ enum WalletType {
   Debit
   Credit
   Crypto
+}
+
+enum IconType {
+  FlatIcon
+  Bank
+  EWallet
+  Imported
 }

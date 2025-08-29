@@ -15,19 +15,17 @@ import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import { WiseTextInput } from "@/lib/components/wise/wise-text-input";
 import { formatOption } from "@/lib/helpers";
 import { IWallet } from "@/lib/types";
-import { useState } from "react";
+import { PopoverClose } from "@radix-ui/react-popover";
 import { useForm } from "react-hook-form";
 
 export const DialogCreateConfigSync = () => {
   const { isOpen } = dialogs.useDialog("create-config-sync");
-  const [openPopover, setOpenPopover] = useState(false);
 
   const { data: wallets = [] } = useQueryWallet();
 
   const form = useForm<TypeSchemaConfigSync>({ resolver });
 
   const onSelectWallet = (wallet: IWallet) => {
-    setOpenPopover(false);
     form.setValue("wallet", formatOption(wallet, "id", "name"));
     wallet.icon && form.setValue("icon", wallet.icon);
   };
@@ -50,7 +48,7 @@ export const DialogCreateConfigSync = () => {
             {...form.register("email")}
           />
 
-          <Popover open={openPopover} onOpenChange={setOpenPopover}>
+          <Popover>
             <PopoverTrigger
               asChild
               className="w-48  flex justify-center border border-gray-200 rounded-md cursor-pointer"
@@ -67,23 +65,40 @@ export const DialogCreateConfigSync = () => {
               </span>
             </PopoverTrigger>
 
-            <WisePopoverContent className="gap-2 flex flex-col">
-              {wallets.map((wallet) => {
-                return (
-                  <WiseButton
-                    key={wallet.id}
-                    className="w-full"
-                    variant={"outline"}
-                    onClick={() => onSelectWallet(wallet)}
-                  >
-                    <span>{wallet.name}</span>
-                  </WiseButton>
-                );
-              })}
-            </WisePopoverContent>
+            <PopoverContentConfigSync
+              wallets={wallets}
+              onSelectWallet={onSelectWallet}
+            />
           </Popover>
         </WiseDialogContent>
       </Form>
     </Dialog>
+  );
+};
+
+type Props = {
+  wallets: IWallet[];
+  onSelectWallet: (wallet: IWallet) => void;
+};
+export const PopoverContentConfigSync = ({
+  wallets,
+  onSelectWallet,
+}: Props) => {
+  return (
+    <WisePopoverContent className="gap-2 flex flex-col">
+      {wallets.map((wallet) => {
+        return (
+          <PopoverClose asChild key={wallet.id}>
+            <WiseButton
+              className="w-full"
+              variant={"outline"}
+              onClick={() => onSelectWallet(wallet)}
+            >
+              <span>{wallet.name}</span>
+            </WiseButton>
+          </PopoverClose>
+        );
+      })}
+    </WisePopoverContent>
   );
 };

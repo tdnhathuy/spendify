@@ -60,15 +60,15 @@ export interface IWalletDetail extends IWallet {
 
 export type IIcon = {
   id: string;
-  code: string;
-  url: string;
+  code: string | null;
+  url: string | null;
 };
 
 export interface BaseCategory {
   id: string;
   name: string;
   type: CategoryType;
-  icon: IIcon | null;
+  icon: IIcon | undefined | null;
   idParent?: string | null;
 }
 
@@ -112,7 +112,7 @@ export interface IConfigSync {
   id: string;
   idUser: string;
   fromEmail: string;
-  toWallet: string;
+  toWallet: string | null;
 
-  wallet: IWallet;
+  wallet: IWallet | null;
 }

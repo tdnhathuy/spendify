@@ -1,10 +1,9 @@
-import { DTOWallet } from "@/lib/dto/wallet.dto";
+import { DTOConfigSync } from "@/lib/dto/config-sync.dto";
 import {
   createApi,
   prisma,
   responseSuccess,
   selectConfigSync,
-  selectWallet,
 } from "@/lib/server";
 import { IConfigSync } from "@/lib/types";
 
@@ -14,13 +13,7 @@ export const GET = createApi(async ({ idUser }) => {
     select: selectConfigSync,
   });
 
-  const configs: IConfigSync[] = response.map((item) => ({
-    id: item.id,
-    idUser: idUser,
-    fromEmail: item.fromEmail,
-    toWallet: item.toWallet.id,
-    wallet: DTOWallet.fromDB(item.toWallet)!,
-  }));
+  const configs: IConfigSync[] = response.map(DTOConfigSync.fromDB);
   return responseSuccess(configs);
 });
 

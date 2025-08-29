@@ -2,6 +2,8 @@ import "server-only";
 
 import { prisma } from "@/lib/server/prisma.server";
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs/promises";
+import path from "path";
 
 export type HandlerCtx = {
   timing<T>(name: string, fn: () => Promise<T>): Promise<T>;
@@ -11,6 +13,7 @@ export type HandlerCtx = {
 type HandlerV2 = (payload: {
   request: NextRequest;
   idUser: string;
+  id: string | undefined;
 }) => Promise<NextResponse>;
 
 export const timing = async <T>(name: string, fn: () => Promise<T>) => {
@@ -36,12 +39,14 @@ export function createApi(handler: HandlerV2) {
       return await handler({
         idUser: u.id,
         request,
+        id: getParamId(request),
       });
     }
 
     return await handler({
       request,
       idUser: "6bdb5088-1831-44ee-af45-9909955df7b7",
+      id: undefined,
     });
   };
 }
@@ -63,4 +68,33 @@ export const getParamsPaging = (req: NextRequest) => {
   const limit = url.searchParams.get("limit") ?? 5;
 
   return { page: Number(page), limit: Number(limit) };
+};
+
+async function getListPublic(
+  absDir: string,
+  baseUrl: string
+): Promise<string[]> {
+  const ents = await fs.readdir(absDir, { withFileTypes: true });
+  const out: string[] = [];
+  for (const e of ents) {
+    const abs = path.join(absDir, e.name);
+    const rel = `${baseUrl}/${e.name}`.replace(/\\/g, "/");
+    if (e.isDirectory()) out.push(...(await getListPublic(abs, rel)));
+    else if (e.isFile() && e.name.endsWith(".svg")) out.push(rel);
+  }
+  return out;
+}
+
+export const getSvgByFolderName = async (folderName: string) => {
+  const dir = path.join(process.cwd(), "public", "svg");
+  const result = await getListPublic(
+    path.join(dir, folderName),
+    `/svg/${folderName}`
+  );
+
+  return result;
+};
+
+export const getParamId = (request: NextRequest) => {
+  return request.nextUrl.pathname.split("/").pop()!;
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -8,18 +9,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { dialogs } from "@/lib/components/dialogs";
+import { useMutateUpdateConfigSync } from "@/lib/api/app.mutate";
+import { useQueryConfigSync, useQueryWallet } from "@/lib/api/app.query";
+import { dialogs, PopoverContentConfigSync } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { PageHeader } from "@/lib/components/shared/page-header";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { ServiceConfigSync } from "@/lib/services/config-sync.service";
-import { useQuery } from "@tanstack/react-query";
 
 export const PageConfigSync = () => {
-  const { data = [] } = useQuery({
-    queryKey: ["config"],
-    queryFn: ServiceConfigSync.get,
-  });
+  const { data = [] } = useQueryConfigSync();
+
+  const { data: wallets = [] } = useQueryWallet();
+  const { mutateAsync: updateConfigSync } = useMutateUpdateConfigSync();
 
   return (
     <div>
@@ -51,10 +52,33 @@ export const PageConfigSync = () => {
                 {item.fromEmail}
               </TableCell>
               <TableCell className="w-[50%] text-center">
-                <div className="flex items-center gap-2 text-sm font-semibold justify-center">
-                  <IconPicker icon={item.wallet.icon} disabled size={"sm"} />
-                  <span>{item.wallet.name}</span>
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild className="cursor-pointer">
+                    {item.wallet ? (
+                      <div className="flex items-center gap-2 text-sm font-semibold justify-center">
+                        <IconPicker
+                          icon={item.wallet?.icon}
+                          disabled
+                          size={"sm"}
+                        />
+                        <span>{item.wallet?.name}</span>
+                      </div>
+                    ) : (
+                      <span>No Config</span>
+                    )}
+                  </PopoverTrigger>
+
+                  <PopoverContentConfigSync
+                    wallets={wallets ?? []}
+                    onSelectWallet={async (wallet) => {
+                      console.log("wallet", wallet);
+                      await updateConfigSync({
+                        id: item.id,
+                        walletId: wallet.id,
+                      });
+                    }}
+                  />
+                </Popover>
               </TableCell>
             </TableRow>
           ))}

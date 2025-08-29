@@ -94,11 +94,7 @@ export const useMutateCreateConfigSync = () => {
   return useMutation({
     mutationKey: [MutationKeys.createConfigSync],
     mutationFn: ServiceConfigSync.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.getConfigSync],
-      });
-    },
+    onSuccess: Refetch.configSync,
   });
 };
 
@@ -106,5 +102,13 @@ export const useMutateCreateTransfer = () => {
   return useMutation({
     mutationKey: [MutationKeys.createTransfer],
     mutationFn: ServiceTransfer.transfer,
+  });
+};
+
+export const useMutateUpdateConfigSync = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.updateConfigSync],
+    mutationFn: ServiceConfigSync.update,
+    onSuccess: Refetch.configSync,
   });
 };

@@ -18,7 +18,6 @@ import { useDidUpdate } from "rooks";
 
 export const DialogCreateWallet = () => {
   const { isOpen, data } = dialogs.useDialog("create-wallet");
-  console.log("data", data);
 
   const form = useForm<TypeSchemaCreateWallet>({ resolver });
 
