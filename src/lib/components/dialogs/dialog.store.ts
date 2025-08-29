@@ -13,6 +13,7 @@ type DialogMap = {
   "create-trans": null;
   "create-config-sync": null;
   transfer: null;
+  "create-icon": null;
 };
 
 type DialogsState<M extends Record<string, any>> = {

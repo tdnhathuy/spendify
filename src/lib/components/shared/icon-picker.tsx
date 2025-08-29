@@ -1,18 +1,16 @@
 "use client";
 
-import { PopoverClose } from "@radix-ui/react-popover";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { QueryKeys } from "@/lib/configs";
-import { ServiceIcon } from "@/lib/services/icon.service";
+import { useQueryIcon } from "@/lib/api/app.query";
 import type { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { PopoverClose } from "@radix-ui/react-popover";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface Props {
   icon: IIcon | null | undefined;
@@ -33,11 +31,7 @@ export const IconPicker = ({
   disabled,
   size = "md",
 }: Props) => {
-  const { data: icons = [] } = useQuery({
-    queryKey: [QueryKeys.getIcon],
-    queryFn: ServiceIcon.get,
-    enabled: !disabled,
-  });
+  const { data: icons = [] } = useQueryIcon(disabled);
 
   const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);
 

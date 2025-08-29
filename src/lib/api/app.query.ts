@@ -1,5 +1,10 @@
 import { QueryKeys } from "@/lib/configs";
-import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
+import {
+  ServiceCategory,
+  ServiceIcon,
+  ServiceTrans,
+  ServiceWallet,
+} from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ParamsPagination } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
@@ -47,5 +52,12 @@ export const useQueryConfigSync = () => {
   return useQuery({
     queryKey: [QueryKeys.getConfigSync],
     queryFn: ServiceConfigSync.get,
+  });
+};
+export const useQueryIcon = (disabled = false) => {
+  return useQuery({
+    queryKey: [QueryKeys.getIcon],
+    queryFn: ServiceIcon.get,
+    enabled: !disabled,
   });
 };

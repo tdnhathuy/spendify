@@ -2,6 +2,7 @@ import {
   DialogAssignCategory,
   DialogAssignWallet,
   DialogCreateConfigSync,
+  DialogCreateIcon,
   DialogCreateTrans,
   DialogCreateWallet,
   DialogTrans,
@@ -20,6 +21,7 @@ export const RootDialog = () => {
       <DialogCreateTrans />
       <DialogCreateConfigSync />
       <DialogTransfer />
+      <DialogCreateIcon />
     </>
   );
 };
