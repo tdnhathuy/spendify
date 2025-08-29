@@ -13,6 +13,15 @@ const fromDB = (icon: DBIcon | null): IIcon | null => {
     url: convertIdFlatIcon(icon.code),
   };
 };
+
+const formPublic = (url: string, code: string): IIcon | null => {
+  return {
+    id: url,
+    code,
+    url,
+  };
+};
 export const DTOIcon = {
   fromDB,
+  formPublic,
 };

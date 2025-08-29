@@ -28,7 +28,9 @@ export const POST = async (req: NextRequest) => {
   const user = await prisma.user.create({ data: { email, name } });
 
   const icons = values(flatIcon).map((code) => ({ code, idUser: user.id }));
+
   await prisma.icon.createMany({ data: icons });
+  
   const userIcons = await prisma.icon.findMany({
     where: { idUser: user.id },
     select: { id: true, code: true },
