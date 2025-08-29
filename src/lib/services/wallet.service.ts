@@ -36,4 +36,5 @@ export interface PayloadCreateWallet {
   cardNumber: string;
   cardStatementPassword: string;
   cardStatementDate: string;
+  includeInReport: boolean;
 }

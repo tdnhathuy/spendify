@@ -15,9 +15,11 @@ import { CiCreditCard1 } from "react-icons/ci";
 import { IoWalletOutline } from "react-icons/io5";
 import { PiMoney } from "react-icons/pi";
 import { useDidUpdate } from "rooks";
+import { Switch } from "@/components/ui/switch";
 
 export const DialogCreateWallet = () => {
   const { isOpen, data } = dialogs.useDialog("create-wallet");
+  console.log("data", data);
 
   const form = useForm<TypeSchemaCreateWallet>({ resolver });
 
@@ -31,6 +33,7 @@ export const DialogCreateWallet = () => {
         initBalance: data?.initBalance?.toString() ?? "",
         name: data?.name ?? "",
         type: data?.type || "Cash",
+        includeInReport: data?.includeInReport || false,
       });
     }
   }, [isOpen]);
@@ -64,12 +67,25 @@ export const DialogCreateWallet = () => {
             />
           </WrapperInput>
 
-          <WrapperInput icon={<PiMoney />} label="Initial Balance">
-            <WiseTextInput
-              placeholder="Enter initial balance"
-              {...form.register("initBalance")}
-            />
-          </WrapperInput>
+          <div className="grid grid-cols-[2fr_1fr] gap-4">
+            <WrapperInput icon={<PiMoney />} label="Initial Balance">
+              <WiseTextInput
+                placeholder="Enter initial balance"
+                {...form.register("initBalance")}
+              />
+            </WrapperInput>
+
+            <WrapperInput icon={<PiMoney />} label="Include in Report">
+              <div className="flex items-center gap-2 h-full justify-center">
+                <Switch
+                  checked={form.watch("includeInReport") ?? false}
+                  onCheckedChange={(checked) =>
+                    form.setValue("includeInReport", checked)
+                  }
+                />
+              </div>
+            </WrapperInput>
+          </div>
 
           <WrapperInput icon={<CiCreditCard1 />} label="Wallet Type">
             <InputWalletType />
@@ -88,7 +104,7 @@ interface PropsWrapperInput {
 
 export const WrapperInput = (props: PropsWrapperInput) => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       <span className="flex items-center gap-2 text-sm font-semibold">
         <span className="flex size-6 rounded-sm bg-gray-100 justify-center items-center text-base">
           {props.icon}

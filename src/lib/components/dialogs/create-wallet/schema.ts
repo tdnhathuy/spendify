@@ -14,6 +14,7 @@ export const schemaCreateWallet = z.object({
 
   icon: schemaIcon.optional().nullable(),
   type: z.enum(["Cash", "Debit", "Credit", "Crypto"]),
+  includeInReport: z.boolean().optional(),
 
   cardNumber: z.string().optional(),
   cardStatementPassword: z.string().optional(),

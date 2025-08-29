@@ -40,6 +40,7 @@ export const FooterDialogCreateWallet = () => {
         initBalance: Number(form.initBalance),
         name: form.name,
         type: form.type,
+        includeInReport: form.includeInReport ?? false,
       });
 
       dialogs.close("create-wallet");
@@ -54,6 +55,7 @@ export const FooterDialogCreateWallet = () => {
       cardNumber: form.cardNumber ?? "",
       cardStatementPassword: form.cardStatementPassword ?? "",
       cardStatementDate: form.cardStatementDate ?? "",
+      includeInReport: form.includeInReport ?? false,
     });
 
     dialogs.close("create-wallet");

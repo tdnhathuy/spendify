@@ -16,6 +16,7 @@ export const PUT = createApi(async ({ request, idUser }) => {
   const wallet = await prisma.wallet.update({
     where: { id: idWallet, idUser },
     data: {
+      ...payload,
       name: payload.name,
       idIcon: payload.idIcon || null,
       type: payload.type,
