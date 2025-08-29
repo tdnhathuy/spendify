@@ -62,7 +62,7 @@ export type IIcon = {
   id: string;
   code: string | null;
   url: string | null;
-  type: IconType;
+  type: IconType | null;
 };
 
 export interface BaseCategory {

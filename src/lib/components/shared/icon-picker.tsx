@@ -23,6 +23,7 @@ const defaultIcon: IIcon = {
   code: "",
   id: "",
   url: "https://cdn-icons-png.flaticon.com/512/3875/3875433.png",
+  type: "FlatIcon",
 };
 
 export const IconPicker = ({
