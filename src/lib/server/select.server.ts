@@ -5,6 +5,7 @@ export const selectIcon = {
   id: true,
   code: true,
   url: true,
+  type: true,
 } satisfies Prisma.IconSelect;
 
 export const selectCategory = {

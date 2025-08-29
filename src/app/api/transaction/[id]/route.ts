@@ -1,12 +1,19 @@
 import { createApi, prisma, responseSuccess } from "@/lib/server";
 
-export const DELETE = createApi(async ({ idUser, request, id }) => {
+export const DELETE = createApi(async ({ idUser, id }) => {
   await prisma.transfer.deleteMany({
-    where: { transaction: { id: id! }, idUser },
+    where: { transaction: { id }, idUser },
+  });
+
+  await prisma.transactionInfoSync.deleteMany({
+    where: {
+      transaction: { id },
+      idUser,
+    },
   });
 
   await prisma.transaction.delete({
-    where: { id: id!, idUser },
+    where: { id, idUser },
   });
 
   return responseSuccess(true);

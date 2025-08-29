@@ -1,4 +1,4 @@
-import { CategoryType, WalletType } from "@/generated/prisma";
+import { CategoryType, IconType, WalletType } from "@/generated/prisma";
 
 export interface ParamsPagination {
   page?: number;
@@ -62,6 +62,7 @@ export type IIcon = {
   id: string;
   code: string | null;
   url: string | null;
+  type: IconType;
 };
 
 export interface BaseCategory {

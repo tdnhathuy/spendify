@@ -13,7 +13,7 @@ export type HandlerCtx = {
 type HandlerV2 = (payload: {
   request: NextRequest;
   idUser: string;
-  id: string | undefined;
+  id: string;
 }) => Promise<NextResponse>;
 
 export const timing = async <T>(name: string, fn: () => Promise<T>) => {
@@ -46,7 +46,7 @@ export function createApi(handler: HandlerV2) {
     return await handler({
       request,
       idUser: "6bdb5088-1831-44ee-af45-9909955df7b7",
-      id: undefined,
+      id: "",
     });
   };
 }

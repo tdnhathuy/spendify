@@ -5,32 +5,18 @@ import { IIcon } from "@/lib/types";
 export type ObjectIcon = { id: string; code: string } | null;
 
 const fromDB = (icon: DBIcon | null): IIcon | null => {
-  console.log('icon', icon)
   if (!icon) return null;
 
   if (icon.code) {
     return {
-      id: icon.id,
-      code: icon.code,
+      ...icon,
       url: convertIdFlatIcon(icon.code),
     };
   }
 
-  return {
-    id: icon.id,
-    code: icon.code,
-    url: icon.url,
-  };
+  return icon;
 };
 
-const formPublic = (url: string, code: string): IIcon | null => {
-  return {
-    id: url,
-    code,
-    url,
-  };
-};
 export const DTOIcon = {
   fromDB,
-  formPublic,
 };
