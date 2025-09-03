@@ -1,7 +1,7 @@
 import { apiPath } from "@/generated/api-routes.gen";
 import { WalletType } from "@/generated/prisma";
 import { api } from "@/lib/configs";
-import { IWallet, IWalletDetail } from "@/lib/types";
+import { IIcon, IWallet, IWalletDetail } from "@/lib/types";
 
 export const ServiceWallet = {
   get: () => api<IWallet[]>("get", "wallet"),
@@ -32,9 +32,9 @@ export interface PayloadCreateWallet {
   name: string;
   initBalance: number;
   type: WalletType;
-  idIcon: string;
   cardNumber: string;
   cardStatementPassword: string;
   cardStatementDate: string;
   includeInReport: boolean;
+  idIcon: string | null;
 }

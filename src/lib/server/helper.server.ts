@@ -26,28 +26,30 @@ export const timing = async <T>(name: string, fn: () => Promise<T>) => {
 
 export function createApi(handler: HandlerV2) {
   return async (request: NextRequest) => {
-    let idUser: string = "";
-    const email = request.headers.get("x-user-email");
-    if (email) {
-      const u = await prisma.user.findUnique({ where: { email } });
-      if (!u)
-        return NextResponse.json(
-          { message: "User not found" },
-          { status: 404 }
-        );
-      idUser = u.id;
-      return await handler({
-        idUser: u.id,
-        request,
-        id: getParamId(request),
-      });
-    }
+    try {
+      let idUser: string = "";
+      const email = request.headers.get("x-user-email");
+      if (email) {
+        const u = await prisma.user.findUnique({ where: { email } });
+        if (!u)
+          return NextResponse.json(
+            { message: "User not found" },
+            { status: 404 }
+          );
+        idUser = u.id;
+        return await handler({
+          idUser: u.id,
+          request,
+          id: getParamId(request),
+        });
+      }
 
-    return await handler({
-      request,
-      idUser: "6bdb5088-1831-44ee-af45-9909955df7b7",
-      id: "",
-    });
+      return await handler({
+        request,
+        idUser: "6bdb5088-1831-44ee-af45-9909955df7b7",
+        id: "",
+      });
+    } catch (error) {}
   };
 }
 

@@ -8,6 +8,52 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+model IconGlobal {
+  id         String  @id @default(uuid())
+  idFlatIcon String?
+  url        String?
+
+  Icon Icon?
+
+  @@index([idFlatIcon])
+  @@index([url])
+}
+
+model IconUser {
+  id         String  @id @default(uuid())
+  idFlatIcon String?
+  url        String?
+
+  idUser String
+  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
+
+  Icon Icon?
+
+  @@index([idUser])
+}
+
+enum IconSource {
+  System
+  User
+}
+
+model Icon {
+  id     String     @id @default(uuid())
+  source IconSource
+
+  idIconGlobal String? @map("systemIconId")
+  idIconUser   String? @map("userIconId")
+
+  iconGlobal IconGlobal? @relation(fields: [idIconGlobal], references: [id], onDelete: Cascade)
+  iconUser   IconUser?   @relation(fields: [idIconUser], references: [id], onDelete: Cascade)
+
+  Wallet   Wallet[]
+  Category Category[]
+
+  @@unique([idIconGlobal])
+  @@unique([idIconUser])
+}
+
 model User {
   id           String        @id @default(uuid())
   email        String        @unique
@@ -15,11 +61,11 @@ model User {
   wallets      Wallet[]
   categories   Category[]
   transactions Transaction[]
-  icons        Icon[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   syncConfig   SyncConfig[]
   Transfer     Transfer[]
+  IconUser     IconUser[]
 
   @@index([email])
 }
@@ -41,32 +87,13 @@ model SyncConfig {
   @@index([idUser])
 }
 
-model Icon {
-  id           String        @id @default(uuid())
-  code         String?
-  url          String?
-  idUser       String
-  user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  wallets      Wallet[]
-  categories   Category[]
-  transactions Transaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  type         IconType      @default(FlatIcon)
-
-  @@index([idUser])
-  @@index([code])
-}
-
 model Wallet {
   id              String        @id @default(uuid())
   name            String
   initBalance     Decimal       @default(0) @db.Decimal(19, 4)
   type            WalletType
   idUser          String
-  idIcon          String?
   user            User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  icon            Icon?         @relation(fields: [idIcon], references: [id], onDelete: SetNull)
   transactions    Transaction[]
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -79,9 +106,12 @@ model Wallet {
   TransferFromWallet    Transfer[]   @relation("TransferFromWallet")
   TransferToWallet      Transfer[]   @relation("TransferToWallet")
 
+  idIcon String?
+  icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
+
   @@unique([idUser, name])
-  @@index([idUser])
   @@index([idIcon])
+  @@index([idUser])
 }
 
 model Transfer {
@@ -104,23 +134,22 @@ model Transfer {
   @@index([toWalletId])
 }
 
-// NOTE: Nên thêm CHECK ở migration SQL để tránh chuyển cùng một ví:
-// ALTER TABLE "Transfer" ADD CONSTRAINT transfer_from_to_diff CHECK ("fromWalletId" <> "toWalletId");
-
 model Category {
   id           String        @id @default(uuid())
   name         String
   idUser       String
-  idIcon       String?
   idParent     String?
   type         CategoryType
   user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  icon         Icon?         @relation(fields: [idIcon], references: [id], onDelete: SetNull)
   parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id], onDelete: SetNull)
   children     Category[]    @relation("CategoryToCategory")
   transactions Transaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+
+  idIcon String?
+  icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([idUser, name, type])
   @@index([idUser])
@@ -133,20 +162,17 @@ model Transaction {
   idUser     String
   idWallet   String?
   idCategory String?
-  idIcon     String?
   amount     Decimal   @db.Decimal(19, 4)
   note       String?
   date       DateTime  @default(now())
   user       User      @relation(fields: [idUser], references: [id], onDelete: Cascade)
   wallet     Wallet?   @relation(fields: [idWallet], references: [id], onDelete: SetNull)
   category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)
-  icon       Icon?     @relation(fields: [idIcon], references: [id], onDelete: SetNull)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
   infoSync TransactionInfoSync?
 
-  // ⬇️ thêm @unique để đảm bảo 1 Transfer chỉ map tới 1 Transaction
   idTransfer String?   @unique
   transfer   Transfer? @relation(fields: [idTransfer], references: [id], onDelete: SetNull)
 
@@ -185,11 +211,4 @@ enum WalletType {
   Debit
   Credit
   Crypto
-}
-
-enum IconType {
-  FlatIcon
-  Bank
-  EWallet
-  Imported
 }

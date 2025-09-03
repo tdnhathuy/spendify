@@ -1,16 +1,26 @@
 import { Prisma } from "@/generated/prisma";
 import { prisma } from "@/lib/server/prisma.server";
 
+export const selectIconUser = {
+  id: true,
+  url: true,
+  idFlatIcon: true,
+} satisfies Prisma.IconUserSelect;
+
+export const selectIconGlobal = {
+  id: true,
+  url: true,
+  idFlatIcon: true,
+} satisfies Prisma.IconGlobalSelect;
+
 export const selectIcon = {
   id: true,
-  code: true,
-  url: true,
-  type: true,
+  iconGlobal: { select: selectIconGlobal },
+  iconUser: { select: selectIconUser },
 } satisfies Prisma.IconSelect;
 
 export const selectCategory = {
   id: true,
-  icon: { select: selectIcon },
   name: true,
   type: true,
   parent: {
@@ -18,8 +28,10 @@ export const selectCategory = {
       id: true,
       name: true,
       type: true,
-      icon: { select: selectIcon },
     },
+  },
+  icon: {
+    select: selectIcon,
   },
 } satisfies Prisma.CategorySelect;
 
@@ -31,7 +43,6 @@ export const selectWalletSimple = {
 
 export const selectWallet = {
   id: true,
-  icon: { select: selectIcon },
   name: true,
   type: true,
   initBalance: true,
@@ -39,6 +50,7 @@ export const selectWallet = {
     select: { id: true, amount: true, category: { select: { type: true } } },
   },
   includeInReport: true,
+  icon: { select: selectIcon },
 } satisfies Prisma.WalletSelect;
 
 export const selectWalletDetail = {
@@ -82,7 +94,6 @@ export const selectTrans = {
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {
-  icons: { select: selectIcon },
   categories: { select: selectCategory },
   transactions: { select: selectTrans },
   wallets: { select: selectWallet },
@@ -105,7 +116,18 @@ export type DBSyncConfig = Prisma.SyncConfigGetPayload<{
 export type DBWalletDetail = Prisma.WalletGetPayload<{
   select: typeof selectWalletDetail;
 }>;
-export type DBIcon = Prisma.IconGetPayload<{ select: typeof selectIcon }>;
+
+export type DBUserIcon = Prisma.IconGetPayload<{
+  select: typeof selectIconUser;
+}>;
+
+export type DBIcon = Prisma.IconGetPayload<{
+  select: typeof selectIcon;
+}>;
+
+export type DBSystemIcon = Prisma.IconGlobalGetPayload<{
+  select: typeof selectIconGlobal;
+}>;
 
 export type DBTransaction = Prisma.TransactionGetPayload<{
   select: typeof selectTrans;

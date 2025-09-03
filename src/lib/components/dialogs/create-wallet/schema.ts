@@ -3,9 +3,8 @@ import z from "zod";
 
 export const schemaIcon = z.object({
   id: z.string(),
-  code: z.string().nullable(),
-  url: z.string().nullable(),
-  type: z.enum(["FlatIcon", "Bank", "EWallet", "Imported"]).nullable(),
+  url: z.string(),
+  isSystemIcon: z.boolean(),
 });
 
 export const schemaCreateWallet = z.object({

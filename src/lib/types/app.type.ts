@@ -1,4 +1,4 @@
-import { CategoryType, IconType, WalletType } from "@/generated/prisma";
+import { CategoryType, WalletType } from "@/generated/prisma";
 
 export interface ParamsPagination {
   page?: number;
@@ -60,9 +60,8 @@ export interface IWalletDetail extends IWallet {
 
 export type IIcon = {
   id: string;
-  code: string | null;
-  url: string | null;
-  type: IconType | null;
+  url: string;
+  isSystemIcon: boolean;
 };
 
 export interface BaseCategory {

@@ -18,8 +18,8 @@ importers:
         specifier: ^5.1.1
         version: 5.1.1(react-hook-form@7.61.0(react@19.1.0))
       '@prisma/client':
-        specifier: 6.13.0
-        version: 6.13.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)
+        specifier: 6.15.0
+        version: 6.15.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)
       '@radix-ui/react-dialog':
         specifier: ^1.1.14
         version: 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -97,7 +97,7 @@ importers:
         version: 5.0.0-beta.29(next@15.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       prisma-extension-pagination:
         specifier: ^0.7.5
-        version: 0.7.5(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3))
+        version: 0.7.5(@prisma/client@6.15.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3))
       prisma-generator-fake-data:
         specifier: ^0.15.0
         version: 0.15.0(typescript@5.8.3)
@@ -690,8 +690,8 @@ packages:
   '@panva/hkdf@1.2.1':
     resolution: {integrity: sha512-6oclG6Y3PiDFcoyk8srjLfVKyMfVCKJ27JwNPViuXziFpmdz+MZnZN/aKY0JGXgYuO/VghU0jcOAZgWXZ1Dmrw==}
 
-  '@prisma/client@6.13.0':
-    resolution: {integrity: sha512-8m2+I3dQovkV8CkDMluiwEV1TxV9EXdT6xaCz39O6jYw7mkf5gwfmi+cL4LJsEPwz5tG7sreBwkRpEMJedGYUQ==}
+  '@prisma/client@6.15.0':
+    resolution: {integrity: sha512-wR2LXUbOH4cL/WToatI/Y2c7uzni76oNFND7+23ypLllBmIS8e3ZHhO+nud9iXSXKFt1SoM3fTZvHawg63emZw==}
     engines: {node: '>=18.18'}
     peerDependencies:
       prisma: '*'
@@ -3996,7 +3996,7 @@ snapshots:
 
   '@panva/hkdf@1.2.1': {}
 
-  '@prisma/client@6.13.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)':
+  '@prisma/client@6.15.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)':
     optionalDependencies:
       prisma: 6.13.0(typescript@5.8.3)
       typescript: 5.8.3
@@ -6514,9 +6514,9 @@ snapshots:
       clsx: 2.1.1
       react: 19.1.0
 
-  prisma-extension-pagination@0.7.5(@prisma/client@6.13.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)):
+  prisma-extension-pagination@0.7.5(@prisma/client@6.15.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)):
     dependencies:
-      '@prisma/client': 6.13.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)
+      '@prisma/client': 6.15.0(prisma@6.13.0(typescript@5.8.3))(typescript@5.8.3)
 
   prisma-generator-fake-data@0.15.0(typescript@5.8.3):
     dependencies:

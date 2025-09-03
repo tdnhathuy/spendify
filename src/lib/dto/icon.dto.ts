@@ -1,20 +1,26 @@
-import { convertIdFlatIcon } from "@/lib/helpers/func.helper";
+import { convertIdFlatIcon } from "@/lib/helpers";
 import { DBIcon } from "@/lib/server";
 import { IIcon } from "@/lib/types";
 
 export type ObjectIcon = { id: string; code: string } | null;
 
+const parseIconGlobal = (icon: DBIcon["iconGlobal"]): string => {
+  if (icon?.idFlatIcon) return convertIdFlatIcon(icon.idFlatIcon);
+  return icon?.url || "";
+};
+
 const fromDB = (icon: DBIcon | null): IIcon | null => {
   if (!icon) return null;
 
-  if (icon.code) {
-    return {
-      ...icon,
-      url: convertIdFlatIcon(icon.code),
-    };
-  }
+  const isSystemIcon = !!icon.iconGlobal?.id;
 
-  return icon;
+  return {
+    id: icon.id,
+    isSystemIcon,
+    url: isSystemIcon
+      ? parseIconGlobal(icon.iconGlobal)
+      : icon.iconUser?.url || "",
+  };
 };
 
 export const DTOIcon = {

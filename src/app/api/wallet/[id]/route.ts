@@ -18,7 +18,9 @@ export const PUT = createApi(async ({ request, idUser }) => {
     data: {
       ...payload,
       name: payload.name,
-      idIcon: payload.idIcon || null,
+      ...(payload.icon?.isSystemIcon
+        ? { idSystemIcon: payload.icon.id }
+        : { idUserIcon: payload.icon?.id }),
       type: payload.type,
       initBalance: payload.initBalance,
       cardNumber: payload.cardNumber ?? "",

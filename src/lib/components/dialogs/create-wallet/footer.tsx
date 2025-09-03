@@ -36,11 +36,11 @@ export const FooterDialogCreateWallet = () => {
         cardNumber: form.cardNumber ?? "",
         cardStatementPassword: form.cardStatementPassword ?? "",
         cardStatementDate: form.cardStatementDate ?? "",
-        idIcon: form.icon?.id ?? "",
         initBalance: Number(form.initBalance),
         name: form.name,
         type: form.type,
         includeInReport: form.includeInReport ?? false,
+        idIcon: form.icon?.id || null,
       });
 
       dialogs.close("create-wallet");
@@ -50,7 +50,7 @@ export const FooterDialogCreateWallet = () => {
     createWallet({
       name: form.name,
       initBalance: Number(form.initBalance),
-      idIcon: form.icon?.id ?? "",
+      idIcon: form.icon?.id ?? null,
       type: form.type,
       cardNumber: form.cardNumber ?? "",
       cardStatementPassword: form.cardStatementPassword ?? "",

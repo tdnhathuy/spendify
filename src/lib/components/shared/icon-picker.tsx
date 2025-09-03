@@ -20,10 +20,9 @@ interface Props {
 }
 
 const defaultIcon: IIcon = {
-  code: "",
   id: "",
   url: "https://cdn-icons-png.flaticon.com/512/3875/3875433.png",
-  type: "FlatIcon",
+  isSystemIcon: true,
 };
 
 export const IconPicker = ({
@@ -33,8 +32,17 @@ export const IconPicker = ({
   size = "md",
 }: Props) => {
   const { data: icons = [] } = useQueryIcon(disabled);
+  console.log("icons", icons);
 
   const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);
+
+  const iconUser = icons.filter((x) => !x.isSystemIcon);
+  const iconBank = icons.filter(
+    (x) => x.isSystemIcon && x.url.includes("bank")
+  );
+  const iconEWallet = icons.filter(
+    (x) => x.isSystemIcon && x.url.includes("e-wallet")
+  );
 
   useEffect(() => {
     if (selectedIcon) setIcon(selectedIcon);
@@ -43,6 +51,21 @@ export const IconPicker = ({
   const handleSelectIcon = (icon: IIcon) => {
     setIcon(icon);
     onChange?.(icon);
+  };
+
+  const renderSection = (title: string, icons: IIcon[]) => {
+    return (
+      <div className="w-full gap-2 flex flex-col">
+        <h1 className="flex font-semibold px-2">{title}</h1>
+        <div className="flex flex-wrap gap-4 bg-red-200 items-center justify-center">
+          {icons.map((icon) => (
+            <div key={icon.id} className="bg-gray-100 rounded-md p-2">
+              {renderIcon(icon)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   const renderIcon = (icon: IIcon) => (
@@ -58,7 +81,7 @@ export const IconPicker = ({
       <Image
         draggable={false}
         key={icon.id}
-        alt={icon.code || icon.url || ""}
+        alt={icon.url || ""}
         src={icon.url || ""}
         fill
       />
@@ -71,17 +94,16 @@ export const IconPicker = ({
         {renderIcon(icon)}
       </PopoverTrigger>
 
-      <PopoverContent className="p-2 pr-1">
+      <PopoverContent className="p-2 pr-1 w-[50vw]">
         <div
           className={cn(
-            "grid grid-cols-5 overflow-y-auto gap-4 h-56 overscroll-contain pr-2",
-            "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+            "scrollbar overflow-y-scroll h-72 w-full gap-2 flex flex-col"
           )}
-          style={{
-            scrollbarGutter: "stable",
-          }}
         >
-          {icons.map((ic: IIcon) => (
+          {renderSection("User", iconUser)}
+          {renderSection("Bank", iconBank)}
+          {renderSection("E-Wallet", iconEWallet)}
+          {/* {icons.map((ic: IIcon) => (
             <PopoverClose asChild key={ic.id}>
               <button
                 type="button"
@@ -94,7 +116,7 @@ export const IconPicker = ({
                 {renderIcon(ic)}
               </button>
             </PopoverClose>
-          ))}
+          ))} */}
         </div>
       </PopoverContent>
     </Popover>

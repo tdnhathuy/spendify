@@ -25,7 +25,7 @@ export const POST = createApi(async ({ idUser, request }) => {
       initBalance: Number(payload.initBalance),
       name: payload.name,
       type: payload.type,
-      idIcon: payload.idIcon || null,
+      idIcon: payload.idIcon ?? null,
     },
   });
 

@@ -9,7 +9,7 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 
 const clearData = async (idUser: string) => {
-  await prisma.icon.deleteMany({ where: { idUser } });
+  await prisma.iconUser.deleteMany({ where: { idUser } });
   await prisma.wallet.deleteMany({ where: { idUser } });
   await prisma.category.deleteMany({ where: { idUser } });
   await prisma.syncConfig.deleteMany({ where: { idUser } });
