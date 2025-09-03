@@ -8,7 +8,6 @@ import {
 import { useQueryIcon } from "@/lib/api/app.query";
 import type { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { PopoverClose } from "@radix-ui/react-popover";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -32,9 +31,9 @@ export const IconPicker = ({
   size = "md",
 }: Props) => {
   const { data: icons = [] } = useQueryIcon(disabled);
-  console.log("icons", icons);
 
   const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);
+  const [isOpen, setIsOpen] = useState(false);
 
   const iconUser = icons.filter((x) => !x.isSystemIcon);
   const iconBank = icons.filter(
@@ -51,15 +50,21 @@ export const IconPicker = ({
   const handleSelectIcon = (icon: IIcon) => {
     setIcon(icon);
     onChange?.(icon);
+    setIsOpen(false);
   };
 
   const renderSection = (title: string, icons: IIcon[]) => {
+    if (!icons.length) return null;
     return (
       <div className="w-full gap-2 flex flex-col">
         <h1 className="flex font-semibold px-2">{title}</h1>
-        <div className="flex flex-wrap gap-4 bg-red-200 items-center justify-center">
+        <div className="flex flex-wrap gap-4 p-2 justify-center ">
           {icons.map((icon) => (
-            <div key={icon.id} className="bg-gray-100 rounded-md p-2">
+            <div
+              key={icon.id}
+              className="bg-gray-100 rounded-md p-2"
+              onClick={() => handleSelectIcon(icon)}
+            >
               {renderIcon(icon)}
             </div>
           ))}
@@ -89,34 +94,20 @@ export const IconPicker = ({
   );
 
   return (
-    <Popover modal>
+    <Popover modal open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger tabIndex={-1} disabled={disabled}>
         {renderIcon(icon)}
       </PopoverTrigger>
 
-      <PopoverContent className="p-2 pr-1 w-[50vw]">
+      <PopoverContent className="p-2 pr-1 w-[90vw] lg:w-[50vw]">
         <div
           className={cn(
-            "scrollbar overflow-y-scroll h-72 w-full gap-2 flex flex-col"
+            "scrollbar overflow-y-scroll h-72 w-full gap-2 flex flex-col "
           )}
         >
           {renderSection("User", iconUser)}
           {renderSection("Bank", iconBank)}
           {renderSection("E-Wallet", iconEWallet)}
-          {/* {icons.map((ic: IIcon) => (
-            <PopoverClose asChild key={ic.id}>
-              <button
-                type="button"
-                onClick={() => handleSelectIcon(ic)}
-                className={cn(
-                  "flex items-center justify-center focus:outline-none border-none bg-transparent p-0"
-                )}
-                tabIndex={0}
-              >
-                {renderIcon(ic)}
-              </button>
-            </PopoverClose>
-          ))} */}
         </div>
       </PopoverContent>
     </Popover>
