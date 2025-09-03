@@ -13,7 +13,7 @@ import { useMutateUpdateConfigSync } from "@/lib/api/app.mutate";
 import { useQueryConfigSync, useQueryWallet } from "@/lib/api/app.query";
 import { dialogs, PopoverContentConfigSync } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import { PageHeader } from "@/lib/components/shared/page-header";
+import { Page } from "@/lib/components/shared/page";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 
 export const PageConfigSync = () => {
@@ -23,20 +23,19 @@ export const PageConfigSync = () => {
   const { mutateAsync: updateConfigSync } = useMutateUpdateConfigSync();
 
   return (
-    <div>
-      {/* <ConfigTable /> */}
-      <PageHeader
-        title="Config Sync"
-        rightComponent={
+    <Page
+      title="Config Sync"
+      headerProps={{
+        rightComponent: (
           <WiseButton
             size={"sm"}
             onClick={() => dialogs.open("create-config-sync")}
           >
             Add
           </WiseButton>
-        }
-      />
-
+        ),
+      }}
+    >
       <Table>
         <TableHeader>
           <TableRow className="font-semibold">
@@ -84,6 +83,6 @@ export const PageConfigSync = () => {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Page>
   );
 };

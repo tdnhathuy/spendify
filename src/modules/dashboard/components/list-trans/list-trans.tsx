@@ -1,9 +1,7 @@
 "use client";
 
 import { usePaging } from "@/hooks/use-paging";
-import { dialogs } from "@/lib/components/dialogs";
 import { LoaderPaging } from "@/lib/components/shared/loader-paging";
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { QueryKeys } from "@/lib/configs";
 import { ServiceTrans } from "@/lib/services";
 import { ListTransGroup } from "@/modules/dashboard/components/list-trans/list-trans-group";
@@ -24,17 +22,10 @@ export const ListTrans = () => {
     dayjs(item.date).format("DD/MM/YYYY")
   );
 
-  // if (isFirstLoading)
-  //   return <div className="loader bg-red-100 w-full h-full mx-auto"></div>;
+  // return null
 
   return (
     <div className="flex gap-2 flex-col ">
-      <div className="flex items-center justify-end">
-        <WiseButton size={"sm"} onClick={() => dialogs.open("create-trans")}>
-          Tạo
-        </WiseButton>
-      </div>
-
       <ul className="flex flex-col gap-2 mx-auto bg-white p-4 rounded-sm border w-full">
         {map(grouped, (item, key) => {
           return <ListTransGroup key={key} data={item} date={key} />;
