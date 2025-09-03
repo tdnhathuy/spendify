@@ -14,7 +14,9 @@ export const GET = createApi(async ({ idUser }) => {
     }),
   ]);
 
-  const arr = [...iconUser, ...iconGlobal].map(DTOIcon.fromDB);
+  const arr = [...iconUser, ...iconGlobal]
+    .map(DTOIcon.fromDB)
+    .filter((x) => x !== null);
 
   return responseSuccess(arr);
 });

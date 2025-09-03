@@ -32,20 +32,6 @@ export const GET = createApi(async ({ idUser, request }) => {
 export const POST = createApi(async ({ idUser, request }) => {
   const payload: PayloadCreateTrans = await request.json();
 
-  //  await Promise.all(
-  //   range(1, 500).map((tr) => {
-  //     return prisma.transaction.create({
-  //       data: {
-  //         amount: Number(payload.amount),
-  //         date: payload.date,
-  //         idUser: idUser!,
-  //         idCategory: "05385120-8acf-4489-9904-2088281b157c",
-  //         idWallet: "354cda09-83d5-4d56-a1c3-dbad8777c464",
-  //       },
-  //     });
-  //   })
-  // );
-
   await prisma.transaction.create({
     data: {
       amount: Number(payload.amount),

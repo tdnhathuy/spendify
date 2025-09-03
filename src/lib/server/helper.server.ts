@@ -49,7 +49,13 @@ export function createApi(handler: HandlerV2) {
         idUser: "6bdb5088-1831-44ee-af45-9909955df7b7",
         id: "",
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error('API error:', error);
+      return NextResponse.json(
+        { message: "Internal server error" },
+        { status: 500 }
+      );
+    }
   };
 }
 

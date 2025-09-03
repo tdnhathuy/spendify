@@ -6,6 +6,7 @@ import { DBTransaction } from "@/lib/server";
 import { ITransaction } from "@/lib/types";
 
 const fromDB = (transaction: DBTransaction): ITransaction => {
+  console.log("transaction", transaction);
   const category = DTOCategory.fromDB(transaction.category);
   const categoryParent = transaction.category?.parent
     ? DTOCategory.fromDB(transaction.category?.parent as any)

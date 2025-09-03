@@ -17,8 +17,6 @@ export const POST = createApi(async ({ idUser, request }) => {
           note: "Transfer",
           idWallet: null,
           idCategory: null,
-          idIcon: null,
-          
         },
       },
     },

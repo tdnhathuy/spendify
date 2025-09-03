@@ -28,11 +28,10 @@ export const selectCategory = {
       id: true,
       name: true,
       type: true,
+      icon: { select: selectIcon },
     },
   },
-  icon: {
-    select: selectIcon,
-  },
+  icon: { select: selectIcon },
 } satisfies Prisma.CategorySelect;
 
 export const selectWalletSimple = {
