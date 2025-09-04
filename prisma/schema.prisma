@@ -191,7 +191,7 @@ model TransactionInfoSync {
 
   emailProvider String
   providerMsgId String
-  emailReceived DateTime
+  emailReceived String
   emailTitle    String
 
   idTransaction String      @unique

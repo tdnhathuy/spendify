@@ -35,6 +35,6 @@ export const usePaging = <T>({ key, service }: Params<T>) => {
     ...query,
     listData,
     loaderProps,
-    isFirstLoading: query.isFetching && !query.isFetchingNextPage,
+    isFirstLoading: query.isLoading,
   };
 };

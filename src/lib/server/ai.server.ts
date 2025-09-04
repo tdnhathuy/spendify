@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 const apiKey = process.env.GEMINI_API_KEY!;
 const ai = new GoogleGenAI({ apiKey });
-const model = "gemini-2.5-flash";
+const model = "gemini-2.0-flash-lite";
 
 export const Prompt = {
   extractAmount: async (text: string) => {

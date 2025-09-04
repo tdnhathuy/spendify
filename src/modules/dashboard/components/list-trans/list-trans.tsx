@@ -7,6 +7,7 @@ import { ServiceTrans } from "@/lib/services";
 import { ListTransGroup } from "@/modules/dashboard/components/list-trans/list-trans-group";
 import dayjs from "dayjs";
 import { groupBy, map } from "lodash";
+import { Loader } from "lucide-react";
 
 export const ListTrans = () => {
   const {
@@ -22,7 +23,7 @@ export const ListTrans = () => {
     dayjs(item.date).format("DD/MM/YYYY")
   );
 
-  // return null
+  if (isFirstLoading) return <Loader className="animate-spin" />;
 
   return (
     <div className="flex gap-2 flex-col ">
