@@ -1,6 +1,9 @@
-import { getMail, parseMail, prisma } from "@/lib/server";
-import { Prompt } from "@/lib/server/ai.server";
-import dayjs from "dayjs";
+import {
+  checkIsTransCreated,
+  createSyncInfo,
+  getUserInfo,
+} from "@/app/api/hook-email/misc";
+import { parseMail } from "@/lib/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -22,77 +25,23 @@ export async function POST(req: NextRequest) {
   try {
     if (typeof raw_base64url === "string" && raw_base64url.length > 0) {
       const mail = await parseMail(raw_base64url);
-      const { from, date = "", to } = mail;
-
-      const amount = await Prompt.extractAmount(String(mail.html || ""));
-
-      const emailFrom = getMail(from);
-      const emailTo = getMail(to);
 
       const email = "tdn.huyz@gmail.com";
+      const { id, syncConfig } = await getUserInfo(email);
 
-      const { id, syncConfig } = await prisma.user.findUniqueOrThrow({
-        where: { email },
-        select: {
-          id: true,
-          syncConfig: {
-            select: {
-              fromEmail: true,
-              walletId: true,
-            },
-          },
-        },
-      });
-
-      const NAMES: Record<string, string> = {
-        "VCBDigibank@info.vietcombank.com.vn": "VCB",
-        "tpbank@tpb.com.vn": "TPB",
-        "HSBC Vietnam": "HSBC",
-      };
-
-      const walletId = syncConfig.find(
-        (item) => item.fromEmail === emailFrom
-      )?.walletId;
-
-      const name = from?.value[0]?.name || from?.value[0]?.address || "";
-
-      const finalName = NAMES[name] || name;
-      const dateStr = dayjs(date).format("DD/MM/YYYY");
-
-      const note = `Sync transaction ${dateStr} from ${finalName}`;
-      await prisma.transaction.create({
-        data: {
-          amount: amount ?? 0,
-          note,
-          date: new Date(date),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          user: { connect: { id } },
-          ...(walletId && { wallet: { connect: { id: walletId } } }),
-
-          infoSync: {
-            create: {
-              emailProvider: emailFrom,
-              emailReceived: emailTo,
-              emailTitle: mail.subject || "",
-              idUser: id,
-              providerMsgId: message_id || mail.messageId,
-            },
-          },
-        },
-      });
-
-      return NextResponse.json({
-        ok: true,
-        via: "gmail_raw",
-        messageId: message_id || mail.messageId,
-        subject: mail.subject,
-        from: mail.from?.text,
-        amount,
+      await checkIsTransCreated(message_id || mail.messageId, id);
+      return await createSyncInfo({
+        idUser: id,
+        syncConfig,
+        providerMsgId: message_id || mail.messageId,
+        mail,
       });
     }
   } catch (e: any) {
     console.error("hook-email error", e?.message || e);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, message: e?.message || e },
+      { status: 500 }
+    );
   }
 }
