@@ -75,7 +75,7 @@ export const IconPicker = ({
 
   const renderIcon = (icon: IIcon) => (
     <div
-      className={cn("relative w-full aspect-square", {
+      className={cn("relative w-full aspect-square cursor-pointer", {
         "size-6": size === "sm",
         "size-8": size === "md",
         "size-10": size === "lg",

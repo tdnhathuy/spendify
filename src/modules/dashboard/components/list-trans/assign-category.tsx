@@ -29,10 +29,12 @@ export const WrapperAssign = (props: {
 export const AssignCategory = (props: Props) => {
   const title = props.transaction.category?.name || "No category";
 
+  const handleClick = () => {
+    dialogs.open("assign-category", props.transaction);
+  };
+
   return (
-    <WrapperAssign
-      onClick={() => dialogs.open("assign-category", props.transaction)}
-    >
+    <WrapperAssign onClick={handleClick}>
       <IconPicker icon={props.transaction.category?.icon} size="xs" disabled />
       <span>{title}</span>
     </WrapperAssign>

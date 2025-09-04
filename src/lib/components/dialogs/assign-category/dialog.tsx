@@ -14,9 +14,9 @@ import { useDidUpdate } from "rooks";
 export const DialogAssignCategory = () => {
   const { isOpen, data } = useDialog("assign-category");
 
-  const [mode, setMode] = useState<CategoryType>(
-    data?.category?.type || "Expense"
-  );
+  const defaultMode = data?.category?.type || "Expense";
+
+  const [mode, setMode] = useState<CategoryType>(defaultMode);
 
   const { income, expense } = useQueryCategory();
 
@@ -45,8 +45,8 @@ export const DialogAssignCategory = () => {
       <WiseDialogContent
         title="Assign Category"
         footer={<FooterDialogAssignCategory />}
-        className="gap-4"
-        ctnClassName="h-[70%] -translate-y-[60%]"
+        className="gap-4 "
+        ctnClassName="h-[70%] -translate-y-[60%] w-92"
       >
         <ModeSelection mode={mode} setMode={setMode} />
         <ListCategory
