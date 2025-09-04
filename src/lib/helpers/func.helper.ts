@@ -17,7 +17,8 @@ export const compareId = (obj1: any, obj2: any): boolean => {
   return obj1?._id?.toString() === obj2?._id?.toString();
 };
 
-export const formatMoney = (amount: number): string => {
+export const formatMoney = (amount?: number): string => {
+  if (!amount) return "0";
   const isNegative = amount < 0;
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",

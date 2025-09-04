@@ -10,7 +10,7 @@ export const PageWallet = () => {
     <Page
       title={"Wallets"}
       headerProps={{ rightComponent: <HeaderButtons /> }}
-      className="grid grid-cols-1 xxs:grid-cols-2 lg:grid-cols-3 gap-2 w-full"
+      className=""
     >
       <ListWallet
         onClick={async (wallet) => {

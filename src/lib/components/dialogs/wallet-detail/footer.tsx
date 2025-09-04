@@ -10,16 +10,31 @@ export const FooterDialogWalletDetail = ({
   const onClickUpdate = () => {
     dialogs.open("create-wallet", walletDetail);
   };
+
+  const onClickAdjustBalance = () => {
+    dialogs.open("adjust-balance", walletDetail);
+  };
+
   return (
-    <div className="flex  gap-2 w-full">
-      <WiseButton
-        variant={"outline"}
-        className="flex-1 flex"
-        onClick={onClickUpdate}
-      >
-        Update wallet
+    <>
+      <WiseButton size="sm" variant={"outline"} onClick={onClickAdjustBalance}>
+        Adjust Balance
       </WiseButton>
-      <WiseButton className="flex-1 flex">View all transactions</WiseButton>
-    </div>
+
+      <div className="flex gap-1 flex-1 justify-end">
+        <WiseButton
+          size="sm"
+          variant={"outline"}
+          className=""
+          onClick={onClickUpdate}
+        >
+          Update
+        </WiseButton>
+
+        <WiseButton size="sm" className="flex">
+          Transactions
+        </WiseButton>
+      </div>
+    </>
   );
 };

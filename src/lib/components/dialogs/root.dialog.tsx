@@ -1,3 +1,4 @@
+import { DialogAdjustBalance } from "@/lib/components/dialogs/adjust-balance/dialog";
 import {
   DialogAssignCategory,
   DialogAssignWallet,
@@ -22,6 +23,7 @@ export const RootDialog = () => {
       <DialogCreateConfigSync />
       <DialogTransfer />
       <DialogCreateIcon />
+      <DialogAdjustBalance />
     </>
   );
 };

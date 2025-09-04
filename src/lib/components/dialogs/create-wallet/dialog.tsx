@@ -19,7 +19,6 @@ import { Switch } from "@/components/ui/switch";
 
 export const DialogCreateWallet = () => {
   const { isOpen, data } = dialogs.useDialog("create-wallet");
-  console.log("data", data);
 
   const form = useForm<TypeSchemaCreateWallet>({ resolver });
 
@@ -50,7 +49,9 @@ export const DialogCreateWallet = () => {
           footer={<FooterDialogCreateWallet />}
           className="gap-4 py-8 "
           ctnClassName="-translate-y-[60%]"
-          footerProps={{ className: "flex sm:justify-between" }}
+          footerProps={{
+            className: "flex flex-row  gap-2  w-full justify-between",
+          }}
         >
           <span className="mx-auto bg-gray-100 flex  justify-center items-center p-3 rounded-md border shadow">
             <IconPicker
