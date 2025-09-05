@@ -9,4 +9,8 @@ export const ServiceTransfer = {
     const url = apiPath.transaction.id.mark_transfer(json.idTransaction);
     return api("post", url, { json });
   },
+  unmarkTransfer: (idTransaction: string) => {
+    const url = apiPath.transaction.id.unmark_transfer(idTransaction);
+    return api("post", url);
+  },
 };

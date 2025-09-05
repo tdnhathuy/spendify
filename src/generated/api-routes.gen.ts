@@ -12,6 +12,7 @@ export type ApiRoute =
   | `setup`
   | `sync/mail`
   | `transaction/${string}/mark-transfer`
+  | `transaction/${string}/unmark-transfer`
   | `transaction/${string}`
   | `transaction/assign-category`
   | `transaction/assign-wallet`
@@ -46,6 +47,8 @@ export const apiPath = {
       $: (id: string) => `transaction/${id}` as ApiRoute,
       mark_transfer: (id: string) =>
         `transaction/${id}/mark-transfer` as ApiRoute,
+      unmark_transfer: (id: string) =>
+        `transaction/${id}/unmark-transfer` as ApiRoute,
     } as const,
   } as const,
   transfer: () => `transfer` as ApiRoute,

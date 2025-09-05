@@ -109,6 +109,15 @@ export const useMutateMarkTransfer = () => {
   return useMutation({
     mutationKey: [MutationKeys.markTransfer],
     mutationFn: ServiceTransfer.markTransfer,
+    onSuccess: Refetch.trans,
+  });
+};
+
+export const useMutateUnmarkTransfer = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.unmarkTransfer],
+    mutationFn: ServiceTransfer.unmarkTransfer,
+    onSuccess: Refetch.trans,
   });
 };
 

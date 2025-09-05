@@ -2,6 +2,7 @@ import { PayloadMarkTransfer } from "@/app/api/transaction/[id]/mark-transfer/ro
 import {
   useMutateCreateTransfer,
   useMutateMarkTransfer,
+  useMutateUnmarkTransfer,
 } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { TypeSchemaTransfer } from "@/lib/components/dialogs/transfer/schema";
@@ -17,10 +18,12 @@ export const FooterDialogTransfer = () => {
 
   const onTransfer: SubmitHandler<TypeSchemaTransfer> = async (data) => {
     if (data.isMarkTransfer) {
+      const { idTransaction = "", amount, walletFrom, walletTo } = data;
       const payload: PayloadMarkTransfer = {
-        idTransaction: data.idTransaction || "",
-        idWalletTo: data.walletTo?.id || "",
-        idWalletFrom: data.walletFrom?.id || "",
+        amount,
+        idTransaction,
+        idWalletTo: walletTo?.id || "",
+        idWalletFrom: walletFrom?.id || "",
       };
       await markTransfer(payload);
     } else {

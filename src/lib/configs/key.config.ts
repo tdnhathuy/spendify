@@ -21,4 +21,5 @@ export const MutationKeys = {
   createTransfer: "createTransfer",
   markTransfer: "markTransfer",
   updateConfigSync: "updateConfigSync",
+  unmarkTransfer: "unmarkTransfer",
 };
