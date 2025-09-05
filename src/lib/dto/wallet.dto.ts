@@ -17,6 +17,7 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
     allIncome.reduce((acc, curr) => acc + curr.amount.toNumber(), 0) -
     allExpense.reduce((acc, curr) => acc + curr.amount.toNumber(), 0);
 
+
   return {
     id: wallet.id,
     name: wallet.name,

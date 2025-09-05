@@ -13,7 +13,7 @@ export const schemaTransaction = z.object({
   category: schemaOption.nullable(),
   wallet: schemaOption.nullable(),
 
-  type: z.enum(["Expense", "Income", "Transfer"]),
+  type: z.enum(["Expense", "Income", "Other"]),
 });
 
 export const resolverTransaction = zodResolver(schemaTransaction);
