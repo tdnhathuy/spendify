@@ -170,6 +170,7 @@ model Transaction {
   category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  isAdjust   Boolean?  @default(false)
 
   infoSync TransactionInfoSync?
 

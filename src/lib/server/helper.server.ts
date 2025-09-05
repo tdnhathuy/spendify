@@ -104,5 +104,20 @@ export const getSvgByFolderName = async (folderName: string) => {
 };
 
 export const getParamId = (request: NextRequest) => {
-  return request.nextUrl.pathname.split("/").pop()!;
+  const pathParts = request.nextUrl.pathname.split("/").filter(Boolean);
+  
+  // Check if the URL follows a pattern with dynamic route segments
+  // For Next.js dynamic routes like /api/[type]/[id] or /api/[type]/[id]/action
+  // The ID is typically a UUID or similar format that can be detected
+  
+  for (const part of pathParts) {
+    // Check if the part looks like a UUID (common ID format)
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(part)) {
+      return part;
+    }
+  }
+  
+  // Fallback: if no UUID-like string found, return the last segment
+  // This handles cases where the ID might not be a UUID
+  return pathParts.length > 0 ? pathParts[pathParts.length - 1] : "";
 };

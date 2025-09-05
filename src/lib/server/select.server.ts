@@ -90,6 +90,7 @@ export const selectTrans = {
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
   transfer: { select: selectTransfer },
+  isAdjust: true,
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

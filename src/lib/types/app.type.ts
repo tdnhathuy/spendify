@@ -97,6 +97,7 @@ export interface ITransaction {
 
   infoSync: IInfoSync | null;
   transfer: ITransfer | null;
+  isAdjust: boolean;
 }
 
 export interface ITransfer {

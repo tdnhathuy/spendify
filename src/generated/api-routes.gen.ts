@@ -17,6 +17,7 @@ export type ApiRoute =
   | `transaction`
   | `transfer`
   | `user`
+  | `wallet/${string}/adjust-balance`
   | `wallet/${string}`
   | `wallet`;
 
@@ -46,6 +47,9 @@ export const apiPath = {
   user: () => `user` as ApiRoute,
   wallet: {
     $: () => `wallet` as ApiRoute,
-    id: (id: string) => `wallet/${id}` as ApiRoute,
+    id: {
+      $: (id: string) => `wallet/${id}` as ApiRoute,
+      adjust_balance: (id: string) => `wallet/${id}/adjust-balance` as ApiRoute,
+    } as const,
   } as const,
 } as const;

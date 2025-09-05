@@ -27,7 +27,10 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
 
   return (
     <div
-      className="flex gap-2 w-full px-2 hover:bg-gray-100 py-2 rounded-sm "
+      className={cn(
+        "flex gap-2 w-full px-2 hover:bg-gray-100 py-2 rounded-sm",
+        { "bg-red-300 ": item.isAdjust }
+      )}
       onClick={(e) => {
         dialogs.open("trans", item);
       }}
