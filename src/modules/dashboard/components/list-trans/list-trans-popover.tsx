@@ -24,12 +24,14 @@ export const PopoverListTrans = ({ transaction }: Props) => {
     dialogs.open("transfer", {
       isMarkTransfer: true,
       amount: transaction.amount + "",
+      idTransaction: transaction.id,
       walletFrom: {
         id: transaction.wallet?.id || "",
         name: transaction.wallet?.name || "",
         currentBalance: transaction.wallet?.currentBalance + "",
         icon: transaction.wallet?.icon || null,
       },
+
       // walletFrom: transaction.wallet,
       // walletTo: transaction.wallet,
     });

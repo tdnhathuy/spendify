@@ -15,6 +15,7 @@ export const schemaTransfer = z.object({
   amount: z.string(),
 
   isMarkTransfer: z.boolean().optional(),
+  idTransaction: z.string().optional(),
 });
 
 export const resolverTransfer = zodResolver(schemaTransfer);

@@ -105,6 +105,13 @@ export const useMutateCreateTransfer = () => {
   });
 };
 
+export const useMutateMarkTransfer = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.markTransfer],
+    mutationFn: ServiceTransfer.markTransfer,
+  });
+};
+
 export const useMutateUpdateConfigSync = () => {
   return useMutation({
     mutationKey: [MutationKeys.updateConfigSync],
