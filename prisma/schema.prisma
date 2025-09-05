@@ -148,8 +148,9 @@ model Category {
   idIcon String?
   icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeletable Boolean  @default(false)
 
   @@unique([idUser, name, type])
   @@index([idUser])
@@ -205,6 +206,7 @@ model TransactionInfoSync {
 enum CategoryType {
   Income
   Expense
+  Other
 }
 
 enum WalletType {
