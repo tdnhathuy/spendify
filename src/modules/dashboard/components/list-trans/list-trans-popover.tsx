@@ -1,5 +1,6 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { useMutateDeleteTrans } from "@/lib/api/app.mutate";
+import { dialogs } from "@/lib/components";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import { ITransaction } from "@/lib/types";
 import { PopoverClose } from "@radix-ui/react-popover";
@@ -20,8 +21,23 @@ export const PopoverListTrans = ({ transaction }: Props) => {
   };
 
   const onTransfer = () => {
-    console.log("onTransfer", onTransfer);
+    dialogs.open("transfer", {
+      isMarkTransfer: true,
+      amount: transaction.amount + "",
+      walletFrom: {
+        id: transaction.wallet?.id || "",
+        name: transaction.wallet?.name || "",
+        currentBalance: transaction.wallet?.currentBalance + "",
+        icon: transaction.wallet?.icon || null,
+      },
+      // walletFrom: transaction.wallet,
+      // walletTo: transaction.wallet,
+    });
   };
+
+  const isCanMarkTransfer = !!transaction.infoSync;
+  const isCanDelete = !transaction.transfer;
+  console.log("isCanMarkTransfer", isCanMarkTransfer);
 
   return (
     <Popover>
@@ -39,9 +55,15 @@ export const PopoverListTrans = ({ transaction }: Props) => {
           icon={<FaMoneyBillTransfer />}
           title="Transfer"
           onClick={onTransfer}
+          visible={isCanMarkTransfer}
         />
 
-        <PopoverItem icon={<MdDelete />} title="Delete" onClick={onDelete} />
+        <PopoverItem
+          icon={<MdDelete />}
+          title="Delete"
+          onClick={onDelete}
+          visible={isCanDelete}
+        />
       </WisePopoverContent>
     </Popover>
   );
@@ -51,10 +73,13 @@ interface PopoverItemProps {
   icon: ReactNode;
   title: string;
   onClick: () => void;
+  visible?: boolean;
 }
 
 const PopoverItem = (props: PopoverItemProps) => {
-  const { icon, title, onClick } = props;
+  const { icon, title, onClick, visible = true } = props;
+
+  if (!visible) return null;
 
   return (
     <PopoverClose

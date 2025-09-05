@@ -5,16 +5,18 @@ import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import { formatMoney } from "@/lib/helpers";
 import { IWallet } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 interface Props {
   listWallets: IWallet[];
   schemaKey: keyof Pick<TypeSchemaTransfer, "walletFrom" | "walletTo">;
+  disabled?: boolean;
 }
 
 export const InputWalletSelector = (props: Props) => {
-  const { listWallets = [], schemaKey } = props;
+  const { listWallets = [], schemaKey, disabled = false } = props;
   const [open, setOpen] = useState(false);
 
   const form = useFormContext<TypeSchemaTransfer>();
@@ -33,7 +35,13 @@ export const InputWalletSelector = (props: Props) => {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="flex cursor-pointer flex-1 border rounded-sm px-4 h-10 items-center gap-2">
+      <PopoverTrigger
+        disabled={disabled}
+        className={cn(
+          "flex cursor-pointer flex-1 border rounded-sm px-4 h-10 items-center gap-2",
+          { "opacity-60": disabled }
+        )}
+      >
         {icon && <IconPicker icon={icon} disabled size="sm" />}
 
         <span className="flex flex-1 text-sm font-semibold">

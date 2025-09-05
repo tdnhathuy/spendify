@@ -13,6 +13,8 @@ export const schemaTransfer = z.object({
   walletFrom: schemaWallet.nullable().optional(),
   walletTo: schemaWallet.nullable().optional(),
   amount: z.string(),
+
+  isMarkTransfer: z.boolean().optional(),
 });
 
 export const resolverTransfer = zodResolver(schemaTransfer);

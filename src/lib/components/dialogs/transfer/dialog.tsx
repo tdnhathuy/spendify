@@ -13,12 +13,19 @@ import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { WiseTextInput } from "@/lib/components/wise/wise-text-input";
 import { useForm } from "react-hook-form";
 import { BiTransferAlt } from "react-icons/bi";
+import { useDidUpdate } from "rooks";
 
 export const DialogTransfer = () => {
-  const { isOpen } = useDialog("transfer");
+  const { isOpen, data } = useDialog("transfer");
   const { data: listWallets = [] } = useQueryWallet();
 
   const form = useForm<TypeSchemaTransfer>({ resolver });
+
+  useDidUpdate(() => {
+    if (isOpen && !!data) {
+      form.reset(data);
+    }
+  }, [isOpen, data]);
 
   const onClickSwap = () => {
     const { walletFrom, walletTo } = form.getValues();
@@ -28,6 +35,8 @@ export const DialogTransfer = () => {
       walletTo: { ...walletFrom },
     });
   };
+
+  const isDisableSwap = !!form.watch("isMarkTransfer");
 
   return (
     <Dialog open={isOpen} onOpenChange={() => dialogs.close("transfer")}>
@@ -41,9 +50,14 @@ export const DialogTransfer = () => {
             <InputWalletSelector
               schemaKey="walletFrom"
               listWallets={listWallets}
+              disabled={isDisableSwap}
             />
 
-            <WiseButton size="icon" onClick={onClickSwap}>
+            <WiseButton
+              size="icon"
+              onClick={onClickSwap}
+              disabled={isDisableSwap}
+            >
               <BiTransferAlt />
             </WiseButton>
 
@@ -54,6 +68,7 @@ export const DialogTransfer = () => {
           </div>
 
           <WiseTextInput
+            disabled={isDisableSwap}
             className="text-2xl py-8 text-center font-semibold"
             placeholder="Amount"
             style={{ fontSize: 36 }}

@@ -1,6 +1,6 @@
 import { formatMoney, formatTitleDate } from "@/lib/helpers";
 import { ITransaction } from "@/lib/types";
-import { ListTransItem } from "@/modules/dashboard/components/list-trans/list-trans-item";
+import { ListTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
 
 interface Props {
   data: ITransaction[];

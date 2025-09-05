@@ -11,7 +11,7 @@ export const DescTransfer = ({ transaction }: DescTransferProps) => {
   if (!transfer) return null;
 
   return (
-    <span className="flex gap-2">
+    <span className="flex gap-2 items-center">
       <Wallet wallet={transfer.fromWallet} />
       <FcAdvance />
       <Wallet wallet={transfer.toWallet} />

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { AssignCategory } from "@/modules/dashboard/components/list-trans/assign-category";
 import { AssignWallet } from "@/modules/dashboard/components/list-trans/assign-wallet";
 import { DescTransfer } from "@/modules/dashboard/components/list-trans/desc-transfer";
+import { ListTransItemTitle } from "@/modules/dashboard/components/list-trans/item/title";
 import { PopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover";
 import { BiTransferAlt } from "react-icons/bi";
 import { useDidUpdate } from "rooks";
@@ -16,9 +17,7 @@ interface ListTransItemProps {
 }
 
 export const ListTransItem = ({ item }: ListTransItemProps) => {
-  const category = item.categoryParent?.name || "Uncategorized";
   const isIncome = item.categoryParent?.type === "Income";
-
   const isTransfer = !!item.transfer;
 
   useDidUpdate(() => {
@@ -44,7 +43,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
       </span>
 
       <span className="flex flex-1 flex-col text-xs gap-1">
-        <h1 className=" font-semibold text-sm">{category}</h1>
+        <ListTransItemTitle transaction={item} />
 
         {isTransfer ? (
           <DescTransfer transaction={item} />

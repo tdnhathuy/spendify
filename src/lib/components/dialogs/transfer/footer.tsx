@@ -33,7 +33,7 @@ export const FooterDialogTransfer = () => {
         className="flex flex-1"
         onClick={form.handleSubmit(onTransfer)}
       >
-        Transfer
+        {form.watch("isMarkTransfer") ? "Mark Transfer" : "Transfer"}
       </WiseButton>
     </>
   );
