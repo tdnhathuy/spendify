@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog } from "@/components/ui/dialog";
 import { CategoryType } from "@/generated/prisma";
 import { useMutateAssignCategory } from "@/lib/api/app.mutate";

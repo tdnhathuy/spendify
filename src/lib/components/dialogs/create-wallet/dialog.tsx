@@ -1,3 +1,4 @@
+"use client";
 import { Dialog } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { FooterDialogCreateWallet } from "@/lib/components/dialogs/create-wallet/footer";

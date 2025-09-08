@@ -1,3 +1,4 @@
+'use client'
 import { TypeSchemaConfigSync } from "@/lib/components/dialogs/create-config-sync/schema";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";

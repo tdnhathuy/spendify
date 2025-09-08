@@ -1,3 +1,4 @@
+"use client";
 import { useController } from "react-hook-form";
 import type { TypeSchemaTransaction } from "@/lib/components/dialogs/transaction/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";

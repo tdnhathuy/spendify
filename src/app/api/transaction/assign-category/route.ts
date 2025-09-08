@@ -5,9 +5,13 @@ import { prisma } from "@/lib/server/prisma.server";
 export const POST = createApi(async ({ request }) => {
   const { idTransaction, idCategory } = await request.json();
 
+  const isIncome = await prisma.category.findFirst({
+    where: { id: idCategory, type: "Income" },
+  });
+
   const response = await prisma.transaction.update({
     where: { id: idTransaction },
-    data: { idCategory },
+    data: { idCategory, amount: { multiply: isIncome ? 1 : -1 } },
     select: selectTrans,
   });
 

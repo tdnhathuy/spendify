@@ -1,3 +1,5 @@
+"use client";
+
 import { PopoverClose } from "@radix-ui/react-popover";
 import type { ControllerRenderProps } from "react-hook-form";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";

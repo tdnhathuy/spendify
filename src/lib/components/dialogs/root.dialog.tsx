@@ -1,3 +1,5 @@
+"use client";
+
 import { DialogAdjustBalance } from "@/lib/components/dialogs/adjust-balance/dialog";
 import {
   DialogAssignCategory,

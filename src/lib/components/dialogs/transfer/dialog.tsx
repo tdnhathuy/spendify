@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { useQueryWallet } from "@/lib/api/app.query";

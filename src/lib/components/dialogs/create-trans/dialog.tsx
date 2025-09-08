@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog } from "@/components/ui/dialog";
 import { FooterDialogCreateTrans } from "@/lib/components/dialogs/create-trans/footer";
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";

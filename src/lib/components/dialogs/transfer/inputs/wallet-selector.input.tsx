@@ -1,3 +1,4 @@
+"use client";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { TypeSchemaTransfer } from "@/lib/components/dialogs/transfer/schema";
 import { IconPicker } from "@/lib/components/shared/icon-picker";

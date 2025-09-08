@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog } from "@/components/ui/dialog";
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { FooterDialogTransaction } from "@/lib/components/dialogs/transaction/footer";

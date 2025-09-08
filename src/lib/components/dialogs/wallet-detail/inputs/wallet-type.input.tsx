@@ -1,3 +1,5 @@
+"use client";
+
 import { WalletType } from "@/generated/prisma";
 import { TypeSchemaWallet } from "@/lib/components/dialogs/wallet-detail/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";

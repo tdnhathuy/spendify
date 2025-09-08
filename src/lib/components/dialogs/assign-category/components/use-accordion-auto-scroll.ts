@@ -1,5 +1,6 @@
-import { AccordionItemProps } from "@radix-ui/react-accordion";
-import { RefAttributes, useEffect, useRef } from "react";
+"use client";
+
+import { useEffect, useRef } from "react";
 
 export const useAccordionAutoScroll = () => {
   const containerRef = useRef<HTMLUListElement>(null);

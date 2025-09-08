@@ -21,7 +21,16 @@ export const PageWallet = () => {
 const HeaderButtons = () => {
   return (
     <div className="flex gap-2">
-      <WiseButton size="sm" onClick={() => dialogs.open("transfer")}>
+      <WiseButton
+        size="sm"
+        onClick={() =>
+          dialogs.open("transfer", {
+            amount: "",
+            walletFrom: null,
+            walletTo: null,
+          })
+        }
+      >
         Transfer
       </WiseButton>
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { WalletType } from "@/generated/prisma";
 import { WrapperInput } from "@/lib/components/dialogs/create-wallet/dialog";
 import { TypeSchemaCreateWallet } from "@/lib/components/dialogs/create-wallet/schema";

@@ -1,18 +1,9 @@
-"use client";
-import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { client } from "@/lib/configs";
+import { UpdateTransactionButton } from "@/app/(protected)/debug/update-transaction-button";
 
 export default function DebugPage() {
   return (
-    <form>
-      <WiseButton
-        onClick={(e) => {
-          e.preventDefault();
-          client.post("sync/mail");
-        }}
-      >
-        Crawl Mail
-      </WiseButton>
-    </form>
+    <div className="space-y-4">
+      <UpdateTransactionButton />
+    </div>
   );
 }

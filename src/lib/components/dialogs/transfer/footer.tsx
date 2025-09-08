@@ -1,8 +1,8 @@
+"use client";
 import { PayloadMarkTransfer } from "@/app/api/transaction/[id]/mark-transfer/route";
 import {
   useMutateCreateTransfer,
   useMutateMarkTransfer,
-  useMutateUnmarkTransfer,
 } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { TypeSchemaTransfer } from "@/lib/components/dialogs/transfer/schema";
