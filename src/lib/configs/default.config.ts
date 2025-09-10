@@ -1,4 +1,4 @@
-import { flatIcon } from "@/lib/configs/cdn.config";
+import { flatIcon } from "../../../prisma/seed-flat-icon";
 
 export const defaultExpenseCategory = [
   {
@@ -14,11 +14,11 @@ export const defaultExpenseCategory = [
   },
   {
     name: "Xe",
-    idIcon: flatIcon.fuel,
+    idIcon: flatIcon.motorbike,
     children: [
       { name: "Xăng xe", idIcon: flatIcon.fuel },
       { name: "Bảo dưỡng", idIcon: flatIcon.maintenance },
-      { name: "Xe Khách", idIcon: flatIcon.taxi },
+      { name: "Xe Khách", idIcon: flatIcon.transport },
       { name: "Grab", idIcon: flatIcon.bus },
     ],
   },
@@ -28,6 +28,14 @@ export const defaultExpenseCategory = [
     children: [
       { name: "Lặt vặt", idIcon: flatIcon.market },
       { name: "Đồ gia dụng", idIcon: flatIcon.appliances },
+    ],
+  },
+  {
+    name: "Gia đình",
+    idIcon: flatIcon.family,
+    children: [
+      { name: "Cha mẹ", idIcon: flatIcon.parent },
+      { name: "Người yêu", idIcon: flatIcon.lover },
     ],
   },
   {

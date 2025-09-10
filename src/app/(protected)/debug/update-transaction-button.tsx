@@ -1,3 +1,4 @@
+import { createDefaultCategory } from "@/app/api/setup/misc";
 import { WiseButton } from "@/lib/components";
 import { prisma } from "@/lib/server";
 
@@ -47,6 +48,18 @@ async function createWallets() {
   });
 }
 
+async function createCategories() {
+  "use server";
+  const email = "tdn.huyz@gmail.com";
+  const { id: idUser } = await prisma.user.findFirstOrThrow({
+    where: { email },
+    select: { id: true },
+  });
+
+  await prisma.category.deleteMany({ where: { idUser } });
+  await createDefaultCategory(idUser);
+}
+
 export const UpdateTransactionButton = () => {
   return (
     <>
@@ -55,6 +68,9 @@ export const UpdateTransactionButton = () => {
       </form>
       <form action={createWallets}>
         <WiseButton type="submit">Create Wallets</WiseButton>
+      </form>
+      <form action={createCategories}>
+        <WiseButton type="submit">Create Categories</WiseButton>
       </form>
     </>
   );

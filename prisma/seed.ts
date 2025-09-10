@@ -1,10 +1,8 @@
-import { Icon, PrismaClient } from "@/generated/prisma";
-import { flatIcon } from "@/lib/configs";
-import { map, values } from "lodash";
+import { PrismaClient } from "@/generated/prisma";
 import fs from "fs/promises";
+import { values } from "lodash";
 import path from "path";
-
-type PayloadIcon = Omit<Icon, "id">;
+import { flatIcon } from "./seed-flat-icon";
 
 const prisma = new PrismaClient();
 
@@ -49,7 +47,6 @@ const seed = async () => {
     ...bankIcons.map((icon) => createIcon(icon, "bank", false)),
     ...eWalletIcons.map((icon) => createIcon(icon, "e-wallet", false)),
   ].forEach(async (icon) => {
-    console.log("icon", icon);
     await prisma.icon.create({
       data: {
         source: "System",

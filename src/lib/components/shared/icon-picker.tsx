@@ -93,6 +93,10 @@ export const IconPicker = ({
     </div>
   );
 
+  if (disabled) {
+    return renderIcon(icon);
+  }
+
   return (
     <Popover modal open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger tabIndex={-1} disabled={disabled}>

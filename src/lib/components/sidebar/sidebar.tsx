@@ -39,7 +39,11 @@ export function AppSidebar() {
             label="Wallets"
           />
 
-          <SidebarButton href={"/"} icon={<Tags />} label="Categories" />
+          <SidebarButton
+            href={"/category"}
+            icon={<Tags />}
+            label="Categories"
+          />
 
           <SidebarButton
             href={"/profile"}
