@@ -91,12 +91,9 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
-  idTransfer: true,
-  isToTransfer: true,
-  isFromTransfer: true,
-  transferTo: { select: selectTransfer },
-  transferFrom: { select: selectTransfer },
-  isAdjust: true,
+  transfer: true,
+  adjust: true,
+  
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

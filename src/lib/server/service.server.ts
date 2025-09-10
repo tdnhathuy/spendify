@@ -9,7 +9,7 @@ export const getCurrentByWalletId = async (idWallet: string) => {
       transferToWallet: { select: { amount: true } },
       transferFromWallet: { select: { amount: true } },
       transactions: {
-        where: { transferTo: null },
+        where: { transfer: null },
         select: {
           amount: true,
           category: { select: { type: true } },

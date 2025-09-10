@@ -29,7 +29,6 @@ export const POST = createApi(async ({ request, id, idUser }) => {
       user: { connect: { id: idUser } },
       note: `Adjust Balance (${currentBalance.toLocaleString()} → ${payload.newBalance.toLocaleString()})`,
       date: new Date(),
-      isAdjust: true,
     },
     select: selectTrans,
   });

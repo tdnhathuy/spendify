@@ -55,17 +55,18 @@ model Icon {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  email        String        @unique
+  id           String              @id @default(uuid())
+  email        String              @unique
   name         String
   wallets      Wallet[]
   categories   Category[]
   transactions Transaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
   syncConfig   SyncConfig[]
   transfer     Transfer[]
   iconUser     IconUser[]
+  adjustments  TransactionAdjust[]
 
   @@index([email])
 }
@@ -127,9 +128,9 @@ model Transfer {
   fromWallet Wallet @relation("transferFromWallet", fields: [fromWalletId], references: [id])
   toWallet   Wallet @relation("transferToWallet", fields: [toWalletId], references: [id])
 
-  // Liên kết với hai transaction riêng biệt
-  fromTransaction Transaction? @relation("FromTransfer")
-  toTransaction   Transaction? @relation("ToTransfer")
+  // Liên kết với transaction (chỉ cần một transaction để đại diện cho transfer)
+  idTransaction String?      @unique
+  transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: SetNull)
 
   @@index([idUser])
   @@index([fromWalletId])
@@ -173,29 +174,16 @@ model Transaction {
   category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  isAdjust   Boolean?  @default(false)
 
-  idInfoSync String?              @unique
-  infoSync   TransactionInfoSync? @relation(fields: [idInfoSync], references: [id], onDelete: SetNull)
-
-  // Thông tin liên quan đến Transfer
-  idTransfer     String?  @unique
-  isFromTransfer Boolean? @default(false) // True nếu là giao dịch từ ví nguồn
-  isToTransfer   Boolean? @default(false) // True nếu là giao dịch đến ví đích
-
-  // Quan hệ với Transfer
-  transferFrom Transfer? @relation("FromTransfer", fields: [idTransfer], references: [id], onDelete: SetNull, map: "Transaction_fromTransfer_fkey")
-  transferTo   Transfer? @relation("ToTransfer", fields: [idTransfer], references: [id], onDelete: SetNull, map: "Transaction_toTransfer_fkey")
+  infoSync TransactionInfoSync? 
+  transfer Transfer? 
+  adjust   TransactionAdjust? 
 
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])
   @@index([idCategory])
   @@index([idUser, idWallet, date(sort: Desc)])
   @@index([idUser, idCategory, date(sort: Desc)])
-  @@index([idInfoSync])
-  @@index([idTransfer])
-  @@index([isFromTransfer])
-  @@index([isToTransfer])
 }
 
 model TransactionInfoSync {
@@ -209,9 +197,26 @@ model TransactionInfoSync {
   emailReceived String
   emailTitle    String
 
-  transaction Transaction? @relation()
+  idTransaction String?     @unique
+  transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
 
   @@unique([idUser, emailProvider, providerMsgId])
+  @@index([idUser])
+}
+
+model TransactionAdjust {
+  id        String   @id @default(uuid())
+  idUser    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reason String
+  amount Decimal @db.Decimal(19, 4)
+
+  user          User        @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  idTransaction String      @unique
+  transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
+
   @@index([idUser])
 }
 

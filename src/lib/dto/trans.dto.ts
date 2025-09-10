@@ -1,6 +1,5 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOInfoSync } from "@/lib/dto/info-sync.dto";
-import { DTOTransfer } from "@/lib/dto/transfer.dto";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
 import { DBTransaction } from "@/lib/server";
 import { ITransaction } from "@/lib/types";
@@ -13,22 +12,11 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
 
   const infoSync = DTOInfoSync.fromDB(transaction.infoSync as any);
   const wallet = DTOWallet.fromDB(transaction.wallet);
-  // const transfer = DTOTransfer.fromDB(transaction.transfer);
-  console.log("transaction.transfer", transaction.idTransfer);
-
-  // const transfer: ITransaction["transfer"] = transaction.idTransfer
-  //   ? {
-  //       id: transaction.idTransfer,
-  //       amount: transaction.amount.toNumber(),
-  //       fromWallet: DTOTransfer.fromDB(transaction.transferFrom!)!,
-  //       toWallet: DTOTransfer.fromDB(transaction.transferTo!)!,
-  //     }
-  //   : null;
 
   const result: ITransaction = {
     id: transaction.id,
     amount: transaction.amount.toNumber(),
-    isAdjust: transaction.isAdjust ?? false,
+    isAdjust: !!transaction.adjust,
     date: transaction.date,
     description: transaction.note,
 
@@ -37,15 +25,6 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
     wallet: wallet,
     infoSync: infoSync,
     transfer: null,
-    // transfer: transfer,
-    // transfer: !!transaction.idTransfer
-    //   ? {
-    //       id: transaction.idTransfer,
-    //       amount: transaction.amount.toNumber(),
-    //       fromWallet: transaction.transferFrom?.fromWallet,
-    //       toWallet: transaction.transferTo?.toWallet,
-    //     }
-    //   : null,
   };
 
   return result;
