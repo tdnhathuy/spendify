@@ -1,12 +1,12 @@
 "use client";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import { formatMoney } from "@/lib/helpers/func.helper";
 import { ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { AssignCategory } from "@/modules/dashboard/components/list-trans/assign-category";
 import { AssignWallet } from "@/modules/dashboard/components/list-trans/assign-wallet";
 import { DescTransfer } from "@/modules/dashboard/components/list-trans/desc-transfer";
+import { ListTransItemAmount } from "@/modules/dashboard/components/list-trans/item/amount";
 import { ListTransItemTitle } from "@/modules/dashboard/components/list-trans/item/title";
 import { PopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover";
 import { BiTransferAlt } from "react-icons/bi";
@@ -17,7 +17,6 @@ interface ListTransItemProps {
 }
 
 export const ListTransItem = ({ item }: ListTransItemProps) => {
-  const isIncome = item.categoryParent?.type === "Income";
   const isTransfer = !!item.transfer;
 
   useDidUpdate(() => {
@@ -62,15 +61,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
       </span>
 
       <span className="flex  flex-col justify-between items-end ">
-        <span
-          className={cn("font-semibold text-base", {
-            "text-green-500": isIncome,
-            "text-red-500": !isIncome,
-          })}
-        >
-          {formatMoney(item.amount)}
-        </span>
-
+        <ListTransItemAmount transaction={item} />
         <PopoverListTrans transaction={item} />
       </span>
     </div>

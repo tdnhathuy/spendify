@@ -50,6 +50,8 @@ export const selectWallet = {
   },
   includeInReport: true,
   icon: { select: selectIcon },
+  transferFromWallet: { select: { amount: true } },
+  transferToWallet: { select: { amount: true } },
 } satisfies Prisma.WalletSelect;
 
 export const selectWalletDetail = {
@@ -89,7 +91,11 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
-  transfer: { select: selectTransfer },
+  idTransfer: true,
+  isToTransfer: true,
+  isFromTransfer: true,
+  transferTo: { select: selectTransfer },
+  transferFrom: { select: selectTransfer },
   isAdjust: true,
 } satisfies Prisma.TransactionSelect;
 

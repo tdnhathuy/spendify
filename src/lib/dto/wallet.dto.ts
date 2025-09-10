@@ -5,19 +5,27 @@ import { IWallet, IWalletDetail, IWalletSimple } from "@/lib/types";
 const fromDB = (wallet: DBWallet | null): IWallet | null => {
   if (!wallet) return null;
 
-  const allIncome = wallet.transactions.filter(
-    (x) => x?.category?.type === "Income"
+  const allAmount = wallet.transactions.reduce(
+    (acc, curr) => acc + curr.amount.toNumber(),
+    0
   );
-  const allExpense = wallet.transactions.filter(
-    (x) => x?.category?.type === "Expense" || !x?.category?.type
+
+  const allTransferExpense =
+    wallet.transferFromWallet.reduce(
+      (acc, curr) => acc + curr.amount.toNumber(),
+      0
+    ) * -1;
+
+  const allTransferIncome = wallet.transferToWallet.reduce(
+    (acc, curr) => acc + curr.amount.toNumber(),
+    0
   );
 
   const currentBalance =
+    allAmount +
     wallet.initBalance.toNumber() +
-    allIncome.reduce((acc, curr) => acc + curr.amount.toNumber(), 0) -
-    allExpense.reduce((acc, curr) => acc + curr.amount.toNumber(), 0);
-
-
+    allTransferIncome +
+    allTransferExpense;
   return {
     id: wallet.id,
     name: wallet.name,

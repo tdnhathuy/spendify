@@ -47,8 +47,8 @@ model Icon {
   iconGlobal IconGlobal? @relation(fields: [idIconGlobal], references: [id], onDelete: Cascade)
   iconUser   IconUser?   @relation(fields: [idIconUser], references: [id], onDelete: Cascade)
 
-  Wallet   Wallet[]
-  Category Category[]
+  wallet   Wallet[]
+  category Category[]
 
   @@unique([idIconGlobal])
   @@unique([idIconUser])
@@ -64,8 +64,8 @@ model User {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   syncConfig   SyncConfig[]
-  Transfer     Transfer[]
-  IconUser     IconUser[]
+  transfer     Transfer[]
+  iconUser     IconUser[]
 
   @@index([email])
 }
@@ -102,9 +102,9 @@ model Wallet {
   cardNumber            String?
   cardStatementPassword String?
   cardStatementDate     DateTime?
-  SyncConfig            SyncConfig[]
-  TransferFromWallet    Transfer[]   @relation("TransferFromWallet")
-  TransferToWallet      Transfer[]   @relation("TransferToWallet")
+  syncConfig            SyncConfig[]
+  transferFromWallet    Transfer[]   @relation("transferFromWallet")
+  transferToWallet      Transfer[]   @relation("transferToWallet")
 
   idIcon String?
   icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
@@ -124,10 +124,12 @@ model Transfer {
   amount       Decimal  @db.Decimal(19, 4)
 
   user       User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  fromWallet Wallet @relation("TransferFromWallet", fields: [fromWalletId], references: [id])
-  toWallet   Wallet @relation("TransferToWallet", fields: [toWalletId], references: [id])
+  fromWallet Wallet @relation("transferFromWallet", fields: [fromWalletId], references: [id])
+  toWallet   Wallet @relation("transferToWallet", fields: [toWalletId], references: [id])
 
-  transaction Transaction?
+  // Liên kết với hai transaction riêng biệt
+  fromTransaction Transaction? @relation("FromTransfer")
+  toTransaction   Transaction? @relation("ToTransfer")
 
   @@index([idUser])
   @@index([fromWalletId])
@@ -173,16 +175,27 @@ model Transaction {
   updatedAt  DateTime  @updatedAt
   isAdjust   Boolean?  @default(false)
 
-  infoSync TransactionInfoSync?
+  idInfoSync String?              @unique
+  infoSync   TransactionInfoSync? @relation(fields: [idInfoSync], references: [id], onDelete: SetNull)
 
-  idTransfer String?   @unique
-  transfer   Transfer? @relation(fields: [idTransfer], references: [id], onDelete: SetNull)
+  // Thông tin liên quan đến Transfer
+  idTransfer     String?  @unique
+  isFromTransfer Boolean? @default(false) // True nếu là giao dịch từ ví nguồn
+  isToTransfer   Boolean? @default(false) // True nếu là giao dịch đến ví đích
+
+  // Quan hệ với Transfer
+  transferFrom Transfer? @relation("FromTransfer", fields: [idTransfer], references: [id], onDelete: SetNull, map: "Transaction_fromTransfer_fkey")
+  transferTo   Transfer? @relation("ToTransfer", fields: [idTransfer], references: [id], onDelete: SetNull, map: "Transaction_toTransfer_fkey")
 
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])
   @@index([idCategory])
   @@index([idUser, idWallet, date(sort: Desc)])
   @@index([idUser, idCategory, date(sort: Desc)])
+  @@index([idInfoSync])
+  @@index([idTransfer])
+  @@index([isFromTransfer])
+  @@index([isToTransfer])
 }
 
 model TransactionInfoSync {
@@ -196,8 +209,7 @@ model TransactionInfoSync {
   emailReceived String
   emailTitle    String
 
-  idTransaction String      @unique
-  transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
+  transaction Transaction? @relation()
 
   @@unique([idUser, emailProvider, providerMsgId])
   @@index([idUser])

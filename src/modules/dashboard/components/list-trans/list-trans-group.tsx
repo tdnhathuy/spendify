@@ -15,7 +15,7 @@ export const ListTransGroup = ({ data = [], date }: Props) => {
     .reduce(fnCal, 0);
 
   const allExpense = data
-    .filter(({ category }) => category?.type === "Expense" || !category)
+    .filter(({ category }) => category?.type === "Expense")
     .reduce(fnCal, 0);
 
   return (
