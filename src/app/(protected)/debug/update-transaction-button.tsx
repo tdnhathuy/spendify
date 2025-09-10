@@ -3,47 +3,59 @@ import { prisma } from "@/lib/server";
 
 async function updateRandomTransaction() {
   "use server";
-
   const { id } = await prisma.user.findFirstOrThrow({ select: { id: true } });
+}
 
-  // const allTrans = await prisma.transaction.updateMany({
-  //   where: { idUser: id, category: { type: "Expense" } },
-  //   data: { amount: { multiply: -1 } },
-  // });
+async function createWallets() {
+  "use server";
 
-  //   try {
-  //     // Tìm một transaction ngẫu nhiên để cập nhật
-  //     const randomTransaction = await prisma.transaction.findFirst({
-  //       orderBy: {
-  //         createdAt: "desc"
-  //       }
-  //     });
+  const email = "tdn.huyz@gmail.com";
+  const { id: idUser } = await prisma.user.findFirstOrThrow({
+    where: { email },
+    select: { id: true },
+  });
 
-  //     if (randomTransaction) {
-  //       // Cập nhật transaction với một ghi chú mới
-  //       await prisma.transaction.update({
-  //         where: {
-  //           id: randomTransaction.id
-  //         },
-  //         data: {
-  //           note: `Updated at ${new Date().toISOString()}`
-  //         }
-  //       });
+  await prisma.wallet.createMany({
+    data: [
+      { name: "Cash", initBalance: 0, type: "Cash", idUser },
+      { name: "VCB", initBalance: 0, type: "Debit", idUser },
+      { name: "MoMo", initBalance: 0, type: "Debit", idUser },
 
-  //       console.log(`Updated transaction: ${randomTransaction.id}`);
-  //       revalidatePath("/debug");
-  //     } else {
-  //       console.log("No transaction found to update");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating transaction:", error);
-  //   }
+      {
+        name: "SC",
+        initBalance: 0,
+        type: "Credit",
+        idUser,
+        includeInReport: false,
+      },
+      {
+        name: "HSBC",
+        initBalance: 0,
+        type: "Credit",
+        idUser,
+        includeInReport: false,
+      },
+
+      {
+        name: "Binance",
+        initBalance: 0,
+        type: "Crypto",
+        idUser,
+        includeInReport: false,
+      },
+    ],
+  });
 }
 
 export const UpdateTransactionButton = () => {
   return (
-    <form action={updateRandomTransaction}>
-      <WiseButton type="submit">Update Transaction</WiseButton>
-    </form>
+    <>
+      <form action={updateRandomTransaction}>
+        <WiseButton type="submit">Update Transaction</WiseButton>
+      </form>
+      <form action={createWallets}>
+        <WiseButton type="submit">Create Wallets</WiseButton>
+      </form>
+    </>
   );
 };

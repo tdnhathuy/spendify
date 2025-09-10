@@ -1,4 +1,3 @@
-import { CategoryType } from "@/generated/prisma";
 import { prisma } from "@/lib/server/prisma.server";
 
 export const getCurrentByWalletId = async (idWallet: string) => {
