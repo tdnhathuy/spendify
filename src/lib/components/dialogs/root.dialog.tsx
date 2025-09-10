@@ -1,6 +1,7 @@
 "use client";
 
 import { DialogAdjustBalance } from "@/lib/components/dialogs/adjust-balance/dialog";
+import { DialogCreateCategory } from "@/modules/category/dialogs/create-category/dialog";
 import {
   DialogAssignCategory,
   DialogAssignWallet,
@@ -26,6 +27,8 @@ export const RootDialog = () => {
       <DialogTransfer />
       <DialogCreateIcon />
       <DialogAdjustBalance />
+
+      <DialogCreateCategory />
     </>
   );
 };

@@ -16,6 +16,7 @@ type DialogMap = {
   transfer: TypeSchemaTransfer | null;
   "create-icon": null;
   "adjust-balance": IWalletDetail;
+  "create-category": null;
 };
 
 type DialogsState<M extends Record<string, any>> = {
