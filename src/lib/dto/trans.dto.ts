@@ -16,16 +16,14 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
   // const transfer = DTOTransfer.fromDB(transaction.transfer);
   console.log("transaction.transfer", transaction.idTransfer);
 
-  const transfer: ITransaction["transfer"] = transaction.idTransfer
-    ? {
-        id: transaction.idTransfer,
-        amount: transaction.amount.toNumber(),
-        fromWallet: DTOTransfer.fromDB(transaction.transferFrom!)!,
-        toWallet: DTOTransfer.fromDB(transaction.transferTo!)!,
-      }
-    : null;
-
-  console.log("transfer", transfer);
+  // const transfer: ITransaction["transfer"] = transaction.idTransfer
+  //   ? {
+  //       id: transaction.idTransfer,
+  //       amount: transaction.amount.toNumber(),
+  //       fromWallet: DTOTransfer.fromDB(transaction.transferFrom!)!,
+  //       toWallet: DTOTransfer.fromDB(transaction.transferTo!)!,
+  //     }
+  //   : null;
 
   const result: ITransaction = {
     id: transaction.id,
@@ -38,7 +36,7 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
     categoryParent: categoryParent,
     wallet: wallet,
     infoSync: infoSync,
-    transfer: transfer,
+    transfer: null,
     // transfer: transfer,
     // transfer: !!transaction.idTransfer
     //   ? {
