@@ -18,6 +18,7 @@ interface ListTransItemProps {
 
 export const ListTransItem = ({ item }: ListTransItemProps) => {
   const isTransfer = !!item.transfer;
+  console.log('isTransfer', isTransfer)
 
   useDidUpdate(() => {
     // dialogs.open("trans", item);

@@ -9,17 +9,6 @@ export const GET = createApi(async ({ idUser }) => {
     select: selectWallet,
   });
 
-  // // Process all wallets in parallel with optimized balance calculation
-  // const walletsWithBalance = await Promise.all(
-  //   wallets.map(async (wallet) => {
-  //     const dto = DTOWallet.fromDB(wallet);
-  //     if (!dto) return null;
-
-  //     const currentBalance = await getCurrentByWalletId(wallet.id);
-  //     return { ...dto, currentBalance };
-  //   })
-  // );
-
   return responseSuccess(wallets.map(DTOWallet.fromDB));
 });
 

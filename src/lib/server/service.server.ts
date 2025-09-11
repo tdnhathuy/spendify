@@ -46,3 +46,25 @@ export const getCurrentByWalletId = async (idWallet: string) => {
 
   return balance;
 };
+
+export const getAllAmountTransferByWalletId = async (idWallet: string) => {
+  const { transferFromWallet, transferToWallet } =
+    await prisma.wallet.findFirstOrThrow({
+      where: { id: idWallet },
+      select: {
+        transferFromWallet: { select: { amount: true } },
+        transferToWallet: { select: { amount: true } },
+      },
+    });
+
+  const allIncome = transferToWallet.reduce(
+    (acc, curr) => acc + curr.amount.toNumber(),
+    0
+  );
+  const allExpense = transferFromWallet.reduce(
+    (acc, curr) => acc + curr.amount.toNumber(),
+    0
+  );
+
+  return allIncome - allExpense;
+};

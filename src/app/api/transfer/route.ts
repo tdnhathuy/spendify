@@ -3,24 +3,23 @@ import { createApi, prisma, responseSuccess } from "@/lib/server";
 export const POST = createApi(async ({ idUser, request }) => {
   const payload = (await request.json()) as PayloadCreateTransfer;
   if (!payload) return responseSuccess(true);
-  await prisma.transfer.create({
+
+  const amount = Number(payload.amount);
+  await prisma.transaction.create({
     data: {
       idUser,
-      fromWalletId: payload.idWalletFrom,
-      toWalletId: payload.idWalletTo,
-      amount: Number(payload.amount),
-      // transaction: {
-      //   create: {
-      //     idUser,
-      //     amount: Number(payload.amount),
-      //     date: new Date(),
-      //     note: "Transfer",
-      //     idWallet: null,
-      //     idCategory: null,
-      //   },
-      // },
+      amount,
+      transfer: {
+        create: {
+          amount,
+          fromWallet: { connect: { id: payload.idWalletFrom } },
+          toWallet: { connect: { id: payload.idWalletTo } },
+          user: { connect: { id: idUser } },
+        },
+      },
     },
   });
+
   return responseSuccess(true);
 });
 

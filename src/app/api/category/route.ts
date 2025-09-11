@@ -8,7 +8,6 @@ export const GET = createApi(async ({ idUser }) => {
     select: selectCategory,
   });
 
-  console.log('categories', categories)
   const result = DTOCategory.fromDBs(categories);
 
   return responseSuccess(result);

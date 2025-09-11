@@ -130,7 +130,7 @@ model Transfer {
 
   // Liên kết với transaction (chỉ cần một transaction để đại diện cho transfer)
   idTransaction String?      @unique
-  transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: SetNull)
+  transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
 
   @@index([idUser])
   @@index([fromWalletId])
@@ -175,7 +175,7 @@ model Transaction {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
-  infoSync TransactionInfoSync? 
+  infoSync TransactionInfoSync?  
   transfer Transfer? 
   adjust   TransactionAdjust? 
 

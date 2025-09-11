@@ -3,7 +3,7 @@ import { ITransfer } from "../types";
 import { DBTransfer } from "@/lib/server";
 
 export const DTOTransfer = {
-  fromDB: (transfer?: DBTransfer): ITransfer | null => {
+  fromDB: (transfer?: DBTransfer | null): ITransfer | null => {
     if (!transfer) return null;
 
     const fromWallet = DTOWallet.fromDBSimple(transfer.fromWallet);

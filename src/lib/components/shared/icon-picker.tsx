@@ -43,6 +43,10 @@ export const IconPicker = ({
     (x) => x.isSystemIcon && x.url.includes("e-wallet")
   );
 
+  const iconDefault = icons.filter(
+    (x) => x.isSystemIcon && x.url.includes("https")
+  );
+
   useEffect(() => {
     if (selectedIcon) setIcon(selectedIcon);
   }, [selectedIcon]);
@@ -110,6 +114,7 @@ export const IconPicker = ({
           )}
         >
           {renderSection("User", iconUser)}
+          {renderSection("Default", iconDefault)}
           {renderSection("Bank", iconBank)}
           {renderSection("E-Wallet", iconEWallet)}
         </div>

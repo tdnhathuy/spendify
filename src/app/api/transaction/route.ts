@@ -14,7 +14,7 @@ export const GET = createApi(async ({ idUser, request }) => {
 
   const [trans, meta] = await prisma.transaction
     .paginate({
-      where: { idUser },
+      where: { idUser, transfer: {} },
       select: selectTrans,
       orderBy: [{ date: "desc" }, { id: "desc" }],
     })
@@ -23,8 +23,6 @@ export const GET = createApi(async ({ idUser, request }) => {
       page: Number(page),
       includePageCount: true,
     });
-
-  // console.log("trans", trans);
 
   const arr = trans.map(DTOTrans.fromDB);
 

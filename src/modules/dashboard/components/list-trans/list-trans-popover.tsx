@@ -43,9 +43,8 @@ export const PopoverListTrans = ({ transaction }: Props) => {
   };
 
   const isCanMarkTransfer = !!transaction.infoSync;
-  const isCanDelete = !transaction.transfer && !transaction.infoSync;
+  const isCanDelete =  !transaction.infoSync;
   const isCanUnmarkTransfer = !!transaction.transfer && !!transaction.infoSync;
-  console.log("transaction", transaction);
 
   return (
     <Popover>

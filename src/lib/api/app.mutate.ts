@@ -62,7 +62,10 @@ export const useMutateCreateTrans = () => {
   return useMutation({
     mutationKey: [MutationKeys.createTransaction],
     mutationFn: ServiceTrans.create,
-    onSuccess: Refetch.trans,
+    onSuccess: () => {
+      Refetch.trans();
+      Refetch.wallet();
+    },
   });
 };
 
@@ -70,7 +73,10 @@ export const useMutateAssignCategory = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignCategory],
     mutationFn: ServiceTrans.assignCategory,
-    onSuccess: updateQueryTransaction,
+    onSuccess: (trans) => {
+      updateQueryTransaction(trans);
+      Refetch.wallet();
+    },
   });
 };
 
@@ -78,7 +84,10 @@ export const useMutateAssignWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignWallet],
     mutationFn: ServiceTrans.assignWallet,
-    onSuccess: updateQueryTransaction,
+    onSuccess: (trans) => {
+      updateQueryTransaction(trans);
+      Refetch.wallet();
+    },
   });
 };
 
@@ -102,6 +111,10 @@ export const useMutateCreateTransfer = () => {
   return useMutation({
     mutationKey: [MutationKeys.createTransfer],
     mutationFn: ServiceTransfer.transfer,
+    onSuccess: async () => {
+      await Refetch.trans();
+      await Refetch.wallet();
+    },
   });
 };
 

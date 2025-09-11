@@ -1,5 +1,6 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOInfoSync } from "@/lib/dto/info-sync.dto";
+import { DTOTransfer } from "@/lib/dto/transfer.dto";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
 import { DBTransaction } from "@/lib/server";
 import { ITransaction } from "@/lib/types";
@@ -12,6 +13,7 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
 
   const infoSync = DTOInfoSync.fromDB(transaction.infoSync as any);
   const wallet = DTOWallet.fromDB(transaction.wallet);
+  const transfer = DTOTransfer.fromDB(transaction.transfer);
 
   const result: ITransaction = {
     id: transaction.id,
@@ -20,11 +22,7 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
     date: transaction.date,
     description: transaction.note,
 
-    category: category,
-    categoryParent: categoryParent,
-    wallet: wallet,
-    infoSync: infoSync,
-    transfer: null,
+    ...{ transfer, infoSync, wallet, category, categoryParent },
   };
 
   return result;

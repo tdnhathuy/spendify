@@ -46,12 +46,17 @@ export const selectWallet = {
   type: true,
   initBalance: true,
   transactions: {
-    select: { id: true, amount: true, category: { select: { type: true } } },
+    select: {
+      id: true,
+      amount: true,
+      category: { select: { type: true } },
+      transfer: { select: { id: true, amount: true } },
+      adjust: { select: { id: true, reason: true, amount: true } },
+      infoSync: { select: { id: true, emailProvider: true } },
+    },
   },
   includeInReport: true,
   icon: { select: selectIcon },
-  transferFromWallet: { select: { amount: true } },
-  transferToWallet: { select: { amount: true } },
 } satisfies Prisma.WalletSelect;
 
 export const selectWalletDetail = {
@@ -91,9 +96,8 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
-  transfer: true,
+  transfer: { select: selectTransfer },
   adjust: true,
-  
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

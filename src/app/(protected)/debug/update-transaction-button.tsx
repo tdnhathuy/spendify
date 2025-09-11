@@ -1,6 +1,8 @@
 import { createDefaultCategory } from "@/app/api/setup/misc";
 import { WiseButton } from "@/lib/components";
-import { prisma } from "@/lib/server";
+import { DTOWallet } from "@/lib/dto";
+import { prisma, selectTrans, selectWallet } from "@/lib/server";
+import { getAllAmountTransferByWalletId } from "@/lib/server/service.server";
 
 async function updateRandomTransaction() {
   "use server";
@@ -60,6 +62,36 @@ async function createCategories() {
   await createDefaultCategory(idUser);
 }
 
+async function debugWallet() {
+  "use server";
+  const email = "tdn.huyz@gmail.com";
+  const { id: idUser } = await prisma.user.findFirstOrThrow({
+    where: { email },
+    select: { id: true },
+  });
+
+  const wallet = await prisma.wallet.findFirstOrThrow({
+    where: { idUser, name: "Cash" },
+    select: selectWallet,
+  });
+
+  const trans = await prisma.transaction.findMany({
+    where: {
+      idUser,
+      transfer: {
+        OR: [{ fromWalletId: wallet.id }, { toWalletId: wallet.id }],
+      },
+    },
+    select: selectTrans,
+  });
+
+  // console.log("trans", trans);
+  // console.log("wallet", wallet);
+
+  const am = await getAllAmountTransferByWalletId(wallet.id);
+  // console.log("result", result);
+}
+
 export const UpdateTransactionButton = () => {
   return (
     <>
@@ -71,6 +103,10 @@ export const UpdateTransactionButton = () => {
       </form>
       <form action={createCategories}>
         <WiseButton type="submit">Create Categories</WiseButton>
+      </form>
+
+      <form action={debugWallet}>
+        <WiseButton type="submit">Debug Wallet</WiseButton>
       </form>
     </>
   );
