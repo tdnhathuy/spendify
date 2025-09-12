@@ -102,9 +102,7 @@ export interface ITransaction {
 
 export interface ITransfer {
   id: string;
-  amount: number;
-  fromWallet: IWalletSimple;
-  toWallet: IWalletSimple;
+  idWallet: string;
 }
 
 export interface IInfoSync {}

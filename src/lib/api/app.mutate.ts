@@ -95,7 +95,11 @@ export const useMutateDeleteTrans = (idTrans: string) => {
   return useMutation({
     mutationKey: [MutationKeys.deleteTransaction, idTrans],
     mutationFn: ServiceTrans.delete,
-    onSuccess: () => deleteQueryTransaction(idTrans),
+    onSuccess: () => {
+      Refetch.trans();
+      Refetch.wallet();
+      // deleteQueryTransaction(idTrans);
+    },
   });
 };
 

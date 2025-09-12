@@ -50,10 +50,10 @@ export const selectWallet = {
       id: true,
       amount: true,
       category: { select: { type: true } },
-      // transfer: { select: { id: true, amount: true } },
       adjust: { select: { id: true, reason: true, amount: true } },
       infoSync: { select: { id: true, emailProvider: true } },
       idWalletTransfer: true,
+      idTransfer: true,
     },
   },
   includeInReport: true,
@@ -90,8 +90,10 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
-  idWalletTransfer: true,
   adjust: true,
+
+  idWalletTransfer: true,
+  idTransfer: true,
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

@@ -6,6 +6,7 @@ export const ListTransItemTitle = ({
   transaction: ITransaction;
 }) => {
   const category = transaction.categoryParent?.name || "Uncategorized";
+  console.log('transaction', transaction)
 
   const isTransfer = !!transaction.transfer;
 

@@ -18,7 +18,6 @@ interface ListTransItemProps {
 
 export const ListTransItem = ({ item }: ListTransItemProps) => {
   const isTransfer = !!item.transfer;
-  console.log('isTransfer', isTransfer)
 
   useDidUpdate(() => {
     // dialogs.open("trans", item);
@@ -45,20 +44,16 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
       <span className="flex flex-1 flex-col text-xs gap-1">
         <ListTransItemTitle transaction={item} />
 
-        {isTransfer ? (
-          <DescTransfer transaction={item} />
-        ) : (
-          <>
-            <span className="flex flex-col items-start gap-1 xs:flex-row xs:gap-2 ">
-              <AssignCategory transaction={item} />
-              <AssignWallet transaction={item} />
-            </span>
+        <>
+          <span className="flex flex-col items-start gap-1 xs:flex-row xs:gap-2 ">
+            <AssignCategory transaction={item} />
+            <AssignWallet transaction={item} />
+          </span>
 
-            <span className="text-xs  text-gray-500 line-clamp-2 ">
-              {item.description || ""}
-            </span>
-          </>
-        )}
+          <span className="text-xs  text-gray-500 line-clamp-2 ">
+            {item.description || ""}
+          </span>
+        </>
       </span>
 
       <span className="flex  flex-col justify-between items-end ">
