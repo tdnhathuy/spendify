@@ -50,9 +50,10 @@ export const selectWallet = {
       id: true,
       amount: true,
       category: { select: { type: true } },
-      transfer: { select: { id: true, amount: true } },
+      // transfer: { select: { id: true, amount: true } },
       adjust: { select: { id: true, reason: true, amount: true } },
       infoSync: { select: { id: true, emailProvider: true } },
+      idWalletTransfer: true,
     },
   },
   includeInReport: true,
@@ -81,13 +82,6 @@ export const selectInfoSync = {
   emailTitle: true,
 } satisfies Prisma.TransactionInfoSyncSelect;
 
-export const selectTransfer = {
-  id: true,
-  amount: true,
-  fromWallet: { select: selectWalletSimple },
-  toWallet: { select: selectWalletSimple },
-} satisfies Prisma.TransferSelect;
-
 export const selectTrans = {
   id: true,
   amount: true,
@@ -96,7 +90,7 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   infoSync: { select: selectInfoSync },
-  transfer: { select: selectTransfer },
+  idWalletTransfer: true,
   adjust: true,
 } satisfies Prisma.TransactionSelect;
 
@@ -138,9 +132,6 @@ export type DBSystemIcon = Prisma.IconGlobalGetPayload<{
 
 export type DBTransaction = Prisma.TransactionGetPayload<{
   select: typeof selectTrans;
-}>;
-export type DBTransfer = Prisma.TransferGetPayload<{
-  select: typeof selectTransfer;
 }>;
 
 export const getProfile = (idUser: string) =>

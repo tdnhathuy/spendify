@@ -64,7 +64,6 @@ model User {
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
   syncConfig   SyncConfig[]
-  transfer     Transfer[]
   iconUser     IconUser[]
   adjustments  TransactionAdjust[]
 
@@ -89,52 +88,29 @@ model SyncConfig {
 }
 
 model Wallet {
-  id              String        @id @default(uuid())
+  id              String     @id @default(uuid())
   name            String
-  initBalance     Decimal       @default(0) @db.Decimal(19, 4)
+  initBalance     Decimal    @default(0) @db.Decimal(19, 4)
   type            WalletType
   idUser          String
-  user            User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  transactions    Transaction[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  includeInReport Boolean       @default(true)
+  user            User       @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  includeInReport Boolean    @default(true)
 
   cardNumber            String?
   cardStatementPassword String?
   cardStatementDate     DateTime?
   syncConfig            SyncConfig[]
-  transferFromWallet    Transfer[]   @relation("transferFromWallet")
-  transferToWallet      Transfer[]   @relation("transferToWallet")
 
   idIcon String?
   icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
 
+  transactions Transaction[]
+
   @@unique([idUser, name])
   @@index([idIcon])
   @@index([idUser])
-}
-
-model Transfer {
-  id           String   @id @default(uuid())
-  idUser       String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  fromWalletId String
-  toWalletId   String
-  amount       Decimal  @db.Decimal(19, 4)
-
-  user       User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  fromWallet Wallet @relation("transferFromWallet", fields: [fromWalletId], references: [id])
-  toWallet   Wallet @relation("transferToWallet", fields: [toWalletId], references: [id])
-
-  // Liên kết với transaction (chỉ cần một transaction để đại diện cho transfer)
-  idTransaction String?      @unique
-  transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
-
-  @@index([idUser])
-  @@index([fromWalletId])
-  @@index([toWalletId])
 }
 
 model Category {
@@ -164,7 +140,7 @@ model Category {
 model Transaction {
   id         String    @id @default(uuid())
   idUser     String
-  idWallet   String?
+  idWallet   String? // Có thể null khi tạo transaction nhanh
   idCategory String?
   amount     Decimal   @db.Decimal(19, 4)
   note       String?
@@ -175,9 +151,13 @@ model Transaction {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
-  infoSync TransactionInfoSync?  
-  transfer Transfer? 
-  adjust   TransactionAdjust? 
+  infoSync TransactionInfoSync?
+  adjust   TransactionAdjust?
+
+  idWalletTransfer String?
+  idTransfer       String?
+
+  includeInReport Boolean @default(true)
 
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])
@@ -197,7 +177,7 @@ model TransactionInfoSync {
   emailReceived String
   emailTitle    String
 
-  idTransaction String?     @unique
+  idTransaction String?      @unique
   transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
 
   @@unique([idUser, emailProvider, providerMsgId])

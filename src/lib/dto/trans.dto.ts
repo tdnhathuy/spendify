@@ -13,7 +13,6 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
 
   const infoSync = DTOInfoSync.fromDB(transaction.infoSync as any);
   const wallet = DTOWallet.fromDB(transaction.wallet);
-  const transfer = DTOTransfer.fromDB(transaction.transfer);
 
   const result: ITransaction = {
     id: transaction.id,
@@ -21,8 +20,9 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
     isAdjust: !!transaction.adjust,
     date: transaction.date,
     description: transaction.note,
+    transfer: null,
 
-    ...{ transfer, infoSync, wallet, category, categoryParent },
+    ...{ infoSync, wallet, category, categoryParent },
   };
 
   return result;

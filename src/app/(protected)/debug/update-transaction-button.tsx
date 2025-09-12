@@ -78,9 +78,6 @@ async function debugWallet() {
   const trans = await prisma.transaction.findMany({
     where: {
       idUser,
-      transfer: {
-        OR: [{ fromWalletId: wallet.id }, { toWalletId: wallet.id }],
-      },
     },
     select: selectTrans,
   });

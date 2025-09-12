@@ -14,7 +14,7 @@ export const GET = createApi(async ({ idUser, request }) => {
 
   const [trans, meta] = await prisma.transaction
     .paginate({
-      where: { idUser, transfer: {} },
+      where: { idUser },
       select: selectTrans,
       orderBy: [{ date: "desc" }, { id: "desc" }],
     })
