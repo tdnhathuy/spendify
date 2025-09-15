@@ -156,3 +156,13 @@ export const useMutateCreateCategory = () => {
     },
   });
 };
+
+export const useMutateSplitTransaction = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.splitTransaction],
+    mutationFn: ServiceTrans.split,
+    onSuccess: () => {
+      Refetch.trans();
+    },
+  });
+};

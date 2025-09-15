@@ -13,6 +13,7 @@ import {
   DialogTransfer,
   DialogWallet,
 } from "./index";
+import { DialogSplitTransaction } from "@/lib/components/dialogs/split-transaction/dialog";
 
 export const RootDialog = () => {
   return (
@@ -29,6 +30,7 @@ export const RootDialog = () => {
       <DialogAdjustBalance />
 
       <DialogCreateCategory />
+      <DialogSplitTransaction />
     </>
   );
 };

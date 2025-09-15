@@ -1,50 +1,34 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
-import {
-  useMutateDeleteTrans,
-  useMutateUnmarkTransfer,
-} from "@/lib/api/app.mutate";
-import { dialogs } from "@/lib/components";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
 import { ITransaction } from "@/lib/types";
+import { usePopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover.action";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { ReactNode } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 
-interface Props {
+export interface PopoverListTransProps {
   transaction: ITransaction;
 }
 
-export const PopoverListTrans = ({ transaction }: Props) => {
-  const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
-  const { mutateAsync: unmarkTransfer } = useMutateUnmarkTransfer();
+export const PopoverListTrans = (props: PopoverListTransProps) => {
+  const { actions, status } = usePopoverListTrans(props);
+  const {
+    //
+    onDelete,
+    onTransfer,
+    onUnmarkTransfer,
+    onSplit,
+  } = actions;
 
-  const onDelete = async () => {
-    await deleteTrans(transaction.id);
-  };
-
-  const onTransfer = () => {
-    dialogs.open("transfer", {
-      isMarkTransfer: true,
-      amount: transaction.amount + "",
-      idTransaction: transaction.id,
-      walletFrom: {
-        id: transaction.wallet?.id || "",
-        name: transaction.wallet?.name || "",
-        currentBalance: transaction.wallet?.currentBalance + "",
-        icon: transaction.wallet?.icon || null,
-      },
-    });
-  };
-
-  const onUnmarkTransfer = async () => {
-    await unmarkTransfer(transaction.id);
-  };
-
-  const isCanMarkTransfer = !!transaction.infoSync;
-  const isCanDelete =  !transaction.infoSync;
-  const isCanUnmarkTransfer = !!transaction.transfer && !!transaction.infoSync;
+  const {
+    isCanMarkTransfer,
+    isCanDelete,
+    isCanUnmarkTransfer,
+    isCanSplit,
+    //
+  } = status;
 
   return (
     <Popover>
@@ -63,6 +47,13 @@ export const PopoverListTrans = ({ transaction }: Props) => {
           title="Mark Transfer"
           onClick={onTransfer}
           visible={isCanMarkTransfer && !isCanUnmarkTransfer}
+        />
+
+        <PopoverItem
+          icon={<FaMoneyBillTransfer />}
+          title="Split"
+          onClick={onSplit}
+          visible={isCanSplit}
         />
 
         <PopoverItem

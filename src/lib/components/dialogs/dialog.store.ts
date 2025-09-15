@@ -18,6 +18,7 @@ type DialogMap = {
   "create-icon": null;
   "adjust-balance": IWalletDetail;
   "create-category": TypeSchemaCreateCategory | null;
+  "split-transaction": { idTransaction: string };
 };
 
 type DialogsState<M extends Record<string, any>> = {

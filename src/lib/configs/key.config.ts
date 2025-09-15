@@ -23,4 +23,5 @@ export const MutationKeys = {
   updateConfigSync: "updateConfigSync",
   unmarkTransfer: "unmarkTransfer",
   createCategory: "createCategory",
+  splitTransaction: "splitTransaction",
 };
