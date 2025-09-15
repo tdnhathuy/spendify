@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-interface Props {
+export interface IconPickerProps {
   icon: IIcon | undefined | null;
   onChange?: (icon: IIcon) => void;
   disabled?: boolean;
@@ -29,7 +29,7 @@ export const IconPicker = ({
   onChange,
   disabled,
   size = "md",
-}: Props) => {
+}: IconPickerProps) => {
   const { data: icons = [] } = useQueryIcon(disabled);
 
   const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);

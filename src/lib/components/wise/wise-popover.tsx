@@ -9,7 +9,10 @@ interface Props extends Pick<PopoverContentProps, "align" | "side"> {
 export const WisePopoverContent = (props: Props) => {
   return (
     <PopoverContent
-      className={cn("px-2 py-1 rounded-sm", props.className)}
+      className={cn(
+        "px-2 py-1 rounded-sm w-[var(--radix-popover-trigger-width)]",
+        props.className
+      )}
       align={props.align ?? "center"}
       side={props.side ?? "bottom"}
       onClick={(e) => e.stopPropagation()}

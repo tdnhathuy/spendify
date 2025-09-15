@@ -6,7 +6,7 @@ import {
   updateQueryTransaction,
 } from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
-import { ServiceTrans, ServiceWallet } from "@/lib/services";
+import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
@@ -143,5 +143,16 @@ export const useMutateUpdateConfigSync = () => {
     mutationKey: [MutationKeys.updateConfigSync],
     mutationFn: ServiceConfigSync.update,
     onSuccess: Refetch.configSync,
+  });
+};
+
+export const useMutateCreateCategory = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.createCategory],
+    mutationFn: ServiceCategory.create,
+    onSuccess: () => {
+      Refetch.trans();
+      Refetch.category();
+    },
   });
 };

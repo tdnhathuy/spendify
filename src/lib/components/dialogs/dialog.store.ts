@@ -1,6 +1,7 @@
 // dialogs.ts
 import { TypeSchemaTransfer } from "@/lib/components/dialogs/transfer/schema";
 import type { ICategory, ITransaction, IWalletDetail } from "@/lib/types";
+import { TypeSchemaCreateCategory } from "@/modules/category/dialogs/create-category/schema";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 
@@ -16,7 +17,7 @@ type DialogMap = {
   transfer: TypeSchemaTransfer | null;
   "create-icon": null;
   "adjust-balance": IWalletDetail;
-  "create-category": null;
+  "create-category": TypeSchemaCreateCategory | null;
 };
 
 type DialogsState<M extends Record<string, any>> = {

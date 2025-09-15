@@ -22,4 +22,5 @@ export const MutationKeys = {
   markTransfer: "markTransfer",
   updateConfigSync: "updateConfigSync",
   unmarkTransfer: "unmarkTransfer",
+  createCategory: "createCategory",
 };
