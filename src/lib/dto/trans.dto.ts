@@ -16,7 +16,7 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
   const transfer: ITransfer | null = transaction.idTransfer
     ? {
         id: transaction.idTransfer!,
-        idWallet: transaction.idWalletTransfer!,
+        idWallet: transaction.transfer?.walletFrom?.id || "",
       }
     : null;
 

@@ -20,8 +20,12 @@ export const POST = createApi(async ({ idUser, request }) => {
   const nameWalletFrom = await getWalletName(idWalletFrom);
   const nameWalletTo = await getWalletName(idWalletTo);
 
-  const idTransfer = faker.database.mongodbObjectId();
   const note = `Transfer from ${nameWalletFrom} to ${nameWalletTo}`;
+
+  const { id: idTransfer } = await prisma.transactionTransfer.create({
+    data: { idUser, idWalletFrom, idWalletTo },
+    select: { id: true },
+  });
 
   const base = { idUser, idTransfer, note };
 
@@ -30,8 +34,7 @@ export const POST = createApi(async ({ idUser, request }) => {
       data: {
         ...base,
         amount: amount * -1,
-        idWalletTransfer: payload.idWalletTo,
-        idWallet: payload.idWalletFrom,
+        idWallet: idWalletFrom,
       },
     }),
 
@@ -39,8 +42,7 @@ export const POST = createApi(async ({ idUser, request }) => {
       data: {
         ...base,
         amount,
-        idWalletTransfer: payload.idWalletFrom,
-        idWallet: payload.idWalletTo,
+        idWallet: idWalletTo,
       },
     }),
   ]);

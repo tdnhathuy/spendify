@@ -5,8 +5,6 @@ export const getCurrentByWalletId = async (idWallet: string) => {
     where: { id: idWallet },
     select: {
       initBalance: true,
-      transferToWallet: { select: { amount: true } },
-      transferFromWallet: { select: { amount: true } },
       transactions: {
         where: { transfer: null },
         select: {
@@ -14,6 +12,8 @@ export const getCurrentByWalletId = async (idWallet: string) => {
           category: { select: { type: true } },
         },
       },
+      transactionTransferFrom: true,
+      transactionTransferTo: true,
     },
   });
 
@@ -22,8 +22,8 @@ export const getCurrentByWalletId = async (idWallet: string) => {
     items.reduce((acc, curr) => acc + curr.amount.toNumber(), 0);
 
   // Calculate transfers
-  const transferIn = sumAmounts(wallet.transferToWallet);
-  const transferOut = sumAmounts(wallet.transferFromWallet);
+  const transferIn = 0;
+  const transferOut = 0;
 
   // Calculate transactions by type
   const transactions = wallet.transactions || [];
@@ -48,23 +48,5 @@ export const getCurrentByWalletId = async (idWallet: string) => {
 };
 
 export const getAllAmountTransferByWalletId = async (idWallet: string) => {
-  const { transferFromWallet, transferToWallet } =
-    await prisma.wallet.findFirstOrThrow({
-      where: { id: idWallet },
-      select: {
-        transferFromWallet: { select: { amount: true } },
-        transferToWallet: { select: { amount: true } },
-      },
-    });
-
-  const allIncome = transferToWallet.reduce(
-    (acc, curr) => acc + curr.amount.toNumber(),
-    0
-  );
-  const allExpense = transferFromWallet.reduce(
-    (acc, curr) => acc + curr.amount.toNumber(),
-    0
-  );
-
-  return allIncome - allExpense;
+  return 0;
 };

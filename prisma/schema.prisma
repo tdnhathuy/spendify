@@ -106,7 +106,9 @@ model Wallet {
   idIcon String?
   icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
 
-  transactions Transaction[]
+  transactions            Transaction[]
+  transactionTransferFrom TransactionTransfer[] @relation("TransactionTransferFrom")
+  transactionTransferTo   TransactionTransfer[] @relation("TransactionTransferTo")
 
   @@unique([idUser, name])
   @@index([idIcon])
@@ -154,8 +156,8 @@ model Transaction {
   infoSync TransactionInfoSync?
   adjust   TransactionAdjust?
 
-  idWalletTransfer String?
-  idTransfer       String?
+  idTransfer String?
+  transfer   TransactionTransfer? @relation(fields: [idTransfer], references: [id], onDelete: Cascade)
 
   includeInReport Boolean @default(true)
 
@@ -164,6 +166,20 @@ model Transaction {
   @@index([idCategory])
   @@index([idUser, idWallet, date(sort: Desc)])
   @@index([idUser, idCategory, date(sort: Desc)])
+}
+
+model TransactionTransfer {
+  id        String   @id @default(uuid())
+  idUser    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  idWalletFrom String
+  idWalletTo   String
+
+  walletFrom   Wallet?       @relation("TransactionTransferFrom", fields: [idWalletFrom], references: [id], onDelete: Cascade)
+  walletTo     Wallet?       @relation("TransactionTransferTo", fields: [idWalletTo], references: [id], onDelete: Cascade)
+  transactions Transaction[]
 }
 
 model TransactionInfoSync {

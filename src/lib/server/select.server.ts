@@ -40,6 +40,12 @@ export const selectWalletSimple = {
   icon: { select: selectIcon },
 } satisfies Prisma.WalletSelect;
 
+export const selectTransfer = {
+  id: true,
+  walletFrom: { select: selectWalletSimple },
+  walletTo: { select: selectWalletSimple },
+} satisfies Prisma.TransactionTransferSelect;
+
 export const selectWallet = {
   id: true,
   name: true,
@@ -52,8 +58,8 @@ export const selectWallet = {
       category: { select: { type: true } },
       adjust: { select: { id: true, reason: true, amount: true } },
       infoSync: { select: { id: true, emailProvider: true } },
-      idWalletTransfer: true,
       idTransfer: true,
+      transfer: { select: selectTransfer },
     },
   },
   includeInReport: true,
@@ -92,8 +98,8 @@ export const selectTrans = {
   infoSync: { select: selectInfoSync },
   adjust: true,
 
-  idWalletTransfer: true,
   idTransfer: true,
+  transfer: { select: selectTransfer },
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {
@@ -107,6 +113,10 @@ export type DBCategory = Prisma.CategoryGetPayload<{
   select: typeof selectCategory;
 }>;
 export type DBWallet = Prisma.WalletGetPayload<{ select: typeof selectWallet }>;
+
+export type DBTransfer = Prisma.TransactionTransferGetPayload<{
+  select: typeof selectTransfer;
+}>;
 
 export type DBWalletSimple = Prisma.WalletGetPayload<{
   select: typeof selectWalletSimple;

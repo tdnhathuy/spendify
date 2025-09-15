@@ -12,9 +12,9 @@ export const DescTransfer = ({ transaction }: DescTransferProps) => {
 
   return (
     <span className="flex gap-2 items-center">
-      <Wallet wallet={transfer.fromWallet} />
+      {/* <Wallet wallet={transfer.walletFrom} /> */}
       <FcAdvance />
-      <Wallet wallet={transfer.toWallet} />
+      {/* <Wallet wallet={transfer.walletTo} /> */}
     </span>
   );
 };

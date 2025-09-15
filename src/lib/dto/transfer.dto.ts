@@ -6,14 +6,17 @@ export const DTOTransfer = {
   fromDB: (transfer?: DBTransfer | null): ITransfer | null => {
     if (!transfer) return null;
 
-    const fromWallet = DTOWallet.fromDBSimple(transfer.fromWallet);
-    const toWallet = DTOWallet.fromDBSimple(transfer.toWallet);
+    // const fromWallet = DTOWallet.fromDBSimple(transfer.walletFrom);
+    // const toWallet = DTOWallet.fromDBSimple(transfer.walletTo);
 
     return {
       id: transfer.id,
-      amount: transfer.amount.toNumber(),
-      fromWallet: fromWallet!,
-      toWallet: toWallet!,
+      idWallet: transfer.walletFrom?.id || "",
+      // idWallet: transfer.walletFrom?.id || "",
+      // idWallet: transfer.walletFrom?.id || "",
+      // amount: transfer.amount.toNumber(),
+      // walletFrom: fromWallet!,
+      // walletTo: toWallet!,
     };
   },
 };
