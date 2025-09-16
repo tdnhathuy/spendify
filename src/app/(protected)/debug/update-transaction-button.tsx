@@ -89,10 +89,26 @@ async function debugWallet() {
   // console.log("result", result);
 }
 
+async function getWalletInfo() {
+  "use server";
+  const email = "tdn.huyz@gmail.com";
+  const { id: idUser } = await prisma.user.findFirstOrThrow({
+    where: { email },
+    select: { id: true },
+  });
+
+  const wallet = await prisma.wallet.findUnique({
+    where: { id: "82ece73c-b1a0-49c8-a4e3-9e1f59e64f7e" },
+    select: selectWallet,
+  });
+
+  console.log("wallet", wallet);
+}
+
 export const UpdateTransactionButton = () => {
   return (
     <>
-      <form action={updateRandomTransaction}>
+      {/* <form action={updateRandomTransaction}>
         <WiseButton type="submit">Update Transaction</WiseButton>
       </form>
       <form action={createWallets}>
@@ -104,6 +120,10 @@ export const UpdateTransactionButton = () => {
 
       <form action={debugWallet}>
         <WiseButton type="submit">Debug Wallet</WiseButton>
+      </form> */}
+
+      <form action={getWalletInfo}>
+        <WiseButton type="submit">Get Wallet Info</WiseButton>
       </form>
     </>
   );

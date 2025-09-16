@@ -6,6 +6,7 @@ import {
   selectWalletDetail,
 } from "@/lib/server";
 import { prisma } from "@/lib/server/prisma.server";
+import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
 import { PayloadUpdateWallet } from "@/lib/services";
 
 export const PUT = createApi(async ({ request, idUser }) => {
@@ -29,7 +30,15 @@ export const PUT = createApi(async ({ request, idUser }) => {
     },
     select: selectWallet,
   });
-  return responseSuccess(DTOWallet.fromDB(wallet));
+  
+  // Tính balance đúng sau khi update
+  const correctBalance = await WalletBalanceService.calculateBalance(idWallet, idUser);
+  const walletDto = DTOWallet.fromDB(wallet);
+  if (walletDto) {
+    walletDto.currentBalance = correctBalance.toNumber();
+  }
+  
+  return responseSuccess(walletDto);
 });
 
 export const DELETE = createApi(async ({ idUser, request }) => {
@@ -48,7 +57,13 @@ export const GET = createApi(async ({ idUser, request }) => {
     select: selectWalletDetail,
   });
 
+  // Tính balance đúng
+  const correctBalance = await WalletBalanceService.calculateBalance(id, idUser);
+  
   const detail = DTOWallet.fromDBDetail(response);
+  if (detail) {
+    detail.currentBalance = correctBalance.toNumber();
+  }
 
   return responseSuccess(detail);
 });

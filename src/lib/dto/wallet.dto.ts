@@ -1,51 +1,34 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
+import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
 import { DBWallet, DBWalletDetail, DBWalletSimple } from "@/lib/server";
 import { IWallet, IWalletDetail, IWalletSimple } from "@/lib/types";
 
 const calculateCurrentBalance = (wallet: DBWallet): number => {
   const initBalance = wallet.initBalance.toNumber();
-  
-  // Tính tổng tất cả transactions (bao gồm cả transfer, adjust, và regular transactions)
-  const allTransactionsAmount = wallet.transactions.reduce(
-    (acc, curr) => acc + curr.amount.toNumber(),
-    0
-  );
+  let balance = initBalance;
 
-  // Với kiến trúc mới, tất cả các giao dịch đều được lưu trong bảng transactions:
-  // - Regular transactions: thu/chi thông thường
-  // - Transfer transactions: chuyển tiền (âm cho ví nguồn, dương cho ví đích)
-  // - Adjustment transactions: điều chỉnh số dư
-  // - Sync transactions: giao dịch từ email sync
-  
-  const currentBalance = initBalance + allTransactionsAmount;
-  
-  return currentBalance;
-};
+  // Tính toán từ transactions thuộc về wallet này
+  for (const transaction of wallet.transactions) {
+    const amount = transaction.amount.toNumber();
 
-const getWalletBreakdown = (wallet: DBWallet) => {
-  const regularTransactions = wallet.transactions.filter(t => !t.transfer && !t.adjust && !t.infoSync);
-  const transferTransactions = wallet.transactions.filter(t => t.transfer);
-  const adjustmentTransactions = wallet.transactions.filter(t => t.adjust);
-  const syncTransactions = wallet.transactions.filter(t => t.infoSync);
-  
-  return {
-    regular: {
-      count: regularTransactions.length,
-      amount: regularTransactions.reduce((acc, curr) => acc + curr.amount.toNumber(), 0)
-    },
-    transfer: {
-      count: transferTransactions.length,
-      amount: transferTransactions.reduce((acc, curr) => acc + curr.amount.toNumber(), 0)
-    },
-    adjustment: {
-      count: adjustmentTransactions.length,
-      amount: adjustmentTransactions.reduce((acc, curr) => acc + curr.amount.toNumber(), 0)
-    },
-    sync: {
-      count: syncTransactions.length,
-      amount: syncTransactions.reduce((acc, curr) => acc + curr.amount.toNumber(), 0)
+    // Kiểm tra nếu đây là transaction transfer OUT
+    if (transaction.walletTransferTo) {
+      // Đây là transfer OUT (từ wallet này sang wallet khác) - trừ tiền
+      balance -= amount;
+    } else if (transaction.category) {
+      // Đây là transaction thông thường (income/expense)
+      if (transaction.category.type === "Income") {
+        balance += amount;
+      } else if (transaction.category.type === "Expense") {
+        balance -= amount;
+      }
+      // Category type 'Other' không ảnh hưởng đến balance
     }
-  };
+  }
+
+  // TODO: Transfer IN sẽ được tính ở nơi khác vì không có trong wallet.transactions
+
+  return balance;
 };
 
 const fromDB = (wallet: DBWallet | null): IWallet | null => {
@@ -67,6 +50,8 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
 const fromDBDetail = (wallet: DBWalletDetail): IWalletDetail | null => {
   if (!wallet) return null;
 
+  // TODO: fromDBDetail cũng cần async để tính balance đúng
+  // Tạm thời dùng logic cũ, sẽ được override ở API level
   const currentBalance = calculateCurrentBalance(wallet);
 
   return {
@@ -94,23 +79,9 @@ const fromDBSimple = (wallet: DBWalletSimple): IWalletSimple | null => {
   };
 };
 
-const fromDBWithBreakdown = (wallet: DBWallet | null) => {
-  if (!wallet) return null;
-  
-  const baseWallet = fromDB(wallet);
-  const breakdown = getWalletBreakdown(wallet);
-  
-  return {
-    ...baseWallet,
-    breakdown
-  };
-};
-
 export const DTOWallet = {
   fromDB,
   fromDBDetail,
   fromDBSimple,
-  fromDBWithBreakdown,
   calculateCurrentBalance,
-  getWalletBreakdown,
 };

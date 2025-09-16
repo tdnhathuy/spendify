@@ -6,33 +6,40 @@ export interface DashboardInfo {
 }
 
 export const GET = createApi(async ({ idUser }) => {
-  const wallets = await prisma.wallet.findMany({
+  // Lấy tất cả transactions của user (không phân biệt wallet) 
+  // chỉ tính Income/Expense, không tính Transfer
+  const transactions = await prisma.transaction.findMany({
     where: {
       idUser,
-      includeInReport: true,
+      wallet: {
+        includeInReport: true
+      },
+      category: {
+        type: {
+          in: ['Income', 'Expense']
+        }
+      },
+      // Loại trừ transfer transactions
+      idWalletTransferTo: null
     },
     select: {
-      transactions: {
-        select: {
-          amount: true,
-          category: { select: { type: true } },
-        },
-      },
+      amount: true,
+      category: { select: { type: true } },
     },
   });
-
-  const trans = wallets.map((x) => x.transactions).flat();
 
   const result: DashboardInfo = {
     expense: 0,
     income: 0,
   };
 
-  trans.forEach((x) => {
-    if (x.category?.type === "Income" && x.amount.toNumber() > 0) {
-      result.income += Math.abs(x.amount.toNumber());
-    } else {
-      result.expense += Math.abs(x.amount.toNumber());
+  transactions.forEach((transaction) => {
+    const amount = Math.abs(transaction.amount.toNumber());
+    
+    if (transaction.category?.type === "Income") {
+      result.income += amount;
+    } else if (transaction.category?.type === "Expense") {
+      result.expense += amount;
     }
   });
 

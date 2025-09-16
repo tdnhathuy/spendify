@@ -4,19 +4,48 @@ import { DTOWallet } from "@/lib/dto/wallet.dto";
 import { DBTransaction } from "@/lib/server";
 import { ITransaction, ITransfer } from "@/lib/types";
 
-const fromDB = (transaction: DBTransaction): ITransaction => {
+/**
+ * Xác định direction của transfer dựa trên wallet đang xem
+ */
+const determineTransferDirection = (
+  transaction: DBTransaction, 
+  viewFromWalletId?: string
+): 'out' | 'in' => {
+  if (!viewFromWalletId) {
+    // Nếu không có viewFromWalletId, mặc định là 'out' (vì transaction thuộc về wallet nguồn)
+    return 'out';
+  }
+  
+  // Nếu đang xem từ wallet nguồn → 'out'
+  if (transaction.wallet?.id === viewFromWalletId) {
+    return 'out';
+  }
+  
+  // Nếu đang xem từ wallet đích → 'in'  
+  if (transaction.walletTransferTo?.id === viewFromWalletId) {
+    return 'in';
+  }
+  
+  // Fallback
+  return 'out';
+};
+
+const fromDB = (transaction: DBTransaction, viewFromWalletId?: string): ITransaction => {
   const category = DTOCategory.fromDB(transaction.category);
   const categoryParent = transaction.category?.parent
     ? DTOCategory.fromDB(transaction.category?.parent as any)
     : category;
 
   const infoSync = DTOInfoSync.fromDB(transaction.infoSync as any);
-  const wallet = DTOWallet.fromDB(transaction.wallet);
+  const wallet = DTOWallet.fromDBSimple(transaction.wallet as any);
 
-  const transfer: ITransfer | null = transaction.idTransfer
+  // Tạo transfer object nếu đây là transaction transfer
+  const transfer: ITransfer | null = transaction.walletTransferTo && transaction.wallet
     ? {
-        id: transaction.idTransfer!,
-        idWallet: transaction.transfer?.walletFrom?.id || "",
+        isTransfer: true,
+        walletFrom: DTOWallet.fromDBSimple(transaction.wallet),
+        walletTo: DTOWallet.fromDBSimple(transaction.walletTransferTo),
+        direction: determineTransferDirection(transaction, viewFromWalletId)
       }
     : null;
 
@@ -25,14 +54,36 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
     amount: transaction.amount.toNumber(),
     isAdjust: !!transaction.adjust,
     date: transaction.date,
-    description: transaction.note,
+    description: getTransferDescription(transaction),
+    transfer,
 
-    ...{ transfer, infoSync, wallet, category, categoryParent },
+    ...{ infoSync, wallet, category, categoryParent },
   };
 
   return result;
 };
 
+/**
+ * Kiểm tra xem transaction có phải transfer không
+ */
+const isTransferTransaction = (transaction: DBTransaction): boolean => {
+  return !!transaction.walletTransferTo;
+};
+
+/**
+ * Lấy description mặc định cho transfer transaction
+ */
+const getTransferDescription = (transaction: DBTransaction): string => {
+  if (!isTransferTransaction(transaction)) return transaction.note || '';
+  
+  const fromWallet = transaction.wallet?.name || 'Unknown Wallet';
+  const toWallet = transaction.walletTransferTo?.name || 'Unknown Wallet';
+  
+  return transaction.note || `Transfer from ${fromWallet} to ${toWallet}`;
+};
+
 export const DTOTrans = {
   fromDB,
+  isTransferTransaction,
+  getTransferDescription,
 };

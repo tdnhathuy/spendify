@@ -91,18 +91,21 @@ export interface ITransaction {
   category: BaseCategory | null;
   categoryParent: BaseCategory | null;
 
-  wallet: IWallet | null;
+  wallet: IWalletSimple | null;
   date: Date;
   description: string | null;
 
   infoSync: IInfoSync | null;
-  transfer: ITransfer | null;
   isAdjust: boolean;
+
+  transfer: ITransfer | null;
 }
 
 export interface ITransfer {
-  id: string;
-  idWallet: string;
+  isTransfer: true; // Flag để dễ dàng identify transfer transaction
+  walletFrom: IWalletSimple | null; // Wallet nguồn (trừ tiền)
+  walletTo: IWalletSimple | null;   // Wallet đích (cộng tiền)
+  direction: 'out' | 'in';   // 'out' = transfer từ wallet này, 'in' = transfer đến wallet này
 }
 
 export interface IInfoSync {}

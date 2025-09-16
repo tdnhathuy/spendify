@@ -40,11 +40,7 @@ export const selectWalletSimple = {
   icon: { select: selectIcon },
 } satisfies Prisma.WalletSelect;
 
-export const selectTransfer = {
-  id: true,
-  walletFrom: { select: selectWalletSimple },
-  walletTo: { select: selectWalletSimple },
-} satisfies Prisma.TransactionTransferSelect;
+// TransactionTransfer đã bị xóa, thay thế bằng thông tin transfer trong Transaction
 
 export const selectWallet = {
   id: true,
@@ -58,8 +54,7 @@ export const selectWallet = {
       category: { select: { type: true } },
       adjust: { select: { id: true, reason: true, amount: true } },
       infoSync: { select: { id: true, emailProvider: true } },
-      idTransfer: true,
-      transfer: { select: selectTransfer },
+      walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
     },
   },
   includeInReport: true,
@@ -93,13 +88,13 @@ export const selectTrans = {
   amount: true,
   note: true,
   date: true,
-  category: { select: selectCategory },
-  wallet: { select: selectWallet },
-  infoSync: { select: selectInfoSync },
   adjust: true,
 
-  idTransfer: true,
-  transfer: { select: selectTransfer },
+  category: { select: selectCategory },
+  wallet: { select: selectWalletSimple },
+  infoSync: { select: selectInfoSync },
+
+  walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {
@@ -114,9 +109,7 @@ export type DBCategory = Prisma.CategoryGetPayload<{
 }>;
 export type DBWallet = Prisma.WalletGetPayload<{ select: typeof selectWallet }>;
 
-export type DBTransfer = Prisma.TransactionTransferGetPayload<{
-  select: typeof selectTransfer;
-}>;
+// DBTransfer type đã bị xóa vì không còn TransactionTransfer model
 
 export type DBWalletSimple = Prisma.WalletGetPayload<{
   select: typeof selectWalletSimple;
