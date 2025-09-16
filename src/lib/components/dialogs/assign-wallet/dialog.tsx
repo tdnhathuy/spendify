@@ -13,7 +13,7 @@ export const DialogAssignWallet = () => {
   const { data: wallets = [] } = useQueryWallet();
   const { mutate: assignWallet } = useMutateAssignWallet();
 
-  const onClick = (wallet: IWallet) => {
+  const onClick = (wallet: IWallet) => () => {
     if (!data?.id) return;
     assignWallet(
       {
@@ -31,12 +31,16 @@ export const DialogAssignWallet = () => {
         footer={<FooterDialogAssignWallet />}
         ctnClassName="-translate-y-[60%]"
       >
-        <div className="h-[50vh] overflow-y-auto scrollbar flex flex-col gap-2 ">
+        <div className="h-[60vh] overflow-y-auto scrollbar grid  grid-cols-2 gap-2 ">
           {wallets.map((wallet) => {
             return (
-              <div key={wallet.id}>
-                <WalletItem wallet={wallet} onClick={onClick} />
-              </div>
+              <button
+                key={wallet.id}
+                onClick={onClick(wallet)}
+                className="cursor-pointer"
+              >
+                <WalletItem wallet={wallet} />
+              </button>
             );
           })}
         </div>

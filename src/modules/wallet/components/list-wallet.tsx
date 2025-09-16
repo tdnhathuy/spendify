@@ -5,12 +5,9 @@ import { WalletItem } from "@/modules/wallet/components/wallet-item";
 
 interface Props {
   className?: string;
-  onClick: (wallet: IWallet) => void;
 }
 
 export const ListWallet = (props: Props) => {
-  const { onClick } = props;
-
   const { data: listWallet = [] } = useQueryWallet();
 
   const listIncludeInReport = listWallet.filter(
@@ -34,24 +31,18 @@ export const ListWallet = (props: Props) => {
       <List
         label={`Include in Report - ${formatMoney(currentBalance)} VND`}
         wallets={listIncludeInReport}
-        onClick={onClick}
       />
 
       <List
         label={`Not Include in Report - ${formatMoney(currentBalanceNotIncludeInReport)} VND`}
         wallets={listNotIncludeInReport}
-        onClick={onClick}
       />
     </div>
   );
 };
 
-const List = (props: {
-  wallets: IWallet[];
-  onClick: (wallet: IWallet) => void;
-  label: string;
-}) => {
-  const { wallets, onClick, label } = props;
+const List = (props: { wallets: IWallet[]; label: string }) => {
+  const { wallets, label } = props;
 
   if (!wallets.length) return null;
 
@@ -59,11 +50,9 @@ const List = (props: {
     <div className="flex flex-col gap-1">
       <span className="text-sm font-semibold">{label}</span>
 
-      <div className="grid grid-cols-1 xxs:grid-cols-2 lg:grid-cols-3 gap-2 w-full">
+      <div className="grid grid-cols-1 xxs:grid-cols-2  xl:grid-cols-3 gap-2 w-full">
         {wallets.map((wallet) => {
-          return (
-            <WalletItem key={wallet.id} wallet={wallet} onClick={onClick} />
-          );
+          return <WalletItem key={wallet.id} wallet={wallet} />;
         })}
       </div>
     </div>
