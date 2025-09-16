@@ -6,45 +6,36 @@ export const POST = createApi(async ({ idUser, id, request }) => {
 
   const { idTransaction, idWallet, amount } = payload;
 
-  const trans = await prisma.transaction.findFirstOrThrow({
+  // Lấy thông tin transaction gốc
+  const originalTransaction = await prisma.transaction.findFirstOrThrow({
     where: { id: idTransaction },
     select: { idWallet: true, amount: true },
   });
 
-  const delta = new Decimal(amount.toString());
+  const splitAmount = new Decimal(amount.toString());
+  const originalAmount = new Decimal(originalTransaction.amount.toString());
+  
+  // Số tiền mới của transaction gốc = số tiền cũ - số tiền chia
+  const newAmount = originalAmount.minus(splitAmount);
 
-  const idWalletFrom = trans.idWallet || "";
+  const idWalletFrom = originalTransaction.idWallet || "";
   const idWalletTo = idWallet;
 
-  const { id: idTransfer } = await prisma.transactionTransfer.create({
-    data: { idUser, idWalletFrom, idWalletTo },
-    select: { id: true },
-  });
-
-  const rawAmount = Number(trans.amount);
-  const newAmount = Number(amount) + Number(rawAmount);
-
   await Promise.all([
+    // 1. Update transaction gốc với số tiền mới (trừ đi phần chia)
     prisma.transaction.update({
       where: { id: idTransaction },
       data: { amount: newAmount },
     }),
 
+    // 2. Tạo 1 transfer transaction duy nhất (schema mới)
     prisma.transaction.create({
       data: {
         idUser,
-        amount: Number(delta) * -1,
-        idWallet: idWalletFrom,
-        idTransfer,
-      },
-    }),
-
-    prisma.transaction.create({
-      data: {
-        idUser,
-        amount: Number(delta),
-        idWallet: idWalletTo,
-        idTransfer,
+        amount: splitAmount, // Số tiền transfer (luôn dương)
+        idWallet: idWalletFrom, // Wallet nguồn (trừ tiền)
+        idWalletTransferTo: idWalletTo, // Wallet đích (cộng tiền)
+        note: `Split bill transfer: ${splitAmount} from original transaction`,
       },
     }),
   ]);

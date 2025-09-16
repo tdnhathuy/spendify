@@ -27,7 +27,7 @@ export const usePopoverListTrans = (props: PopoverListTransProps) => {
       walletFrom: {
         id: transaction.wallet?.id || "",
         name: transaction.wallet?.name || "",
-        currentBalance: transaction.wallet?.currentBalance + "",
+        currentBalance: "0",
         icon: transaction.wallet?.icon || null,
       },
     });
