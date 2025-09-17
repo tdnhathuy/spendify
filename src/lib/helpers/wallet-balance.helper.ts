@@ -5,7 +5,8 @@ import { DBWallet, DBTransaction } from '@/lib/server/select.server';
  * Tính toán số dư hiện tại của wallet với schema mới
  * 
  * Logic:
- * - Số dư = initBalance + income - expense + transfer_in - transfer_out
+ * - Số dư = initBalance + income + expense + transfer_in - transfer_out
+ * - Expense amounts được lưu là số âm trong DB nên cộng vào
  * - Transfer_in: các transaction có idWalletTransferTo = wallet.id
  * - Transfer_out: các transaction có idWallet = wallet.id và idWalletTransferTo != null
  */
@@ -26,7 +27,8 @@ export function calculateWalletBalance(wallet: DBWallet): Decimal {
       if (transaction.category.type === 'Income') {
         balance = balance.plus(amount);
       } else if (transaction.category.type === 'Expense') {
-        balance = balance.minus(amount);
+        // Expense được lưu là số âm trong DB, nên cộng vào (cộng âm = trừ)
+        balance = balance.plus(amount);
       }
       // Category type 'Other' không ảnh hưởng đến balance
     }

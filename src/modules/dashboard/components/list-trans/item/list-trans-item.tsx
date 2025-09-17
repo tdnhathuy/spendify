@@ -1,16 +1,14 @@
 "use client";
-import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
+import { sheets } from "@/lib/components/sheets/sheet.store";
 import { ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { AssignCategory } from "@/modules/dashboard/components/list-trans/assign-category";
 import { AssignWallet } from "@/modules/dashboard/components/list-trans/assign-wallet";
-import { DescTransfer } from "@/modules/dashboard/components/list-trans/desc-transfer";
 import { ListTransItemAmount } from "@/modules/dashboard/components/list-trans/item/amount";
 import { ListTransItemTitle } from "@/modules/dashboard/components/list-trans/item/title";
 import { PopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover";
 import { BiTransferAlt } from "react-icons/bi";
-import { useDidUpdate } from "rooks";
 
 interface ListTransItemProps {
   item: ITransaction;
@@ -19,9 +17,7 @@ interface ListTransItemProps {
 export const ListTransItem = ({ item }: ListTransItemProps) => {
   const isTransfer = !!item.transfer;
 
-  useDidUpdate(() => {
-    // dialogs.open("trans", item);
-  }, [item]);
+  const onClickTransaction = () => sheets.open("transaction-detail", item);
 
   return (
     <div
@@ -29,9 +25,7 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
         "flex gap-2 w-full px-2 hover:bg-gray-100 py-2 rounded-sm",
         { "bg-red-300 ": item.isAdjust }
       )}
-      onClick={(e) => {
-        dialogs.open("trans", item);
-      }}
+      onClick={onClickTransaction}
     >
       <span className="bg-gray-200 p-2 flex rounded-full h-10 w-10 justify-center items-center ">
         {isTransfer ? (

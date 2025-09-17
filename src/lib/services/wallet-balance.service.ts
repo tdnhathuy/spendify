@@ -36,7 +36,7 @@ export class WalletBalanceService {
       balance = balance.plus(new Decimal(incomeSum._sum.amount));
     }
     
-    // 2. Trừ tất cả expense
+    // 2. Cộng tất cả expense (vì expense được lưu là số âm trong DB)
     const expenseSum = await prisma.transaction.aggregate({
       where: {
         idWallet: walletId,
@@ -51,7 +51,7 @@ export class WalletBalanceService {
     });
     
     if (expenseSum._sum.amount) {
-      balance = balance.minus(new Decimal(expenseSum._sum.amount));
+      balance = balance.plus(new Decimal(expenseSum._sum.amount));
     }
     
     // 3. Trừ tất cả transfer OUT (từ wallet này sang wallet khác)
@@ -145,7 +145,7 @@ export const calculateBalanceRawSQL = `
     w.name,
     (
       w."initBalance" + 
-      COALESCE(income.total, 0) - 
+      COALESCE(income.total, 0) + 
       COALESCE(expense.total, 0) + 
       COALESCE(transfer_in.total, 0) - 
       COALESCE(transfer_out.total, 0)

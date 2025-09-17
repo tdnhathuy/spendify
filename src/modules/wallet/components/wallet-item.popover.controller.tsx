@@ -1,3 +1,5 @@
+"use client";
+
 import { dialogs } from "@/lib/components";
 import { IWallet } from "@/lib/types";
 import { PopoverWalletItemProps } from "@/modules/wallet/components/wallet-item.popover";

@@ -14,19 +14,21 @@ export const GET = createApi(async ({ idUser }) => {
   // Tính balance đúng cho từng wallet (bao gồm transfer IN)
   const walletsWithCorrectBalance = await Promise.all(
     wallets.map(async (wallet) => {
-      const correctBalance = await WalletBalanceService.calculateBalance(wallet.id, idUser);
-      
-      // Tạo wallet object với balance đúng
+      const correctBalance = await WalletBalanceService.calculateBalance(
+        wallet.id,
+        idUser
+      );
+
       const walletDto = DTOWallet.fromDB(wallet);
       if (walletDto) {
         walletDto.currentBalance = correctBalance.toNumber();
       }
-      
+
       return walletDto;
     })
   );
-  
-  return responseSuccess(walletsWithCorrectBalance.filter(w => w !== null));
+
+  return responseSuccess(walletsWithCorrectBalance.filter((w) => w !== null));
 });
 
 export const POST = createApi(async ({ idUser, request }) => {
