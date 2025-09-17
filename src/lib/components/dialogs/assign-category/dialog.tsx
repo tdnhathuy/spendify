@@ -31,6 +31,10 @@ export const DialogAssignCategory = () => {
   const { mutate: assignCategory } = useMutateAssignCategory();
 
   const onSelectCategory = (category: ICategory) => {
+    if (data?.onSelectCategory) {
+      return data.onSelectCategory(category);
+    }
+
     dialogs.close("assign-category");
     if (!data?.id) return;
     assignCategory({

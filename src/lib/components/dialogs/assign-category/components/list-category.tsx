@@ -80,7 +80,7 @@ const CategoryItem = (props: {
   return (
     <b
       onClick={onClick}
-      className="flex flex-1 items-center gap-2  p-2 px-4 text-sm font-semibold hover:bg-gray-100 rounded-md"
+      className="flex flex-1 items-center gap-2  p-2 px-4 text-sm font-semibold hover:bg-gray-100 rounded-md cursor-default"
     >
       <IconPicker icon={props.category.icon} disabled size="sm" />
       <span>{props.category.name}</span>

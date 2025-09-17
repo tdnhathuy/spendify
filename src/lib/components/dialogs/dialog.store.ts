@@ -1,6 +1,11 @@
 // dialogs.ts
 import { TypeSchemaTransfer } from "@/lib/components/dialogs/transfer/schema";
-import type { ICategory, ITransaction, IWalletDetail } from "@/lib/types";
+import type {
+  ICategory,
+  ITransaction,
+  IWallet,
+  IWalletDetail,
+} from "@/lib/types";
 import { TypeSchemaCreateCategory } from "@/modules/category/dialogs/create-category/schema";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
@@ -9,8 +14,14 @@ type DialogMap = {
   trans: ITransaction;
   wallet: { idWallet: string };
   category: ICategory;
-  "assign-category": ITransaction;
-  "assign-wallet": ITransaction;
+  "assign-category": ITransaction & {
+    onSelectCategory?: (category: ICategory) => void;
+  };
+
+  "assign-wallet": ITransaction & {
+    onSelectWallet?: (wallet: IWallet) => void;
+  };
+
   "create-wallet": IWalletDetail;
   "create-trans": null;
   "create-config-sync": null;

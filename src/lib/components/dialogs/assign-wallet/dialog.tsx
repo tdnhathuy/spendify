@@ -15,6 +15,10 @@ export const DialogAssignWallet = () => {
 
   const onClick = (wallet: IWallet) => () => {
     if (!data?.id) return;
+    if (data.onSelectWallet) {
+      return data.onSelectWallet(wallet);
+    }
+
     assignWallet(
       {
         idWallet: wallet.id,
