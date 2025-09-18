@@ -1,50 +1,52 @@
 import { createApi, prisma, responseSuccess } from "@/lib/server";
-import { Decimal } from "@prisma/client/runtime/library";
 
-export const POST = createApi(async ({ idUser, id, request }) => {
-  const payload: PayloadTransactionSplit = await request.json();
+export const POST = createApi(async ({ idUser, request, id }) => {
+  const payload = (await request.json()) as PayloadSplitTransaction;
 
-  const { idTransaction, idWallet, amount } = payload;
+  const splits = payload.splits.map((split) => ({
+    amount: Number(split.amount),
+    idWallet: split.idWallet,
+    note: split.note,
+  }));
 
-  // Lấy thông tin transaction gốc
-  const originalTransaction = await prisma.transaction.findFirstOrThrow({
-    where: { id: idTransaction },
-    select: { idWallet: true, amount: true },
+  // Create multiple splits in a transaction
+  const result = await prisma.$transaction(async (tx) => {
+    const createdSplits = await Promise.all(
+      splits.map((split) =>
+        tx.transactionSplit.create({
+          data: {
+            idUser,
+            idTransaction: payload.idTransaction,
+            idWallet: split.idWallet,
+            amount: split.amount,
+            note: split.note || `Split ${split.amount} from transaction`,
+          },
+          include: {
+            wallet: { select: { id: true, name: true } },
+          },
+        })
+      )
+    );
+
+    return createdSplits;
   });
 
-  const splitAmount = new Decimal(amount.toString());
-  const originalAmount = new Decimal(originalTransaction.amount.toString());
-  
-  // Số tiền mới của transaction gốc = số tiền cũ - số tiền chia
-  const newAmount = originalAmount.minus(splitAmount);
-
-  const idWalletFrom = originalTransaction.idWallet || "";
-  const idWalletTo = idWallet;
-
-  await Promise.all([
-    // 1. Update transaction gốc với số tiền mới (trừ đi phần chia)
-    prisma.transaction.update({
-      where: { id: idTransaction },
-      data: { amount: newAmount },
-    }),
-
-    // 2. Tạo 1 transfer transaction duy nhất (schema mới)
-    prisma.transaction.create({
-      data: {
-        idUser,
-        amount: splitAmount, // Số tiền transfer (luôn dương)
-        idWallet: idWalletFrom, // Wallet nguồn (trừ tiền)
-        idWalletTransferTo: idWalletTo, // Wallet đích (cộng tiền)
-        note: `Split bill transfer: ${splitAmount} from original transaction`,
-      },
-    }),
-  ]);
-
-  return responseSuccess(true);
+  return responseSuccess({
+    transactionId: payload.idTransaction,
+    splits: result.map((split) => ({
+      id: split.id,
+      amount: split.amount.toNumber(),
+      wallet: split.wallet,
+      note: split.note,
+    })),
+  });
 });
 
-export interface PayloadTransactionSplit {
+export interface PayloadSplitTransaction {
   idTransaction: string;
-  idWallet: string;
-  amount: string;
+  splits: Array<{
+    idWallet: string;
+    amount: string;
+    note?: string;
+  }>;
 }

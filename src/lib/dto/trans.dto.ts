@@ -8,29 +8,32 @@ import { ITransaction, ITransfer } from "@/lib/types";
  * Xác định direction của transfer dựa trên wallet đang xem
  */
 const determineTransferDirection = (
-  transaction: DBTransaction, 
+  transaction: DBTransaction,
   viewFromWalletId?: string
-): 'out' | 'in' => {
+): "out" | "in" => {
   if (!viewFromWalletId) {
     // Nếu không có viewFromWalletId, mặc định là 'out' (vì transaction thuộc về wallet nguồn)
-    return 'out';
+    return "out";
   }
-  
+
   // Nếu đang xem từ wallet nguồn → 'out'
   if (transaction.wallet?.id === viewFromWalletId) {
-    return 'out';
+    return "out";
   }
-  
-  // Nếu đang xem từ wallet đích → 'in'  
+
+  // Nếu đang xem từ wallet đích → 'in'
   if (transaction.walletTransferTo?.id === viewFromWalletId) {
-    return 'in';
+    return "in";
   }
-  
+
   // Fallback
-  return 'out';
+  return "out";
 };
 
-const fromDB = (transaction: DBTransaction, viewFromWalletId?: string): ITransaction => {
+const fromDB = (
+  transaction: DBTransaction,
+  viewFromWalletId?: string
+): ITransaction => {
   const category = DTOCategory.fromDB(transaction.category);
   const categoryParent = transaction.category?.parent
     ? DTOCategory.fromDB(transaction.category?.parent as any)
@@ -40,13 +43,23 @@ const fromDB = (transaction: DBTransaction, viewFromWalletId?: string): ITransac
   const wallet = DTOWallet.fromDBSimple(transaction.wallet as any);
 
   // Tạo transfer object nếu đây là transaction transfer
-  const transfer: ITransfer | null = transaction.walletTransferTo && transaction.wallet
-    ? {
-        isTransfer: true,
-        walletFrom: DTOWallet.fromDBSimple(transaction.wallet),
-        walletTo: DTOWallet.fromDBSimple(transaction.walletTransferTo),
-        direction: determineTransferDirection(transaction, viewFromWalletId)
-      }
+  const transfer: ITransfer | null =
+    transaction.walletTransferTo && transaction.wallet
+      ? {
+          isTransfer: true,
+          walletFrom: DTOWallet.fromDBSimple(transaction.wallet),
+          walletTo: DTOWallet.fromDBSimple(transaction.walletTransferTo),
+          direction: determineTransferDirection(transaction, viewFromWalletId),
+        }
+      : null;
+
+  const splits = transaction.splits?.length
+    ? transaction.splits.map((split) => ({
+        id: split.id,
+        amount: split.amount.toNumber(),
+        wallet: DTOWallet.fromDBSimple(split.wallet),
+        note: split.note,
+      }))
     : null;
 
   const result: ITransaction = {
@@ -55,9 +68,8 @@ const fromDB = (transaction: DBTransaction, viewFromWalletId?: string): ITransac
     isAdjust: !!transaction.adjust,
     date: transaction.date,
     description: getTransferDescription(transaction),
-    transfer,
 
-    ...{ infoSync, wallet, category, categoryParent },
+    ...{ transfer, splits, infoSync, wallet, category, categoryParent },
   };
 
   return result;
@@ -74,11 +86,11 @@ const isTransferTransaction = (transaction: DBTransaction): boolean => {
  * Lấy description mặc định cho transfer transaction
  */
 const getTransferDescription = (transaction: DBTransaction): string => {
-  if (!isTransferTransaction(transaction)) return transaction.note || '';
-  
-  const fromWallet = transaction.wallet?.name || 'Unknown Wallet';
-  const toWallet = transaction.walletTransferTo?.name || 'Unknown Wallet';
-  
+  if (!isTransferTransaction(transaction)) return transaction.note || "";
+
+  const fromWallet = transaction.wallet?.name || "Unknown Wallet";
+  const toWallet = transaction.walletTransferTo?.name || "Unknown Wallet";
+
   return transaction.note || `Transfer from ${fromWallet} to ${toWallet}`;
 };
 

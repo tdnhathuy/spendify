@@ -55,6 +55,32 @@ export const selectWallet = {
       adjust: { select: { id: true, reason: true, amount: true } },
       infoSync: { select: { id: true, emailProvider: true } },
       walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
+
+      // Split information
+      splits: {
+        select: {
+          id: true,
+          amount: true,
+          note: true,
+          wallet: { select: selectWalletSimple },
+        },
+      },
+    },
+  },
+  // Split transactions received by this wallet
+  splitsReceived: {
+    select: {
+      id: true,
+      amount: true,
+      note: true,
+      createdAt: true,
+      transaction: {
+        select: {
+          id: true,
+          date: true,
+          wallet: { select: selectWalletSimple }, // Wallet gốc
+        },
+      },
     },
   },
   includeInReport: true,
@@ -95,6 +121,16 @@ export const selectTrans = {
   infoSync: { select: selectInfoSync },
 
   walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
+
+  // Split information
+  splits: {
+    select: {
+      id: true,
+      amount: true,
+      note: true,
+      wallet: { select: selectWalletSimple },
+    },
+  },
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

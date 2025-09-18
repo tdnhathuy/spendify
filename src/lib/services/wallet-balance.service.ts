@@ -87,6 +87,22 @@ export class WalletBalanceService {
       balance = balance.plus(new Decimal(transferInSum._sum.amount));
     }
     
+    // 5. Cộng tất cả split IN (split từ wallet khác đến wallet này)
+    // Chỉ cộng splits nhận được, không trừ splits đi (vì transaction gốc đã tính đầy đủ)
+    const splitInSum = await prisma.transactionSplit.aggregate({
+      where: {
+        idWallet: walletId,
+        idUser: userId
+      },
+      _sum: {
+        amount: true
+      }
+    });
+    
+    if (splitInSum._sum.amount) {
+      balance = balance.plus(new Decimal(splitInSum._sum.amount));
+    }
+    
     return balance;
   }
   
@@ -148,7 +164,8 @@ export const calculateBalanceRawSQL = `
       COALESCE(income.total, 0) + 
       COALESCE(expense.total, 0) + 
       COALESCE(transfer_in.total, 0) - 
-      COALESCE(transfer_out.total, 0)
+      COALESCE(transfer_out.total, 0) +
+      COALESCE(split_in.total, 0)
     ) as balance
   FROM "Wallet" w
   LEFT JOIN (
@@ -177,5 +194,11 @@ export const calculateBalanceRawSQL = `
     WHERE t."idWalletTransferTo" IS NOT NULL AND t."idUser" = $1
     GROUP BY t."idWallet"
   ) transfer_out ON w.id = transfer_out."idWallet"
+  LEFT JOIN (
+    SELECT ts."idWallet", SUM(ts.amount) as total
+    FROM "TransactionSplit" ts
+    WHERE ts."idUser" = $1
+    GROUP BY ts."idWallet"
+  ) split_in ON w.id = split_in."idWallet"
   WHERE w."idUser" = $1
 `;

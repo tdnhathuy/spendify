@@ -99,13 +99,14 @@ export interface ITransaction {
   isAdjust: boolean;
 
   transfer: ITransfer | null;
+  splits: ITransactionSplit[] | null;
 }
 
 export interface ITransfer {
   isTransfer: true; // Flag để dễ dàng identify transfer transaction
   walletFrom: IWalletSimple | null; // Wallet nguồn (trừ tiền)
-  walletTo: IWalletSimple | null;   // Wallet đích (cộng tiền)
-  direction: 'out' | 'in';   // 'out' = transfer từ wallet này, 'in' = transfer đến wallet này
+  walletTo: IWalletSimple | null; // Wallet đích (cộng tiền)
+  direction: "out" | "in"; // 'out' = transfer từ wallet này, 'in' = transfer đến wallet này
 }
 
 export interface IInfoSync {}
@@ -117,4 +118,11 @@ export interface IConfigSync {
   toWallet: string | null;
 
   wallet: IWallet | null;
+}
+
+export interface ITransactionSplit {
+  id: string;
+  amount: number;
+  wallet: IWalletSimple | null;
+  note: string | null;
 }

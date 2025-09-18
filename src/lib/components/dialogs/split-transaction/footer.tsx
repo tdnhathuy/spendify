@@ -12,13 +12,16 @@ export const FooterDialogSplitTransaction = (props: {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!data) return;
     e.preventDefault();
-    console.log("e", e);
-    console.log("submit");
 
     splitTransaction({
       idTransaction: data.idTransaction,
-      idWallet: props.wallet?.id || "",
-      amount: props.amount,
+      splits: [
+        {
+          idWallet: props.wallet?.id || "",
+          amount: props.amount,
+          note: "",
+        },
+      ],
     });
   };
 
