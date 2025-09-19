@@ -16,7 +16,7 @@ export const ListTransGroup = (props: ListTransGroupProps) => {
 
       <ul className=" gap-1 flex flex-col">
         {data.map((item) => (
-          <TransactionItem key={item.id} item={item} />
+          <TransactionItem key={item.id} item={item} transaction={item} />
         ))}
       </ul>
     </div>

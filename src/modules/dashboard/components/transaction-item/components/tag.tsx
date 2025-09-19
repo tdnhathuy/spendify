@@ -29,16 +29,19 @@ interface TransactionItemTagProps {
   title?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   variant?: VariantProps<typeof variants>["variant"];
+  allowPropagation?: boolean; // Thêm prop để control event propagation
 }
 
 export const TransactionItemTag = (props: TransactionItemTagProps) => {
-  const { icon, title, onClick = () => {}, variant } = props;
+  const { icon, title, onClick = () => {}, variant, allowPropagation = false } = props;
 
   return (
     <button
       className={cn(variants({ variant }))}
       onClick={(e) => {
-        e.stopPropagation();
+        if (!allowPropagation) {
+          e.stopPropagation();
+        }
         onClick && onClick(e);
       }}
     >
