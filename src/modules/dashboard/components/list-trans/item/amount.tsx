@@ -1,14 +1,12 @@
 "use client";
 
 import { formatMoney } from "@/lib/helpers";
-import { ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { use } from "react";
 
-type Props = {
-  transaction: ITransaction;
-};
-
-export const ListTransItemAmount = ({ transaction }: Props) => {
+export const ListTransItemAmount = () => {
+  const { item: transaction } = use(ContextTransItem);
   return (
     <span
       className={cn("text-base text-gray-500 font-semibold", {

@@ -1,6 +1,5 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import { ITransaction } from "@/lib/types";
 import { usePopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover.action";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { ReactNode } from "react";
@@ -8,12 +7,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 
-export interface PopoverListTransProps {
-  transaction: ITransaction;
-}
-
-export const PopoverListTrans = (props: PopoverListTransProps) => {
-  const { actions, status } = usePopoverListTrans(props);
+export const PopoverListTrans = () => {
+  const { actions, status } = usePopoverListTrans();
   const {
     //
     onDelete,

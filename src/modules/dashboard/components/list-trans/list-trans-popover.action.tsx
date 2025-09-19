@@ -3,10 +3,11 @@ import {
   useMutateUnmarkTransfer,
 } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components";
-import { PopoverListTransProps } from "@/modules/dashboard/components/list-trans/list-trans-popover";
+import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { use } from "react";
 
-export const usePopoverListTrans = (props: PopoverListTransProps) => {
-  const { transaction } = props;
+export const usePopoverListTrans = () => {
+  const { item: transaction } = use(ContextTransItem);
 
   const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
   const { mutateAsync: unmarkTransfer } = useMutateUnmarkTransfer();

@@ -1,12 +1,10 @@
-import { ITransaction } from "@/lib/types";
+import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { use } from "react";
 
-export const ListTransItemTitle = ({
-  transaction,
-}: {
-  transaction: ITransaction;
-}) => {
+export const ListTransItemTitle = () => {
+  const { item: transaction } = use(ContextTransItem);
+
   const category = transaction.categoryParent?.name || "Uncategorized";
-  console.log('transaction', transaction)
 
   const isTransfer = !!transaction.transfer;
 

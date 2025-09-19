@@ -1,9 +1,11 @@
 import { IconPicker } from "@/lib/components";
 import { formatMoney } from "@/lib/helpers";
-import { ITransaction } from "@/lib/types";
+import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { use } from "react";
 
-export const ListSplit = (props: { transaction: ITransaction }) => {
-  const { splits = [] } = props.transaction;
+export const ListSplit = () => {
+  const { item: transaction } = use(ContextTransItem);
+  const { splits = [] } = transaction;
 
   if (!splits || !splits.length) return null;
 

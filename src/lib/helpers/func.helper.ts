@@ -41,7 +41,7 @@ export const formatTitleDate = (date: string): string => {
   if (dayjs(date, "DD/MM/YYYY").isSame(dayjs().subtract(1, "day"), "day")) {
     return "Yesterday";
   }
-  return dayjs(date, "DD/MM/YYYY").format("DD/MM/YYYY");
+  return dayjs(date, "DD/MM/YYYY").format("ddd DD/MM/YYYY");
 };
 
 export const formatDate = (
