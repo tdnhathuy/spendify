@@ -64,3 +64,5 @@ export const formatOption = <T>(
     label: object[keyLabel]?.toString() || "null",
   };
 };
+
+export const isNotNull = <T>(value: T | null): value is T => value !== null;

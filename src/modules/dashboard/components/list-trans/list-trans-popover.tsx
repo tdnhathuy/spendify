@@ -33,7 +33,7 @@ export const PopoverListTrans = (props: PopoverListTransProps) => {
   return (
     <Popover>
       <PopoverTrigger
-        className=" py-1 px-0 cursor-pointer rounded-sm hover:bg-gray-300"
+        className="p-1 px-[6px] rounded-xs   cursor-pointer hover:bg-gray-200"
         onClick={(e) => {
           e.stopPropagation();
         }}
