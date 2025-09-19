@@ -46,10 +46,11 @@ export const formatTitleDate = (date: string): string => {
 
 export const formatDate = (
   date?: string | Date | null,
-  defaultValue: string | null = null
+  opts?: { defaultValue?: string | null; format?: string }
 ): string | null => {
+  const { defaultValue = "", format = "DD/MM/YYYY" } = opts || {};
   if (!date) return defaultValue;
-  return dayjs(date).format("DD/MM/YYYY");
+  return dayjs(date).format(format);
 };
 
 export const formatOption = <T>(

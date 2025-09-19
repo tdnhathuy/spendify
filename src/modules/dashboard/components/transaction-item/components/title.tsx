@@ -1,8 +1,8 @@
-import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
 import { use } from "react";
 
 export const ListTransItemTitle = () => {
-  const { item: transaction } = use(ContextTransItem);
+  const { item: transaction } = use(ContextTransactionItem);
 
   const category = transaction.categoryParent?.name || "";
 

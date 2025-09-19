@@ -2,7 +2,7 @@ import { CategoryType } from "@/generated/prisma";
 import { formatMoney, formatTitleDate } from "@/lib/helpers";
 import { ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ListTransGroupProps } from "@/modules/dashboard/components/list-trans/list-trans-group";
+import { ListTransGroupProps } from "@/modules/dashboard/components/transaction-list/list-trans-group";
 import {
   HiOutlineArrowTrendingDown,
   HiOutlineArrowTrendingUp,

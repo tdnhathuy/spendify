@@ -35,7 +35,7 @@ export const DialogWallet = () => {
       totalTransaction: detail?.totalTransaction || 0,
       cardNumber: detail?.cardNumber || "",
       cardStatementPassword: detail?.cardStatementPassword || "",
-      cardStatementDate: formatDate(detail?.cardStatementDate, ""),
+      cardStatementDate: formatDate(detail?.cardStatementDate),
     });
   }, [detail, dataUpdatedAt]);
 

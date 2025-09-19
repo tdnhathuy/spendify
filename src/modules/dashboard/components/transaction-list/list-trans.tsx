@@ -4,7 +4,7 @@ import { usePaging } from "@/hooks/use-paging";
 import { LoaderPaging } from "@/lib/components/shared/loader-paging";
 import { QueryKeys } from "@/lib/configs";
 import { ServiceTrans } from "@/lib/services";
-import { ListTransGroup } from "@/modules/dashboard/components/list-trans/list-trans-group";
+import { ListTransGroup } from "@/modules/dashboard/components/transaction-list/list-trans-group";
 import dayjs from "dayjs";
 import { groupBy, map } from "lodash";
 import { Loader } from "lucide-react";

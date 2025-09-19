@@ -1,6 +1,6 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import { usePopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover.action";
+import { usePopoverListTrans } from "@/modules/dashboard/components/transaction-item/components/list-trans-popover.action";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { ReactNode } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
