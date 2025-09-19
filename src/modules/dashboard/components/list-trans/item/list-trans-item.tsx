@@ -9,9 +9,12 @@ import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { sheets } from "@/lib/components/sheets/sheet.store";
 import { ITransaction } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { AssignCategory } from "@/modules/dashboard/components/list-trans/assign-category";
+import { AssignWallet } from "@/modules/dashboard/components/list-trans/assign-wallet";
 import { ListTransItemAmount } from "@/modules/dashboard/components/list-trans/item/amount";
 import { ListTransItemDesc } from "@/modules/dashboard/components/list-trans/item/desc";
 import { ListSplit } from "@/modules/dashboard/components/list-trans/item/list-split";
+import { ListTransItemTag } from "@/modules/dashboard/components/list-trans/item/tag";
 import { ListTransItemTitle } from "@/modules/dashboard/components/list-trans/item/title";
 import { PopoverListTrans } from "@/modules/dashboard/components/list-trans/list-trans-popover";
 import { createContext } from "react";
@@ -32,6 +35,8 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
 
   const isSync = !!item.infoSync;
 
+  const isInvalidate = !item.category || !item.wallet;
+
   return (
     <ContextTransItem.Provider value={{ item }}>
       <Accordion type="single" collapsible>
@@ -41,7 +46,8 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
             "hover:no-underline flex flex-col bg-[#f5f5ff] rounded border-l-4 ",
             "transition-all duration-300",
             // "hover:border-green-500 border-green-300",
-            isSync && "hover:border-blue-500 border-blue-300"
+            !isInvalidate && "hover:border-blue-500 border-blue-300",
+            isInvalidate && ""
           )}
         >
           <div
@@ -63,14 +69,11 @@ export const ListTransItem = ({ item }: ListTransItemProps) => {
             </span>
 
             <span className="flex flex-1 flex-col text-xs gap-1">
-              <ListTransItemTitle />
-
-              {/* <>
-              <span className="flex flex-col items-start gap-1 xs:flex-row xs:gap-2 ">
-                <AssignCategory transaction={item} />
-                <AssignWallet transaction={item} />
+              <span className="flex gap-2">
+                <ListTransItemTitle />
+                <AssignCategory />
+                <AssignWallet />
               </span>
-            </> */}
 
               <ListTransItemDesc />
             </span>

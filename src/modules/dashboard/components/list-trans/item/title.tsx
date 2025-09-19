@@ -4,11 +4,13 @@ import { use } from "react";
 export const ListTransItemTitle = () => {
   const { item: transaction } = use(ContextTransItem);
 
-  const category = transaction.categoryParent?.name || "Uncategorized";
+  const category = transaction.categoryParent?.name || "";
 
   const isTransfer = !!transaction.transfer;
 
   const title = isTransfer ? "Transfer" : category;
 
-  return <h1 className=" font-semibold text-sm">{title}</h1>;
+  if (!title) return null;
+
+  return <h1 className="font-semibold text-sm">{title}</h1>;
 };

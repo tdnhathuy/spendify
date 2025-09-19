@@ -2,41 +2,31 @@
 
 import { dialogs } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import type { ITransaction } from "@/lib/types";
+import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { ListTransItemTag } from "@/modules/dashboard/components/list-trans/item/tag";
+import { useContext } from "react";
 
-type Props = {
-  transaction: ITransaction;
-};
+export const AssignCategory = () => {
+  const { item: transaction } = useContext(ContextTransItem);
 
-export const WrapperAssign = (props: {
-  children: React.ReactNode;
-  onClick: () => void;
-}) => {
-  const { children, onClick } = props;
-  return (
-    <span
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      className="flex hover:bg-gray-200 px-2 p-px rounded items-center gap-1 cursor-pointer"
-    >
-      {children}
-    </span>
-  );
-};
-
-export const AssignCategory = (props: Props) => {
-  const title = props.transaction.category?.name || "No category";
+  const {
+    name: title = "No category",
+    icon: iconCategory,
+    //
+  } = transaction.category || {};
 
   const handleClick = () => {
-    dialogs.open("assign-category", props.transaction);
+    dialogs.open("assign-category", transaction);
   };
 
+  const icon = <IconPicker icon={iconCategory} size="xs" disabled />;
+
   return (
-    <WrapperAssign onClick={handleClick}>
-      <IconPicker icon={props.transaction.category?.icon} size="xs" disabled />
-      <span>{title}</span>
-    </WrapperAssign>
+    <ListTransItemTag
+      icon={icon}
+      title={title}
+      variant={"category"}
+      onClick={handleClick}
+    />
   );
 };

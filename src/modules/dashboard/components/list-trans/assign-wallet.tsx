@@ -2,23 +2,29 @@
 
 import { dialogs } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import type { ITransaction, IWallet } from "@/lib/types";
-import { WrapperAssign } from "@/modules/dashboard/components/list-trans/assign-category";
+import { ContextTransItem } from "@/modules/dashboard/components/list-trans/item/list-trans-item";
+import { ListTransItemTag } from "@/modules/dashboard/components/list-trans/item/tag";
+import { useContext } from "react";
 
-interface Props {
-  transaction: ITransaction;
-}
+export const AssignWallet = () => {
+  const { item: transaction } = useContext(ContextTransItem);
 
-export const AssignWallet = (props: Props) => {
-  const { transaction } = props;
-  const title = transaction.wallet?.name || "Unwallet";
+  const {
+    name: title = "Unwallet",
+    icon: iconWallet,
+    //
+  } = transaction.wallet || {};
+
+  const handleClick = () => {
+    dialogs.open("assign-wallet", transaction);
+  };
 
   return (
-    <WrapperAssign
-      onClick={() => dialogs.open("assign-wallet", props.transaction)}
-    >
-      <IconPicker icon={transaction.wallet?.icon} size="xs" disabled />
-      <span>{title}</span>
-    </WrapperAssign>
+    <ListTransItemTag
+      icon={<IconPicker icon={iconWallet} size="xs" disabled />}
+      title={title}
+      variant={"wallet"}
+      onClick={handleClick}
+    />
   );
 };
