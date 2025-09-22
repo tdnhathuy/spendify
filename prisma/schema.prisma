@@ -109,9 +109,9 @@ model Wallet {
 
   transactions          Transaction[]
   transactionTransferTo Transaction[] @relation("TransactionTransferTo")
-  
+
   // Split transactions received by this wallet
-  splitsReceived        TransactionSplit[]
+  splitsReceived TransactionSplit[]
 
   @@unique([idUser, name])
   @@index([idIcon])
@@ -162,8 +162,8 @@ model Transaction {
   idWalletTransferTo String?
   walletTransferTo   Wallet? @relation("TransactionTransferTo", fields: [idWalletTransferTo], references: [id], onDelete: SetNull)
 
-  // Split transactions: các phần split từ transaction này
-  splits TransactionSplit[]
+  isNeedSplit Boolean            @default(false)
+  splits      TransactionSplit[]
 
   note     String?
   infoSync TransactionInfoSync?
@@ -179,24 +179,24 @@ model Transaction {
 }
 
 model TransactionSplit {
-  id            String   @id @default(uuid())
-  amount        Decimal  @db.Decimal(19, 4) // Số tiền được split
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(uuid())
+  amount    Decimal  @db.Decimal(19, 4) // Số tiền được split
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Transaction gốc
   idTransaction String
   transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
 
   // Wallet đích nhận split
-  idWallet      String
-  wallet        Wallet @relation(fields: [idWallet], references: [id], onDelete: Cascade)
+  idWallet String
+  wallet   Wallet @relation(fields: [idWallet], references: [id], onDelete: Cascade)
 
   // User thực hiện split
-  idUser        String
-  user          User @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  idUser String
+  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
 
-  note          String? // Ghi chú cho split này
+  note String? // Ghi chú cho split này
 
   @@index([idTransaction])
   @@index([idWallet])

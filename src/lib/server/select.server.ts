@@ -122,7 +122,7 @@ export const selectTrans = {
 
   walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
 
-  // Split information
+  isNeedSplit: true,
   splits: {
     select: {
       id: true,

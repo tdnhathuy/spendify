@@ -6,5 +6,7 @@ export const Date = () => {
   const { date } = useTransactionItem();
   const formattedDate = formatDate(date, { format: "HH:mm [-] DD/MM/YYYY " });
 
-  return <TransactionItemTag title={formattedDate!} variant={"date"} />;
+  return (
+    <TransactionItemTag title={formattedDate!} variant={"date"} icon={null} />
+  );
 };

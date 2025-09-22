@@ -38,12 +38,15 @@ export const usePopoverListTrans = () => {
     await unmarkTransfer(transaction.id);
   };
 
+  const onMarkNeedSplit = async () => {};
+
   return {
     actions: {
       onDelete,
       onTransfer,
       onUnmarkTransfer,
       onSplit,
+      onMarkNeedSplit,
     },
 
     status: {

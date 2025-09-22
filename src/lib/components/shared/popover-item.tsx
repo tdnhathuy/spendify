@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react";
 
 type Props = {
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   children?: React.ReactNode;
   title?: string | Element;
   icon?: React.ReactNode;
@@ -10,7 +10,8 @@ type Props = {
 export const PopoverItem = (props: Props) => {
   const { title, icon } = props;
   return (
-    <div
+    <button
+      type="submit"
       onClick={props.onClick}
       className="flex rounded-sm text-sm items-center font-medium  gap-2 w-full cursor-pointer hover:bg-gray-200 p-2 px-3"
     >
@@ -22,6 +23,6 @@ export const PopoverItem = (props: Props) => {
           {typeof title === "string" ? <span>{title}</span> : title}
         </>
       )}
-    </div>
+    </button>
   );
 };

@@ -24,7 +24,7 @@ export const ListCategory = ({ listCategory = [] }: Props) => {
             className="border-b-0 py-0"
           >
             <AccordionTrigger className="w-full" disabled={!hasChildren}>
-              <WrapperItem category={item}>
+              <WrapperItem>
                 <CategoryItem category={item} />
               </WrapperItem>
             </AccordionTrigger>
@@ -34,7 +34,7 @@ export const ListCategory = ({ listCategory = [] }: Props) => {
                 <div className="ml-12 flex flex-col gap-2">
                   {item.children?.map((child) => {
                     return (
-                      <WrapperItem key={child.id} category={child}>
+                      <WrapperItem key={child.id}>
                         <CategoryItem category={child} />
                       </WrapperItem>
                     );
@@ -49,15 +49,12 @@ export const ListCategory = ({ listCategory = [] }: Props) => {
   );
 };
 
-const WrapperItem = (props: {
-  children: React.ReactNode;
-  category: ICategory;
-}) => {
-  const { children, category } = props;
+const WrapperItem = (props: { children: React.ReactNode }) => {
+  const { children } = props;
   return (
     <span className="py-2 cursor-default justify-between flex gap-2 rounded-sm px-4 hover:bg-gray-100">
       {children}
-      <PopoverListCategoryItem category={category} />
+      <PopoverListCategoryItem />
     </span>
   );
 };

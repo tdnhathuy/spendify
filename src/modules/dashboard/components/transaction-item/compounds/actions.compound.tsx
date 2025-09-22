@@ -1,11 +1,13 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import { usePopoverListTrans } from "./actions.controller";
+import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
+import { ButtonNeedSplit } from "@/modules/dashboard/components/transaction-item/server/need-split.server";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { ReactNode } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
+import { usePopoverListTrans } from "./actions.controller";
 
 export const PopoverListTrans = () => {
   const { actions, status } = usePopoverListTrans();
@@ -24,6 +26,8 @@ export const PopoverListTrans = () => {
     isCanSplit,
     //
   } = status;
+
+  const { isNeedSplit } = useTransactionItem();
 
   return (
     <Popover>
@@ -49,6 +53,14 @@ export const PopoverListTrans = () => {
           title="Split"
           onClick={onSplit}
           visible={isCanSplit}
+        />
+
+        <ButtonNeedSplit />
+
+        <PopoverItem
+          icon={<FaMoneyBillTransfer />}
+          title={"Make need split"}
+          onClick={onSplit}
         />
 
         <PopoverItem

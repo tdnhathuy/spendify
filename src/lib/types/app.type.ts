@@ -99,6 +99,8 @@ export interface ITransaction {
   isAdjust: boolean;
 
   transfer: ITransfer | null;
+
+  isNeedSplit: boolean;
   splits: ITransactionSplit[] | null;
 }
 

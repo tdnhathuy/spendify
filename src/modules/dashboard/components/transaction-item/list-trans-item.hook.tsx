@@ -35,6 +35,7 @@ export const useTransactionItem = () => {
     isTransfer,
     isIncome,
     isExpense,
+    isNeedSplit: transaction.isNeedSplit ?? false,
 
     // Validation
     hasCategory,

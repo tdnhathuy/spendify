@@ -66,6 +66,7 @@ const fromDB = (
     id: transaction.id,
     amount: transaction.amount.toNumber(),
     isAdjust: !!transaction.adjust,
+    isNeedSplit: transaction.isNeedSplit,
     date: transaction.date,
     description: getTransferDescription(transaction),
 
