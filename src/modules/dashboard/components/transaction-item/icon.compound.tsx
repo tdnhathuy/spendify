@@ -1,12 +1,9 @@
 import { IconPicker } from "@/lib/components";
-import { ContextTransactionItem } from "./root";
-import { useContext } from "react";
+import { useTransactionItem } from "./use-transaction-item";
 import { BiTransferAlt } from "react-icons/bi";
 
 export const ListTransItemIcon = () => {
-  const { transaction } = useContext(ContextTransactionItem);
-
-  const isTransfer = !!transaction.transfer;
+  const { isTransfer, categoryIcon } = useTransactionItem();
 
   return (
     <span className="bg-gray-200 p-2 flex rounded-full h-10 w-10 justify-center items-center ">
@@ -14,7 +11,7 @@ export const ListTransItemIcon = () => {
         <BiTransferAlt />
       ) : (
         <IconPicker
-          icon={transaction.categoryParent?.icon}
+          icon={categoryIcon}
           disabled
           size="sm"
         />

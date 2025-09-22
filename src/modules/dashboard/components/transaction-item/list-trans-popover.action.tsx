@@ -3,7 +3,7 @@ import {
   useMutateUnmarkTransfer,
 } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components";
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/compounds/root";
+import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/root";
 import { use } from "react";
 
 export const usePopoverListTrans = () => {

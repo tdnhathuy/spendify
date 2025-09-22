@@ -23,6 +23,9 @@ export * from "./wallet-tag.compound";
 export * from "./split-tag.compound";
 export * from "./base-tag.compound";
 
+// Export custom hook
+export * from "./use-transaction-item";
+
 // Create compound component
 export const TransactionItem = Object.assign(Root, {
   // Layout components

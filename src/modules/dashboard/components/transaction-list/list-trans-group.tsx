@@ -1,5 +1,5 @@
 import { ITransaction } from "@/lib/types";
-import { TransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
+import { TransactionItem } from "@/modules/dashboard/components/transaction-item";
 import { HeaderListTrans } from "@/modules/dashboard/components/transaction-list/list-trans-header";
 import { memo } from "react";
 

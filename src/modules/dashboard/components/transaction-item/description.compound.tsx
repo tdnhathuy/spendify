@@ -1,13 +1,12 @@
-import { ContextTransactionItem } from "./root";
+import { useTransactionItem } from "./use-transaction-item";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import { use } from "react";
 import { formatDate } from "@/lib/helpers";
 import { TransactionItemTag } from "./base-tag.compound";
 
 export const ListTransItemDesc = () => {
-  const { description, date } = use(ContextTransactionItem).transaction;
+  const { description, date } = useTransactionItem();
 
-  const title = formatDate(date, { format: "HH:mm [-] DD/MM/YYYY " });
+  const formattedDate = formatDate(date, { format: "HH:mm [-] DD/MM/YYYY " });
 
   return (
     <span
@@ -17,11 +16,11 @@ export const ListTransItemDesc = () => {
       {description && (
         <span className="flex items-center gap-1">
           <HiOutlinePencilSquare />
-          <span className="line-clamp-1">{description.repeat(1)}</span>
+          <span className="line-clamp-1">{description}</span>
         </span>
       )}
 
-      <TransactionItemTag title={title!} variant={"date"} />
+      <TransactionItemTag title={formattedDate!} variant={"date"} />
     </span>
   );
 };
