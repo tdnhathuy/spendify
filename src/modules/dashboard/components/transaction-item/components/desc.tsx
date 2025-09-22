@@ -5,7 +5,7 @@ import { formatDate } from "@/lib/helpers";
 import { TransactionItemTag } from "@/modules/dashboard/components/transaction-item/components/tag";
 
 export const ListTransItemDesc = () => {
-  const { description, date } = use(ContextTransactionItem).item;
+  const { description, date } = use(ContextTransactionItem).transaction;
 
   const title = formatDate(date, { format: "HH:mm [-] DD/MM/YYYY " });
 

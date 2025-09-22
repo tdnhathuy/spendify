@@ -7,7 +7,7 @@ import { ContextTransactionItem } from "@/modules/dashboard/components/transacti
 import { use } from "react";
 
 export const usePopoverListTrans = () => {
-  const { item: transaction } = use(ContextTransactionItem);
+  const { transaction } = use(ContextTransactionItem);
 
   const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
   const { mutateAsync: unmarkTransfer } = useMutateUnmarkTransfer();

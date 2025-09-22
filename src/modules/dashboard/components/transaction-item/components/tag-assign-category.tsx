@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { PiWarningBold } from "react-icons/pi";
 
 export const TagAssignCategory = () => {
-  const { item: transaction } = useContext(ContextTransactionItem);
+  const { transaction } = useContext(ContextTransactionItem);
 
   const {
     name: title = "Uncategorized",

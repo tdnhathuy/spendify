@@ -14,9 +14,9 @@ export const ListTransGroup = (props: ListTransGroupProps) => {
     <div className="w-full">
       <HeaderListTrans {...props} />
 
-      <ul className=" gap-1 flex flex-col">
-        {data.map((item) => (
-          <TransactionItem key={item.id} item={item} transaction={item} />
+      <ul className="gap-1 flex flex-col">
+        {data.map((transaction) => (
+          <TransactionItem key={transaction.id} transaction={transaction} />
         ))}
       </ul>
     </div>

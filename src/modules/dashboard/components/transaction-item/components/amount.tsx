@@ -6,7 +6,7 @@ import { ContextTransactionItem } from "@/modules/dashboard/components/transacti
 import { use } from "react";
 
 export const ListTransItemAmount = () => {
-  const { item: transaction } = use(ContextTransactionItem);
+  const { transaction } = use(ContextTransactionItem);
   return (
     <span
       onClick={(e) => e.stopPropagation()}

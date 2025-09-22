@@ -15,22 +15,21 @@ import {
 import { createContext } from "react";
 
 interface TransactionItemProps {
-  item: ITransaction;
   transaction: ITransaction;
 }
 
 export const ContextTransactionItem = createContext<TransactionItemProps>({
-  item: {} as ITransaction,
   transaction: {} as ITransaction,
 });
 
-export const TransactionItem = ({ item }: TransactionItemProps) => {
-  const onClickTransaction = () => sheets.open("transaction-detail", item);
+export const TransactionItem = ({ transaction }: TransactionItemProps) => {
+  const onClickTransaction = () =>
+    sheets.open("transaction-detail", transaction);
 
-  const isInvalidate = !item.category || !item.wallet;
+  const isInvalidate = !transaction.category || !transaction.wallet;
 
   return (
-    <ContextTransactionItem.Provider value={{ item, transaction: item }}>
+    <ContextTransactionItem.Provider value={{ transaction }}>
       <div
         className={cn(
           "flex gap-2 w-full  px-4  py-3 rounded-sm",

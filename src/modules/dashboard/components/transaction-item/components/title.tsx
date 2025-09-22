@@ -2,7 +2,7 @@ import { ContextTransactionItem } from "@/modules/dashboard/components/transacti
 import { use } from "react";
 
 export const ListTransItemTitle = () => {
-  const { item: transaction } = use(ContextTransactionItem);
+  const { transaction } = use(ContextTransactionItem);
 
   const category = transaction.categoryParent?.name || "";
 
