@@ -1,8 +1,8 @@
 import { IconPicker } from "@/lib/components";
-import { useTransactionItem } from "./use-transaction-item";
+import { useTransactionItem } from "../list-trans-item.hook";
 import { BiTransferAlt } from "react-icons/bi";
 
-export const ListTransItemIcon = () => {
+export const Icon = () => {
   const { isTransfer, categoryIcon } = useTransactionItem();
 
   return (
@@ -10,11 +10,7 @@ export const ListTransItemIcon = () => {
       {isTransfer ? (
         <BiTransferAlt />
       ) : (
-        <IconPicker
-          icon={categoryIcon}
-          disabled
-          size="sm"
-        />
+        <IconPicker icon={categoryIcon} disabled size="sm" />
       )}
     </span>
   );

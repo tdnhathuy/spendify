@@ -5,19 +5,13 @@ import {
 } from "@/components/ui/popover";
 import { dialogs } from "@/lib/components";
 import { PopoverItem } from "@/lib/components/shared/popover-item";
-import { ICategory } from "@/lib/types";
 import { useState } from "react";
 import { BiMessageSquareEdit } from "react-icons/bi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdAddTask } from "react-icons/md";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 
-type Props = {
-  category: ICategory;
-};
-export const PopoverListCategoryItem = (props: Props) => {
-  const { category } = props;
-
+export const PopoverListCategoryItem = () => {
   const [open, setOpen] = useState(false);
 
   const onClick = (type: "add" | "detail") => () => {

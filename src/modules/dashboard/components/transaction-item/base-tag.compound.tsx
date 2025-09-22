@@ -1,5 +1,9 @@
+import { IconPicker } from "@/lib/components";
+import { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
+import { isValidElement } from "react";
+import { PiWarningBold } from "react-icons/pi";
 
 const baseTW = cn(
   "flex cursor-pointer items-center justify-center px-2 py-px border  rounded-full gap-1 w-fit"
@@ -25,7 +29,7 @@ const variants = cva(baseTW, {
 });
 
 interface TransactionItemTagProps {
-  icon?: React.ReactElement;
+  icon: IIcon | React.ReactElement | null;
   title?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   variant?: VariantProps<typeof variants>["variant"];
@@ -33,7 +37,22 @@ interface TransactionItemTagProps {
 }
 
 export const TransactionItemTag = (props: TransactionItemTagProps) => {
-  const { icon, title, onClick = () => {}, variant, allowPropagation = false } = props;
+  const {
+    icon = null,
+    title,
+    onClick = () => {},
+    variant,
+    allowPropagation = false,
+  } = props;
+
+  const renderIcon = () => {
+    if (isValidElement(icon)) return icon;
+
+    if (icon) {
+      return <IconPicker icon={icon as IIcon} size="xs" disabled />;
+    }
+    return <PiWarningBold />;
+  };
 
   return (
     <button
@@ -45,7 +64,7 @@ export const TransactionItemTag = (props: TransactionItemTagProps) => {
         onClick && onClick(e);
       }}
     >
-      <span>{icon}</span>
+      <span>{renderIcon()}</span>
       <span className="text-xs font-semibold">{title}</span>
     </button>
   );

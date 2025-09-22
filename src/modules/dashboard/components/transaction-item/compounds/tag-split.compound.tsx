@@ -1,14 +1,15 @@
 "use client";
+
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { IconPicker, WisePopoverContent } from "@/lib/components";
 import { formatMoney } from "@/lib/helpers";
-import { TransactionItemTag } from "./base-tag.compound";
-import { ContextTransactionItem } from "./root";
-import { use, useState } from "react";
+import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
+import { useState } from "react";
 import { LuSplit } from "react-icons/lu";
+import { TransactionItemTag } from "../base-tag.compound";
 
 export const TagSplit = () => {
-  const { transaction } = use(ContextTransactionItem);
+  const { transaction } = useTransactionItem();
   const [open, setOpen] = useState(false);
 
   if (!transaction.splits || transaction.splits.length === 0) return null;

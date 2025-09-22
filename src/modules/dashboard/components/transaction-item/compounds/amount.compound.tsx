@@ -2,11 +2,11 @@
 
 import { formatMoney } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
-import { useTransactionItem } from "./use-transaction-item";
+import { useTransactionItem } from "../list-trans-item.hook";
 
-export const ListTransItemAmount = () => {
+export const Amount = () => {
   const { amount, isIncome, isExpense, isTransfer } = useTransactionItem();
-  
+
   return (
     <span
       onClick={(e) => e.stopPropagation()}

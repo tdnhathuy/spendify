@@ -16,6 +16,7 @@ export interface IconPickerProps {
   onChange?: (icon: IIcon) => void;
   disabled?: boolean;
   size?: "xs" | "sm" | "md" | "lg";
+  className?: string;
 }
 
 const defaultIcon: IIcon = {
@@ -29,6 +30,7 @@ export const IconPicker = ({
   onChange,
   disabled,
   size = "md",
+  className,
 }: IconPickerProps) => {
   const { data: icons = [] } = useQueryIcon(disabled);
 
@@ -79,13 +81,17 @@ export const IconPicker = ({
 
   const renderIcon = (icon: IIcon) => (
     <div
-      className={cn("relative w-full aspect-square", {
-        "size-6": size === "sm",
-        "size-8": size === "md",
-        "size-10": size === "lg",
-        "size-3": size === "xs",
-        "cursor-pointer": !disabled,
-      })}
+      className={cn(
+        "relative w-full aspect-square",
+        {
+          "size-6": size === "sm",
+          "size-8": size === "md",
+          "size-10": size === "lg",
+          "size-3": size === "xs",
+          "cursor-pointer": !disabled,
+        },
+        className
+      )}
     >
       <Image
         draggable={false}
