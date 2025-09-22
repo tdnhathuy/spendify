@@ -27,7 +27,7 @@ export const ListTrans = () => {
 
   return (
     <div className="flex gap-2 flex-col ">
-      <ul className="flex flex-col gap-4 mx-auto  w-full">
+      <ul className="flex flex-col gap-4 mx-auto  w-full overflow-y-hidden">
         {map(grouped, (item, key) => {
           return <ListTransGroup key={key} data={item} date={key} />;
         })}

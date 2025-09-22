@@ -2,7 +2,7 @@
 
 import { formatMoney } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
+import { ContextTransactionItem } from "./root";
 import { use } from "react";
 
 export const ListTransItemAmount = () => {

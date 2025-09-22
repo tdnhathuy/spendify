@@ -1,8 +1,8 @@
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
+import { ContextTransactionItem } from "./root";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { use } from "react";
 import { formatDate } from "@/lib/helpers";
-import { TransactionItemTag } from "@/modules/dashboard/components/transaction-item/components/tag";
+import { TransactionItemTag } from "./base-tag.compound";
 
 export const ListTransItemDesc = () => {
   const { description, date } = use(ContextTransactionItem).transaction;

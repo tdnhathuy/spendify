@@ -1,4 +1,4 @@
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
+import { ContextTransactionItem } from "./root";
 import { use } from "react";
 
 export const ListTransItemTitle = () => {

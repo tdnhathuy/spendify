@@ -1,8 +1,9 @@
+"use client";
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { IconPicker, WisePopoverContent } from "@/lib/components";
 import { formatMoney } from "@/lib/helpers";
-import { TransactionItemTag } from "@/modules/dashboard/components/transaction-item/components/tag";
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
+import { TransactionItemTag } from "./base-tag.compound";
+import { ContextTransactionItem } from "./root";
 import { use, useState } from "react";
 import { LuSplit } from "react-icons/lu";
 

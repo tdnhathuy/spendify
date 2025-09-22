@@ -2,8 +2,8 @@
 
 import { dialogs } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
-import { TransactionItemTag } from "@/modules/dashboard/components/transaction-item/components/tag";
+import { TransactionItemTag } from "./base-tag.compound";
+import { ContextTransactionItem } from "./root";
 import { useContext } from "react";
 import { PiWarningBold } from "react-icons/pi";
 

@@ -1,5 +1,5 @@
 import { IconPicker } from "@/lib/components";
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item";
+import { ContextTransactionItem } from "./root";
 import { useContext } from "react";
 import { BiTransferAlt } from "react-icons/bi";
 
