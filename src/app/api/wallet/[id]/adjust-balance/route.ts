@@ -1,14 +1,8 @@
 import { DTOTrans, DTOWallet } from "@/lib/dto";
-import {
-  prisma,
-  selectTrans,
-  selectWallet,
-  selectWalletDetail,
-} from "@/server";
+import { prisma, selectTrans, selectWallet } from "@/server";
 import { createApi, responseSuccess } from "@/server/helpers/helper.server";
 
 export const POST = createApi(async ({ request, id, idUser }) => {
-  console.log("id", id);
   const payload: PayloadAdjustBalance = await request.json();
 
   const wallet = await prisma.wallet.findFirstOrThrow({
@@ -18,8 +12,6 @@ export const POST = createApi(async ({ request, id, idUser }) => {
 
   const { currentBalance } = DTOWallet.fromDB(wallet)!;
 
-  // Calculate the difference between new balance and current balance
-  // Positive amount means adding money, negative means removing money
   const amount = payload.newBalance - currentBalance;
 
   const trans = await prisma.transaction.create({
@@ -29,6 +21,13 @@ export const POST = createApi(async ({ request, id, idUser }) => {
       user: { connect: { id: idUser } },
       note: `Adjust Balance (${currentBalance.toLocaleString()} → ${payload.newBalance.toLocaleString()})`,
       date: new Date(),
+      adjust: {
+        create: {
+          reason: `Adjust Balance (${currentBalance.toLocaleString()} → ${payload.newBalance.toLocaleString()})`,
+          amount,
+          idUser,
+        },
+      },
     },
     select: selectTrans,
   });

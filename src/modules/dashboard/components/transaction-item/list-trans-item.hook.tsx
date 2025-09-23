@@ -30,6 +30,8 @@ export const useTransactionItem = () => {
     isIncome,
     isExpense,
     isNeedSplit: transaction.isNeedSplit ?? false,
+    isAdjust: transaction.isAdjust ?? false,
+    isSplit: !!transaction.splits?.length,
 
     // Validation
     hasCategory,

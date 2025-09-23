@@ -14,7 +14,10 @@ export const GET = createApi(async ({ idUser, request }) => {
 
   const [trans, meta] = await prisma.transaction
     .paginate({
-      where: { idUser },
+      where: {
+        idUser,
+        // idWallet: "a589eaa4-8d3f-4fdf-9950-f02fc84fdcf5"
+      },
       select: selectTrans,
       orderBy: [{ date: "desc" }, { id: "desc" }],
     })

@@ -9,6 +9,8 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
     isTransfer,
     transaction,
     isNeedSplit,
+    isAdjust,
+    isSplit,
     //
   } = useTransactionItem();
 
@@ -22,9 +24,11 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
         "flex gap-2 w-full  px-4  py-3 rounded-sm",
         "hover:no-underline flex  bg-[#f5f5ff] rounded border-l-4 ",
         "transition-all duration-300",
-        isValid && "border-blue-500",
+        isSplit && "border-blue-500",
+        isValid && "border-green-500",
         isTransfer && "border-yellow-500",
-        isNeedSplit && "border-red-500"
+        isNeedSplit && "border-red-500",
+        isAdjust && "border-orange-300"
       )}
       onClick={onClickTransaction}
     >
