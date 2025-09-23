@@ -1,6 +1,6 @@
 import "server-only";
 
-import { prisma } from "@/lib/server/prisma.server";
+import { prisma } from "@/server/prisma/prisma.server";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
@@ -124,4 +124,15 @@ export const getParamId = (request: NextRequest) => {
   // Fallback: if no UUID-like string found, return the last segment
   // This handles cases where the ID might not be a UUID
   return pathParts.length > 0 ? pathParts[pathParts.length - 1] : "";
+};
+
+type ServerActionContext = {
+  idUser: string;
+};
+export const withParams = <TParams, TReturn>(
+  fn: (context: ServerActionContext, params: TParams) => Promise<TReturn>
+) => {
+  return async (params: TParams): Promise<TReturn> => {
+    return await fn({ idUser: "123" }, params);
+  };
 };

@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/server";
+import { prisma } from "@/server/prisma/prisma.server";
 
 export const toggleNeedSplit = async (idTransaction: string) => {
   return prisma.$transaction(async (tx) => {

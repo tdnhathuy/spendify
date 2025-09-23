@@ -1,5 +1,5 @@
 import { convertIdFlatIcon } from "@/lib/helpers";
-import { DBIcon } from "@/lib/server";
+import { DBIcon } from "@/server";
 import { IIcon } from "@/lib/types";
 
 export type ObjectIcon = { id: string; code: string } | null;

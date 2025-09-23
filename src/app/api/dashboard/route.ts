@@ -1,4 +1,4 @@
-import { createApi, prisma, responseSuccess } from "@/lib/server";
+import { createApi, prisma, responseSuccess } from "@/server";
 
 export interface DashboardInfo {
   income: number;

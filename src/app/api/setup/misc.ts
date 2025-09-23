@@ -1,6 +1,6 @@
 import { CategoryType } from "@/generated/prisma";
 import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
-import { prisma } from "@/lib/server";
+import { prisma } from "@/server";
 
 export const createDefaultConfigSync = (idUser: string) => {
   const arr = [

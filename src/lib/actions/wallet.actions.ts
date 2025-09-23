@@ -2,7 +2,7 @@
 
 import { DTOWallet } from "@/lib/dto";
 import { isNotNull } from "@/lib/helpers";
-import { prisma, selectWallet } from "@/lib/server";
+import { prisma, selectWallet } from "@/server";
 
 export async function getWallets() {
   try {

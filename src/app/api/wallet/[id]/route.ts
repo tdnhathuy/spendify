@@ -4,8 +4,8 @@ import {
   responseSuccess,
   selectWallet,
   selectWalletDetail,
-} from "@/lib/server";
-import { prisma } from "@/lib/server/prisma.server";
+} from "@/server";
+import { prisma } from "@/server/prisma/prisma.server";
 import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
 import { PayloadUpdateWallet } from "@/lib/services";
 

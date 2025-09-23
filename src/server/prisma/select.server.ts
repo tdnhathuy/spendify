@@ -1,5 +1,5 @@
 import { Prisma } from "@/generated/prisma";
-import { prisma } from "@/lib/server/prisma.server";
+import { prisma } from "@/server/prisma/prisma.server";
 
 export const selectIconUser = {
   id: true,

@@ -4,8 +4,8 @@ import {
   getParamsPaging,
   responseSuccess,
   selectTrans,
-} from "@/lib/server";
-import { prisma } from "@/lib/server/prisma.server";
+} from "@/server";
+import { prisma } from "@/server/prisma/prisma.server";
 import type { PayloadCreateTrans } from "@/lib/services";
 import { NextResponse } from "next/server";
 

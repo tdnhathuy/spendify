@@ -1,8 +1,8 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import { prisma, profileInclude } from "@/lib/server";
+import { prisma, profileInclude } from "@/server";
 import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
-import { createApi, responseSuccess, timing } from "@/lib/server/helper.server";
+import { createApi, responseSuccess, timing } from "@/server/helpers/helper.server";
 
 export const GET = createApi(async ({ idUser }) => {
   const profile = await timing("GET INFO", () =>

@@ -1,8 +1,9 @@
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import { createApi, responseSuccess, selectWallet } from "@/lib/server";
-import { prisma } from "@/lib/server/prisma.server";
+import { createApi, responseSuccess } from "@/server/helpers/helper.server";
+import { prisma } from "@/server/prisma/prisma.server";
 import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
 import type { PayloadCreateWallet } from "@/lib/services";
+import { selectWallet } from "@/server/prisma/select.server";
 
 export const GET = createApi(async ({ idUser }) => {
   // Lấy wallets với transactions (chỉ transfer OUT + regular transactions)

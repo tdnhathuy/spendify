@@ -1,6 +1,6 @@
 import { ParsedMail } from "mailparser";
 import { NextResponse } from "next/server";
-import { prisma, Prompt } from "@/lib/server";
+import { prisma, Prompt } from "@/server";
 import dayjs from "dayjs";
 import { z } from "zod";
 

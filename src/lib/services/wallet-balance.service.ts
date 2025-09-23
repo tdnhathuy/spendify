@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/server/prisma.server';
+import { prisma } from '@/server/prisma/prisma.server';
 import { Decimal } from '@prisma/client/runtime/library';
 
 /**

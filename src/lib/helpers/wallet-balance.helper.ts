@@ -1,5 +1,5 @@
 import { Decimal } from '@prisma/client/runtime/library';
-import { DBWallet, DBTransaction } from '@/lib/server/select.server';
+import { DBWallet, DBTransaction } from '@/server/prisma/select.server';
 
 /**
  * Tính toán số dư hiện tại của wallet với schema mới

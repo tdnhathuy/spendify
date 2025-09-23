@@ -1,16 +1,20 @@
-import { UpdateTransactionButton } from "@/app/(protected)/debug/update-transaction-button";
-import { WiseTextInput } from "@/lib/components";
+import { WiseButton } from "@/lib/components";
+import { Page } from "@/lib/components/shared/page";
+import { getWallet } from "@/server";
 
 export default function DebugPage() {
+  const handleGetWallet = async () => {
+    "use server";
+    const result = await getWallet({
+      includeTransactions: true,
+      walletId: "12",
+    });
+    console.log("Wallet result:", result);
+  };
+
   return (
-    <div className="space-y-8 p-6">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold">Debug Page</h1>
-        <UpdateTransactionButton />
-      </div>
-      <WiseTextInput money />
-      <WiseTextInput />
-      <hr />
-    </div>
+    <Page title={"Debug"}>
+      <WiseButton onClick={handleGetWallet}>Get list Transaction</WiseButton>
+    </Page>
   );
 }

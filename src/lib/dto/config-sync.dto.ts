@@ -1,6 +1,6 @@
 import { IConfigSync } from "@/lib/types";
 import { DTOWallet } from "./wallet.dto";
-import { DBSyncConfig } from "@/lib/server";
+import { DBSyncConfig } from "@/server";
 
 const fromDB = (config: DBSyncConfig): IConfigSync => {
   return {

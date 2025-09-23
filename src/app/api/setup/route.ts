@@ -3,8 +3,8 @@ import {
   createDefaultConfigSync,
   createDefaultIcon,
 } from "@/app/api/setup/misc";
-import { responseSuccess } from "@/lib/server";
-import { prisma } from "@/lib/server/prisma.server";
+import { responseSuccess } from "@/server";
+import { prisma } from "@/server/prisma/prisma.server";
 import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 

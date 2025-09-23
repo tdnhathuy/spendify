@@ -1,5 +1,5 @@
 import { PayloadCreateTransfer } from "@/app/api/transfer/route";
-import { createApi, prisma, responseSuccess, selectTrans } from "@/lib/server";
+import { createApi, prisma, responseSuccess, selectTrans } from "@/server";
 
 export const POST = createApi(async ({ request, id, idUser }) => {
   const payload: PayloadMarkTransfer = await request.json();

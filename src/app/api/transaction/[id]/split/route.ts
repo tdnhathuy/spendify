@@ -1,4 +1,4 @@
-import { createApi, prisma, responseSuccess } from "@/lib/server";
+import { createApi, prisma, responseSuccess } from "@/server";
 
 export const POST = createApi(async ({ idUser, request, id }) => {
   const payload = (await request.json()) as PayloadSplitTransaction;

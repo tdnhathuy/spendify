@@ -1,4 +1,4 @@
-import { parseMail } from "@/lib/server";
+import { parseMail } from "@/server";
 import { NextRequest, NextResponse } from "next/server";
 import {
   checkTransactionExists,

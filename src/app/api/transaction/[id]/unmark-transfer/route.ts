@@ -1,4 +1,4 @@
-import { createApi, prisma, responseSuccess, selectTrans } from "@/lib/server";
+import { createApi, prisma, responseSuccess, selectTrans } from "@/server";
 
 export const POST = createApi(async ({ idUser, id }) => {
   // const transaction = await prisma.transaction.update({

@@ -4,7 +4,7 @@ import {
   prisma,
   responseSuccess,
   selectConfigSync,
-} from "@/lib/server";
+} from "@/server";
 import { IConfigSync } from "@/lib/types";
 
 export const GET = createApi(async ({ idUser }) => {

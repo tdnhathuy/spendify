@@ -1,7 +1,7 @@
 import { CategoryType } from "@/generated/prisma";
 import { DTOCategory } from "@/lib/dto/category.dto";
-import { createApi, responseSuccess, selectCategory } from "@/lib/server";
-import { prisma } from "@/lib/server/prisma.server";
+import { createApi, responseSuccess, selectCategory } from "@/server";
+import { prisma } from "@/server/prisma/prisma.server";
 
 export const GET = createApi(async ({ idUser }) => {
   const categories = await prisma.category.findMany({

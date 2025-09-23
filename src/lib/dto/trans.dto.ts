@@ -1,7 +1,7 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOInfoSync } from "@/lib/dto/info-sync.dto";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import { DBTransaction } from "@/lib/server";
+import { DBTransaction } from "@/server";
 import { ITransaction, ITransfer } from "@/lib/types";
 
 /**

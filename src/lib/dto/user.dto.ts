@@ -1,6 +1,6 @@
 import { DTOCategory } from "@/lib/dto/category.dto";
 import { DTOWallet } from "@/lib/dto/wallet.dto";
-import { DBUser } from "@/lib/server";
+import { DBUser } from "@/server";
 import { UserProfile } from "@/lib/types";
 
 export const DTOUser = {

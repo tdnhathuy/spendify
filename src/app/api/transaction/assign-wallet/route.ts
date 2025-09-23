@@ -1,6 +1,6 @@
 import { DTOTrans } from "@/lib/dto/trans.dto";
-import { createApi, responseSuccess, selectTrans } from "@/lib/server";
-import { prisma } from "@/lib/server/prisma.server";
+import { createApi, responseSuccess, selectTrans } from "@/server";
+import { prisma } from "@/server/prisma/prisma.server";
 
 export const POST = createApi(async ({ request }) => {
   const { idTransaction, idWallet } = await request.json();

@@ -1,5 +1,5 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { DBCategory } from "@/lib/server";
+import { DBCategory } from "@/server";
 import { ICategory } from "@/lib/types";
 
 const fromDB = (category: DBCategory | null): ICategory | null => {

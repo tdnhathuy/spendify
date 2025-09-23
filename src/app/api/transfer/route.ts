@@ -1,4 +1,4 @@
-import { createApi, prisma, responseSuccess } from "@/lib/server";
+import { createApi, prisma, responseSuccess } from "@/server";
 import { faker } from "@faker-js/faker";
 
 const getWalletName = (idWallet: string) => {

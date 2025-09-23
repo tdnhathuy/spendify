@@ -4,7 +4,7 @@ import {
   prisma,
   responseSuccess,
   selectConfigSync,
-} from "@/lib/server";
+} from "@/server";
 
 export const PATCH = createApi(async ({ request, idUser, id }) => {
   const body = (await request.json()) as PayloadUpdateConfigSync;

@@ -1,6 +1,6 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
 import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
-import { DBWallet, DBWalletDetail, DBWalletSimple } from "@/lib/server";
+import { DBWallet, DBWalletDetail, DBWalletSimple } from "@/server";
 import { IWallet, IWalletDetail, IWalletSimple } from "@/lib/types";
 
 const calculateCurrentBalance = (wallet: DBWallet): number => {
