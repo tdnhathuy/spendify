@@ -1,7 +1,7 @@
 "use client";
 
 import { dialogs } from "@/lib/components/dialogs";
-import { TransactionItemTag } from "../base-tag.compound";
+import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
 import { useTransactionItem } from "../list-trans-item.hook";
 
 export const TagCategory = () => {
@@ -12,7 +12,7 @@ export const TagCategory = () => {
   };
 
   return (
-    <TransactionItemTag
+    <WiseTag
       icon={categoryIcon}
       title={categoryName}
       variant={"category"}

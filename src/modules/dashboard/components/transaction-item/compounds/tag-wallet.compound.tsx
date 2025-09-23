@@ -2,7 +2,7 @@
 
 import { dialogs } from "@/lib/components/dialogs";
 import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
-import { TransactionItemTag } from "../base-tag.compound";
+import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 
 export const TagWallet = () => {
@@ -13,7 +13,7 @@ export const TagWallet = () => {
   };
 
   return (
-    <TransactionItemTag
+    <WiseTag
       icon={
         walletIcon ? <IconPicker icon={walletIcon} size="xs" disabled /> : null
       }

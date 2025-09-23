@@ -1,13 +1,17 @@
 import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { FooterDialogCreateIcon } from "@/lib/components/dialogs/create-icon/footer";
-import { useDialog } from "@/lib/components/dialogs/dialog.store";
+import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 
 export const DialogCreateIcon = () => {
   const { isOpen } = useDialog("create-icon");
   return (
-    <Dialog modal open={isOpen}>
+    <Dialog
+      modal
+      open={isOpen}
+      onOpenChange={() => dialogs.close("create-icon")}
+    >
       <WiseDialogContent
         title="Create Icon"
         footer={<FooterDialogCreateIcon />}

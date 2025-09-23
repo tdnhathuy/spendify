@@ -10,6 +10,7 @@ import { FooterDialogAssignCategory } from "@/lib/components/dialogs/assign-cate
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { ICategory } from "@/lib/types";
+import { GridCategory } from "@/modules/category/components/grid-category";
 import { useState } from "react";
 import { useDidUpdate } from "rooks";
 
@@ -55,10 +56,13 @@ export const DialogAssignCategory = () => {
         ctnClassName="h-[70%] -translate-y-[60%] w-92"
       >
         <ModeSelection mode={mode} setMode={setMode} />
-        <ListCategory
+
+        {/* <ListCategory
           listCategory={listCategory}
           onSelectCategory={onSelectCategory}
-        />
+        /> */}
+
+        <GridCategory data={listCategory} onSelectCategory={onSelectCategory} />
       </WiseDialogContent>
     </Dialog>
   );

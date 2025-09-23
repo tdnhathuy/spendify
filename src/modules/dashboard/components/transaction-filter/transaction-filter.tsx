@@ -1,6 +1,6 @@
 import { useQueryWallet } from "@/lib/api/app.query";
 import { IWallet } from "@/lib/types";
-import { TransactionItemTag } from "@/modules/dashboard/components/transaction-item/base-tag.compound";
+import { WiseTag } from "@/lib/components/wise/wise-tag";
 import { useDidUpdate } from "rooks";
 import useArray from "use-array-state";
 
@@ -21,7 +21,7 @@ export const TransactionFilter = () => {
       {wallets.map((wallet) => {
         const isSelected = array.includes(wallet);
         return (
-          <TransactionItemTag
+          <WiseTag
             key={wallet.id}
             icon={wallet.icon}
             title={wallet.name}

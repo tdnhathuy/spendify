@@ -28,21 +28,23 @@ const variants = cva(baseTW, {
   defaultVariants: { variant: "warning" },
 });
 
-interface TransactionItemTagProps {
+interface WiseTagProps {
   icon: IIcon | React.ReactElement | null;
   title?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   variant?: VariantProps<typeof variants>["variant"];
   allowPropagation?: boolean; // Thêm prop để control event propagation
+  className?: string;
 }
 
-export const TransactionItemTag = (props: TransactionItemTagProps) => {
+export const WiseTag = (props: WiseTagProps) => {
   const {
     icon = null,
     title,
     onClick = () => {},
     variant,
     allowPropagation = false,
+    className,
   } = props;
 
   const renderIcon = () => {
@@ -56,7 +58,7 @@ export const TransactionItemTag = (props: TransactionItemTagProps) => {
 
   return (
     <button
-      className={cn(variants({ variant }))}
+      className={cn(variants({ variant }), className)}
       onClick={(e) => {
         if (!allowPropagation) {
           e.stopPropagation();

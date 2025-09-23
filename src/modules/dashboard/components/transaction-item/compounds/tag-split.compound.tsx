@@ -6,7 +6,7 @@ import { formatMoney } from "@/lib/helpers";
 import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
 import { useState } from "react";
 import { LuSplit } from "react-icons/lu";
-import { TransactionItemTag } from "../base-tag.compound";
+import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
 
 export const TagSplit = () => {
   const { transaction } = useTransactionItem();
@@ -17,7 +17,7 @@ export const TagSplit = () => {
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverAnchor>
-        <TransactionItemTag
+        <WiseTag
           icon={<LuSplit />}
           title="Split"
           variant="split"

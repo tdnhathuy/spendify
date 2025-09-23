@@ -1,5 +1,5 @@
 import { formatDate } from "@/lib/helpers";
-import { TransactionItemTag } from "@/modules/dashboard/components/transaction-item/base-tag.compound";
+import { WiseTag } from "@/lib/components/wise/wise-tag";
 import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
 
 export const Date = () => {
@@ -7,6 +7,6 @@ export const Date = () => {
   const formattedDate = formatDate(date, { format: "HH:mm [-] DD/MM/YYYY " });
 
   return (
-    <TransactionItemTag title={formattedDate!} variant={"date"} icon={<></>} />
+    <WiseTag title={formattedDate!} variant={"date"} icon={<></>} />
   );
 };
