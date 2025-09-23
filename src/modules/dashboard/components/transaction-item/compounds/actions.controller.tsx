@@ -1,16 +1,23 @@
+"use client";
 import {
   useMutateDeleteTrans,
+  useMutateToggleNeedSplit,
   useMutateUnmarkTransfer,
 } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components";
-import { ContextTransactionItem } from "@/modules/dashboard/components/transaction-item/compounds/root";
-import { use } from "react";
+import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
+import { useState } from "react";
+
+type Actions = "transfer" | "split" | "mark-split" | "delete";
 
 export const usePopoverListTrans = () => {
-  const { transaction } = use(ContextTransactionItem);
+  const [open, setOpen] = useState(false);
+
+  const { transaction } = useTransactionItem();
 
   const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
   const { mutateAsync: unmarkTransfer } = useMutateUnmarkTransfer();
+  const { mutateAsync: toggleNeedSplit } = useMutateToggleNeedSplit();
 
   const onDelete = async () => {
     await deleteTrans(transaction.id);
@@ -38,16 +45,22 @@ export const usePopoverListTrans = () => {
     await unmarkTransfer(transaction.id);
   };
 
-  const onMarkNeedSplit = async () => {};
+  const onClick = (type: Actions) => () => {
+    setOpen(false);
+
+    const id = transaction.id;
+    if (type === "mark-split") return toggleNeedSplit(id);
+
+    if (type === "delete") return onDelete();
+    if (type === "transfer") return onTransfer();
+    if (type === "split") return onSplit();
+    if (type === "unmark-transfer") return onUnmarkTransfer();
+  };
 
   return {
-    actions: {
-      onDelete,
-      onTransfer,
-      onUnmarkTransfer,
-      onSplit,
-      onMarkNeedSplit,
-    },
+    onClick,
+    open,
+    setOpen,
 
     status: {
       isCanMarkTransfer: !!transaction.infoSync,

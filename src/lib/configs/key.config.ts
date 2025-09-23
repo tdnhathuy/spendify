@@ -24,4 +24,5 @@ export const MutationKeys = {
   unmarkTransfer: "unmarkTransfer",
   createCategory: "createCategory",
   splitTransaction: "splitTransaction",
+  toggleNeedSplit: "toggleNeedSplit",
 };

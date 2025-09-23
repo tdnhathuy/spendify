@@ -4,7 +4,13 @@ import { useTransactionItem } from "@/modules/dashboard/components/transaction-i
 import { useCallback } from "react";
 
 export const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  const { isValid, isTransfer, transaction } = useTransactionItem();
+  const {
+    isValid,
+    isTransfer,
+    transaction,
+    isNeedSplit,
+    //
+  } = useTransactionItem();
 
   const onClickTransaction = useCallback(
     () => sheets.open("transaction-detail", transaction),
@@ -17,7 +23,8 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
         "hover:no-underline flex  bg-[#f5f5ff] rounded border-l-4 ",
         "transition-all duration-300",
         isValid && "border-blue-500",
-        isTransfer && "border-yellow-500"
+        isTransfer && "border-yellow-500",
+        isNeedSplit && "border-red-500"
       )}
       onClick={onClickTransaction}
     >

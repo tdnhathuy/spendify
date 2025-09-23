@@ -1,5 +1,7 @@
 import { CategoryType, WalletType } from "@/generated/prisma";
+import { ButtonHTMLAttributes } from "react";
 
+export type FormAction = ButtonHTMLAttributes<HTMLButtonElement>["formAction"];
 export interface ParamsPagination {
   page?: number;
   limit?: number;

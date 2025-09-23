@@ -1,3 +1,4 @@
+import { PopoverClose } from "@radix-ui/react-popover";
 import { MouseEventHandler } from "react";
 
 type Props = {
@@ -10,8 +11,7 @@ type Props = {
 export const PopoverItem = (props: Props) => {
   const { title, icon } = props;
   return (
-    <button
-      type="submit"
+    <PopoverClose
       onClick={props.onClick}
       className="flex rounded-sm text-sm items-center font-medium  gap-2 w-full cursor-pointer hover:bg-gray-200 p-2 px-3"
     >
@@ -23,6 +23,6 @@ export const PopoverItem = (props: Props) => {
           {typeof title === "string" ? <span>{title}</span> : title}
         </>
       )}
-    </button>
+    </PopoverClose>
   );
 };

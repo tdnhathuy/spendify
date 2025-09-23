@@ -1,10 +1,8 @@
+import { toggleNeedSplit } from "@/actions/transaction.actions";
 import { keyQueryWalletDetail } from "@/lib/api/app.query";
-import { Refetch } from "@/lib/api/app.refech";
-import { MutationKeys, queryClient, QueryKeys } from "@/lib/configs";
-import {
-  deleteQueryTransaction,
-  updateQueryTransaction,
-} from "@/lib/helpers/query.helper";
+import { Refetch } from "@/lib/api/app.refetch";
+import { MutationKeys, queryClient } from "@/lib/configs";
+import { updateQueryTransaction } from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
@@ -164,5 +162,13 @@ export const useMutateSplitTransaction = () => {
     onSuccess: () => {
       Refetch.trans();
     },
+  });
+};
+
+export const useMutateToggleNeedSplit = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.toggleNeedSplit],
+    mutationFn: toggleNeedSplit,
+    onSuccess: Refetch.trans,
   });
 };

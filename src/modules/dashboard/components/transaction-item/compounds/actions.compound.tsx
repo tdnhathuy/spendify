@@ -1,8 +1,6 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { WisePopoverContent } from "@/lib/components/wise/wise-popover";
-import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
-import { ButtonNeedSplit } from "@/modules/dashboard/components/transaction-item/server/need-split.server";
-import { PopoverClose } from "@radix-ui/react-popover";
+import { FormAction } from "@/lib/types";
 import { ReactNode } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
@@ -10,14 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { usePopoverListTrans } from "./actions.controller";
 
 export const PopoverListTrans = () => {
-  const { actions, status } = usePopoverListTrans();
-  const {
-    //
-    onDelete,
-    onTransfer,
-    onUnmarkTransfer,
-    onSplit,
-  } = actions;
+  const { status, onClick, open, setOpen } = usePopoverListTrans();
 
   const {
     isCanMarkTransfer,
@@ -27,10 +18,8 @@ export const PopoverListTrans = () => {
     //
   } = status;
 
-  const { isNeedSplit } = useTransactionItem();
-
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         className="p-1 px-[6px] rounded-xs   cursor-pointer hover:bg-gray-200"
         onClick={(e) => {
@@ -44,37 +33,28 @@ export const PopoverListTrans = () => {
         <PopoverItem
           icon={<FaMoneyBillTransfer />}
           title="Mark Transfer"
-          onClick={onTransfer}
+          onClick={onClick("transfer")}
           visible={isCanMarkTransfer && !isCanUnmarkTransfer}
         />
 
         <PopoverItem
           icon={<FaMoneyBillTransfer />}
           title="Split"
-          onClick={onSplit}
+          onClick={onClick("split")}
           visible={isCanSplit}
         />
-
-        <ButtonNeedSplit />
 
         <PopoverItem
           icon={<FaMoneyBillTransfer />}
           title={"Make need split"}
-          onClick={onSplit}
-        />
-
-        <PopoverItem
-          icon={<FaMoneyBillTransfer />}
-          title="Unmark Transfer"
-          onClick={onUnmarkTransfer}
-          visible={isCanUnmarkTransfer}
+          onClick={onClick("mark-split")}
         />
 
         <PopoverItem
           icon={<MdDelete />}
           title="Delete"
-          onClick={onDelete}
           visible={isCanDelete}
+          onClick={onClick("delete")}
         />
       </WisePopoverContent>
     </Popover>
@@ -84,17 +64,18 @@ export const PopoverListTrans = () => {
 interface PopoverItemProps {
   icon: ReactNode;
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   visible?: boolean;
+  formAction?: FormAction;
 }
 
 const PopoverItem = (props: PopoverItemProps) => {
-  const { icon, title, onClick, visible = true } = props;
+  const { icon, title, onClick, visible = true, formAction } = props;
 
   if (!visible) return null;
 
   return (
-    <PopoverClose
+    <button
       className="flex items-center gap-2 w-full cursor-pointer hover:bg-gray-200 p-2 rounded-xs"
       onClick={onClick}
     >
@@ -102,6 +83,6 @@ const PopoverItem = (props: PopoverItemProps) => {
       <span className="text-xs line-clamp-1 text-left font-semibold">
         {title}
       </span>
-    </PopoverClose>
+    </button>
   );
 };
