@@ -1,12 +1,6 @@
 import { useContext } from "react";
 import { ContextTransactionItem } from "./compounds/root";
 
-/**
- * Custom hook to access transaction data from TransactionItem context
- *
- * @throws Error if used outside of TransactionItem component
- * @returns Object containing transaction data and helper utilities
- */
 export const useTransactionItem = () => {
   const context = useContext(ContextTransactionItem);
 
@@ -46,7 +40,7 @@ export const useTransactionItem = () => {
     hasSplits,
 
     // Computed values
-    categoryName: transaction.category?.name || "Uncategorized",
+    categoryName: transaction.category?.name || "No tag",
     walletName: transaction.wallet?.name || "No Wallet",
     categoryIcon: transaction.category?.icon ?? null,
     walletIcon: transaction.wallet?.icon ?? null,

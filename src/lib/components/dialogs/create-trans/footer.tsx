@@ -1,6 +1,7 @@
 import { useMutateCreateTrans } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import { removeMoneyFormat } from "@/lib/helpers";
 
 interface FooterDialogCreateTransProps {
   amount: string;
@@ -16,7 +17,7 @@ export const FooterDialogCreateTrans = ({
   const onClickCreate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     createTrans({
-      amount,
+      amount: removeMoneyFormat(amount),
       date: new Date(),
       desc: "",
       idCategory: null,
@@ -32,7 +33,7 @@ export const FooterDialogCreateTrans = ({
   return (
     <>
       <WiseButton
-        disabled={isPending }
+        disabled={isPending}
         variant={"outline"}
         size="sm"
         onClick={onClickCancel}

@@ -27,7 +27,7 @@ type DialogMap = {
   "create-config-sync": null;
   transfer: TypeSchemaTransfer | null;
   "create-icon": null;
-  "adjust-balance": IWalletDetail;
+  "adjust-balance": IWallet;
   "create-category": TypeSchemaCreateCategory | null;
   "split-transaction": { idTransaction: string };
 };

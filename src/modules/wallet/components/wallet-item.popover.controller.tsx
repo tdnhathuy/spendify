@@ -23,7 +23,9 @@ export const usePopoverWalletItem = (props: PopoverWalletItemProps) => {
   return { open, setOpen, onClick };
 };
 
-const onClickAdjust = (wallet: IWallet) => {};
+const onClickAdjust = (wallet: IWallet) => {
+  dialogs.open("adjust-balance", wallet);
+};
 
 const onClickTransfer = (wallet: IWallet) => {
   const currentBalance = wallet.currentBalance.toString();

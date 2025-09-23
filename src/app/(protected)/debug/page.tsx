@@ -1,4 +1,5 @@
 import { UpdateTransactionButton } from "@/app/(protected)/debug/update-transaction-button";
+import { WiseTextInput } from "@/lib/components";
 
 export default function DebugPage() {
   return (
@@ -7,7 +8,8 @@ export default function DebugPage() {
         <h1 className="text-3xl font-bold">Debug Page</h1>
         <UpdateTransactionButton />
       </div>
-
+      <WiseTextInput money />
+      <WiseTextInput />
       <hr />
     </div>
   );

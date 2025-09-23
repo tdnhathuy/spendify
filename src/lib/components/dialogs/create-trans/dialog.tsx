@@ -40,10 +40,9 @@ export const DialogCreateTrans = () => {
             )}
             placeholder="Amount"
             style={{ fontSize: 36 }}
-            inputMode="numeric"
-            type="number"
+            onValueChange={(value) => setAmount(value)}
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            money
           />
         </span>
       </WiseDialogContent>

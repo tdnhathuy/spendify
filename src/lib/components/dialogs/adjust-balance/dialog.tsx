@@ -30,7 +30,8 @@ export const DialogAdjustBalance = () => {
             caretColor: amount.length ? "auto" : "transparent",
           }}
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onValueChange={(value) => setAmount(value)}
+          money
         />
       </WiseDialogContent>
     </Dialog>

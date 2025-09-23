@@ -75,6 +75,7 @@ export const DialogTransfer = () => {
             placeholder="Amount"
             style={{ fontSize: 36 }}
             {...form.register("amount")}
+            money
           />
         </WiseDialogContent>
       </Form>

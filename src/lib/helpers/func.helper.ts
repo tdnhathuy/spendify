@@ -67,3 +67,7 @@ export const formatOption = <T>(
 };
 
 export const isNotNull = <T>(value: T | null): value is T => value !== null;
+
+export const removeMoneyFormat = (amount: string) => {
+  return amount.replace(/\D/g, "");
+};
