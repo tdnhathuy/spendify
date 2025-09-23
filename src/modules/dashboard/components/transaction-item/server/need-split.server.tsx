@@ -1,5 +1,5 @@
 import { PopoverItem } from "@/lib/components/shared/popover-item";
-import { toggleNeedSplit } from "@/actions/transaction.actions";
+import { toggleNeedSplit } from "@/lib/actions/transaction.actions";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 
 interface ButtonNeedSplitProps {

@@ -1,6 +1,6 @@
 "use client";
 
-import { getWallets } from "@/actions/wallet.actions";
+import { getWallets } from "@/lib/actions/wallet.actions";
 import { WiseButton } from "@/lib/components";
 
 async function getWalletInfo() {

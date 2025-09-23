@@ -1,6 +1,5 @@
 // middleware.ts
 import { auth } from "@/auth";
-import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export const config = {
