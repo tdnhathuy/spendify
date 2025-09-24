@@ -31,7 +31,7 @@ const variants = cva(baseTW, {
 interface WiseTagProps {
   icon: IIcon | React.ReactElement | null;
   title?: string;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   variant?: VariantProps<typeof variants>["variant"];
   allowPropagation?: boolean; // Thêm prop để control event propagation
   className?: string;
@@ -57,7 +57,7 @@ export const WiseTag = (props: WiseTagProps) => {
   };
 
   return (
-    <button
+    <div
       className={cn(variants({ variant }), className)}
       onClick={(e) => {
         if (!allowPropagation) {
@@ -68,6 +68,6 @@ export const WiseTag = (props: WiseTagProps) => {
     >
       <span>{renderIcon()}</span>
       <span className="text-xs font-semibold">{title}</span>
-    </button>
+    </div>
   );
 };

@@ -34,6 +34,13 @@ export const selectCategory = {
   icon: { select: selectIcon },
 } satisfies Prisma.CategorySelect;
 
+export const selectCategoryBase = {
+  id: true,
+  name: true,
+  type: true,
+  icon: { select: selectIcon },
+} satisfies Prisma.CategorySelect;
+
 export const selectWalletSimple = {
   id: true,
   name: true,
@@ -142,6 +149,10 @@ export const profileInclude = {
 export type DBUser = Prisma.UserGetPayload<{ include: typeof profileInclude }>;
 export type DBCategory = Prisma.CategoryGetPayload<{
   select: typeof selectCategory;
+}>;
+
+export type DBCategoryBase = Prisma.CategoryGetPayload<{
+  select: typeof selectCategoryBase;
 }>;
 export type DBWallet = Prisma.WalletGetPayload<{ select: typeof selectWallet }>;
 

@@ -3,7 +3,9 @@ import { CategoryType } from "@/generated/prisma";
 import { useQueryCategory } from "@/lib/api/app.query";
 import { dialogs, WiseButton } from "@/lib/components";
 import { Page } from "@/lib/components/shared/page";
-import { ListCategory } from "@/modules/category/components/list-category";
+import { sheets } from "@/lib/components/sheets/sheet.store";
+import { ICategory } from "@/lib/types";
+import { GridCategory } from "@/modules/category/components/grid-category";
 import { useState } from "react";
 
 export const PageCategory = () => {
@@ -12,6 +14,10 @@ export const PageCategory = () => {
   const [mode, setMode] = useState<CategoryType>("Expense");
 
   const listCategory = categories.filter((item) => item.type === mode);
+
+  const onSelectCategory = (category: ICategory) => {
+    sheets.open("category-detail", category);
+  };
 
   return (
     <Page title="Categories" className="gap-4">
@@ -38,7 +44,8 @@ export const PageCategory = () => {
         </WiseButton>
       </div>
 
-      <ListCategory listCategory={listCategory} />
+      {/* <ListCategory listCategory={listCategory} /> */}
+      <GridCategory data={listCategory} onSelectCategory={onSelectCategory} />
     </Page>
   );
 };

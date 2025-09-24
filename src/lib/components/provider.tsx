@@ -1,7 +1,7 @@
 "use client";
 
 import { RootDialog } from "@/lib/components/dialogs/root.dialog";
-import { RootSheet } from "@/lib/components/sheets/root.dialog";
+import { RootSheet } from "@/lib/components/sheets/root.sheet";
 import { queryClient } from "@/lib/configs";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";

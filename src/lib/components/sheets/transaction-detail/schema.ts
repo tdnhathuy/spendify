@@ -8,10 +8,11 @@ const schemaWallet = z.object({
   icon: schemaIcon.optional().nullable(),
 });
 
-const schemaCategory = z.object({
+export const schemaCategory = z.object({
   id: z.string().optional().nullable(),
   name: z.string().optional().nullable(),
   icon: schemaIcon.optional().nullable(),
+  type: z.enum(["Income", "Expense", "Other"]).optional().nullable(),
 });
 
 export const schemaTransactionDetail = z.object({

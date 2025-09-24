@@ -4,6 +4,7 @@ import { prisma } from "@/server/prisma/prisma.server";
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
+import { auth } from "@/auth";
 
 export type HandlerCtx = {
   timing<T>(name: string, fn: () => Promise<T>): Promise<T>;
@@ -133,6 +134,15 @@ export const withParams = <TParams, TReturn>(
   fn: (context: ServerActionContext, params: TParams) => Promise<TReturn>
 ) => {
   return async (params: TParams): Promise<TReturn> => {
-    return await fn({ idUser: "123" }, params);
+    const { user } = (await auth()!) || {};
+
+    const email = user!.email!;
+
+    const { id: idUser } = await prisma.user.findFirstOrThrow({
+      where: { email },
+      select: { id: true },
+    })!;
+
+    return await fn({ idUser: idUser }, params);
   };
 };

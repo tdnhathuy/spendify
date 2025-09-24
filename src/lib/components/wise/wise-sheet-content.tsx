@@ -11,6 +11,7 @@ import {
   WiseButtonProps,
 } from "@/lib/components/wise/button/wise-button";
 import { cn } from "@/lib/utils";
+import { Loader } from "lucide-react";
 
 type Props = {
   children: React.ReactNode;
@@ -20,10 +21,11 @@ type Props = {
 
   title?: string;
   desc?: string;
+  loading?: boolean;
 };
 
 export const WiseSheetContent = (props: Props) => {
-  const { children, title = "Title", desc, className } = props;
+  const { children, title = "Title", desc, className, loading } = props;
   return (
     <SheetContent className="flex flex-col gap-2">
       <SheetHeader className="border-b">
@@ -37,7 +39,7 @@ export const WiseSheetContent = (props: Props) => {
           className
         )}
       >
-        {children}
+        {loading ? <Loader /> : children}
       </div>
 
       {props.footer && (

@@ -30,21 +30,21 @@ export const GridCategory = (props: GridCategoryProps) => {
     );
   };
   return (
-    <ul className="flex flex-col p-2 divide-y h-full overflow-y-scroll scrollbar">
+    <ul className="flex flex-col p-2 divide-y h-full overflow-y-auto scrollbar">
       {data.map((parent) => {
         const children = parent.children || [];
         const isNoChildren = !children.length;
         return (
           <Accordion collapsible type="single" key={parent.id}>
             <AccordionItem value={parent.id} className="p-2">
-              <div className="flex items-center gap-2 justify-between">
-                {renderCategory(parent, true)}
-
-                <AccordionTrigger
-                  className=" hover:bg-gray-200 size-7 justify-center items-center flex p-0 m-0"
-                  disabled={isNoChildren}
-                ></AccordionTrigger>
-              </div>
+              <AccordionTrigger
+                className="hover:no-underline  justify-center items-center flex p-0  m-0"
+                hideArrow={isNoChildren}
+              >
+                <div className="flex items-center gap-2 justify-between w-full">
+                  {renderCategory(parent, true)}
+                </div>
+              </AccordionTrigger>
 
               <AccordionContent className={isNoChildren ? "hidden" : ""}>
                 <div className="flex ml-8 gap-2 flex-wrap mt-2">
