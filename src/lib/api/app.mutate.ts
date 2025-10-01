@@ -155,6 +155,16 @@ export const useMutateCreateCategory = () => {
   });
 };
 
+export const useMutateUpdateCategoryParent = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.updateCategoryParent],
+    mutationFn: ServiceCategory.updateParent,
+    onSuccess: () => {
+      Refetch.category();
+    },
+  });
+};
+
 export const useMutateSplitTransaction = () => {
   return useMutation({
     mutationKey: [MutationKeys.splitTransaction],

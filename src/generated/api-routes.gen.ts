@@ -3,6 +3,7 @@
 
 export type ApiRoute =
   | `auth/${string}`
+  | `category/update-parent`
   | `category`
   | `config-sync/${string}`
   | `config-sync`
@@ -28,7 +29,10 @@ export const apiPath = {
   auth: {
     nextauth: (nextauth: string) => `auth/${nextauth}` as ApiRoute,
   } as const,
-  category: () => `category` as ApiRoute,
+  category: {
+    $: () => `category` as ApiRoute,
+    update_parent: () => `category/update-parent` as ApiRoute,
+  } as const,
   config_sync: {
     $: () => `config-sync` as ApiRoute,
     id: (id: string) => `config-sync/${id}` as ApiRoute,

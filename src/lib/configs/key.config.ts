@@ -23,6 +23,7 @@ export const MutationKeys = {
   updateConfigSync: "updateConfigSync",
   unmarkTransfer: "unmarkTransfer",
   createCategory: "createCategory",
+  updateCategoryParent: "updateCategoryParent",
   splitTransaction: "splitTransaction",
   toggleNeedSplit: "toggleNeedSplit",
 };
