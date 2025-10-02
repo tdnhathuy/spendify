@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "pnpm gen:api && next dev --turbopack",
-    "build": "pnpm gen:api && next build",
+    "build": "pnpm gen:api && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "gen:api": "tsx scripts/gen-api-routes.ts",
     "prisma:seed": "tsx prisma/seed.ts",
     "prisma:seed-flat-icon": "tsx prisma/seed-flat-icon.ts",
-    "prisma:update": "tsx scripts/migrate-transfers.ts"
+    "prisma:update": "tsx scripts/migrate-transfers.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
