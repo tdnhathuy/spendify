@@ -1,19 +1,18 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("PRISMA_DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 model IconGlobal {
   id         String  @id @default(uuid())
-  idFlatIcon String?
   url        String?
-
-  Icon Icon?
+  idFlatIcon String?
+  Icon       Icon?
 
   @@index([idFlatIcon])
   @@index([url])
@@ -23,50 +22,37 @@ model IconUser {
   id         String  @id @default(uuid())
   idFlatIcon String?
   url        String?
-
-  idUser String
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-
-  Icon Icon?
+  idUser     String
+  Icon       Icon?
+  user       User    @relation(fields: [idUser], references: [id], onDelete: Cascade)
 
   @@index([idUser])
 }
 
-enum IconSource {
-  System
-  User
-}
-
 model Icon {
-  id     String     @id @default(uuid())
-  source IconSource
-
-  idIconGlobal String? @map("systemIconId")
-  idIconUser   String? @map("userIconId")
-
-  iconGlobal IconGlobal? @relation(fields: [idIconGlobal], references: [id], onDelete: Cascade)
-  iconUser   IconUser?   @relation(fields: [idIconUser], references: [id], onDelete: Cascade)
-
-  wallet   Wallet[]
-  category Category[]
-
-  @@unique([idIconGlobal])
-  @@unique([idIconUser])
+  id           String      @id @default(uuid())
+  source       IconSource
+  idIconGlobal String?     @unique @map("systemIconId")
+  idIconUser   String?     @unique @map("userIconId")
+  category     Category[]
+  iconGlobal   IconGlobal? @relation(fields: [idIconGlobal], references: [id], onDelete: Cascade)
+  iconUser     IconUser?   @relation(fields: [idIconUser], references: [id], onDelete: Cascade)
+  wallet       Wallet[]
 }
 
 model User {
   id           String              @id @default(uuid())
   email        String              @unique
   name         String
-  wallets      Wallet[]
-  categories   Category[]
-  transactions Transaction[]
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
-  syncConfig   SyncConfig[]
+  categories   Category[]
   iconUser     IconUser[]
+  syncConfig   SyncConfig[]
+  transactions Transaction[]
   adjustments  TransactionAdjust[]
   splits       TransactionSplit[]
+  wallets      Wallet[]
 
   @@index([email])
 }
@@ -76,42 +62,35 @@ model SyncConfig {
   idUser    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [idUser], references: [id], onDelete: Cascade)
-
   fromEmail String
-  provider  String @default("gmail")
-
-  toWallet Wallet? @relation(fields: [walletId], references: [id], onDelete: SetNull)
-  walletId String?
+  walletId  String?
+  provider  String   @default("gmail")
+  user      User     @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  toWallet  Wallet?  @relation(fields: [walletId], references: [id])
 
   @@unique([idUser, provider, fromEmail, walletId])
   @@index([idUser])
 }
 
 model Wallet {
-  id              String     @id @default(uuid())
-  name            String
-  initBalance     Decimal    @default(0) @db.Decimal(19, 4)
-  type            WalletType
-  idUser          String
-  user            User       @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-  includeInReport Boolean    @default(true)
-
+  id                    String             @id @default(uuid())
+  name                  String
+  initBalance           Decimal            @default(0) @db.Decimal(19, 4)
+  type                  WalletType
+  idUser                String
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  includeInReport       Boolean            @default(true)
   cardNumber            String?
   cardStatementPassword String?
   cardStatementDate     DateTime?
+  idIcon                String?
   syncConfig            SyncConfig[]
-
-  idIcon String?
-  icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
-
+  transactionTransferTo Transaction[]      @relation("TransactionTransferTo")
   transactions          Transaction[]
-  transactionTransferTo Transaction[] @relation("TransactionTransferTo")
-
-  // Split transactions received by this wallet
-  splitsReceived TransactionSplit[]
+  splitsReceived        TransactionSplit[]
+  icon                  Icon?              @relation(fields: [idIcon], references: [id])
+  user                  User               @relation(fields: [idUser], references: [id], onDelete: Cascade)
 
   @@unique([idUser, name])
   @@index([idIcon])
@@ -122,19 +101,17 @@ model Category {
   id           String        @id @default(uuid())
   name         String
   idUser       String
+  idIcon       String?
   idParent     String?
   type         CategoryType
-  user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id], onDelete: SetNull)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isDeletable  Boolean       @default(false)
+  icon         Icon?         @relation(fields: [idIcon], references: [id])
+  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id])
   children     Category[]    @relation("CategoryToCategory")
+  user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
   transactions Transaction[]
-
-  idIcon String?
-  icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeletable Boolean  @default(false)
 
   @@unique([idUser, name, type])
   @@index([idUser])
@@ -143,31 +120,25 @@ model Category {
 }
 
 model Transaction {
-  id              String   @id @default(uuid())
-  amount          Decimal  @db.Decimal(19, 4)
-  date            DateTime @default(now())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  includeInReport Boolean  @default(true)
-
-  idUser String
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-
-  idWallet String?
-  wallet   Wallet? @relation(fields: [idWallet], references: [id], onDelete: SetNull)
-
-  idCategory String?
-  category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)
-
+  id                 String               @id @default(uuid())
+  idUser             String
+  idWallet           String?
+  idCategory         String?
+  amount             Decimal              @db.Decimal(19, 4)
+  note               String?
+  date               DateTime             @default(now())
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  includeInReport    Boolean              @default(true)
   idWalletTransferTo String?
-  walletTransferTo   Wallet? @relation("TransactionTransferTo", fields: [idWalletTransferTo], references: [id], onDelete: SetNull)
-
-  isNeedSplit Boolean            @default(false)
-  splits      TransactionSplit[]
-
-  note     String?
-  infoSync TransactionInfoSync?
-  adjust   TransactionAdjust?
+  isNeedSplit        Boolean              @default(false)
+  category           Category?            @relation(fields: [idCategory], references: [id])
+  user               User                 @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  walletTransferTo   Wallet?              @relation("TransactionTransferTo", fields: [idWalletTransferTo], references: [id])
+  wallet             Wallet?              @relation(fields: [idWallet], references: [id])
+  adjust             TransactionAdjust?
+  infoSync           TransactionInfoSync?
+  splits             TransactionSplit[]
 
   @@index([idUser, date(sort: Desc), id(sort: Desc)])
   @@index([idWallet])
@@ -179,24 +150,17 @@ model Transaction {
 }
 
 model TransactionSplit {
-  id        String   @id @default(uuid())
-  amount    Decimal  @db.Decimal(19, 4) // Số tiền được split
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Transaction gốc
+  id            String      @id @default(uuid())
+  amount        Decimal     @db.Decimal(19, 4)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   idTransaction String
+  idWallet      String
+  idUser        String
+  note          String?
   transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
-
-  // Wallet đích nhận split
-  idWallet String
-  wallet   Wallet @relation(fields: [idWallet], references: [id], onDelete: Cascade)
-
-  // User thực hiện split
-  idUser String
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-
-  note String? // Ghi chú cho split này
+  user          User        @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  wallet        Wallet      @relation(fields: [idWallet], references: [id], onDelete: Cascade)
 
   @@index([idTransaction])
   @@index([idWallet])
@@ -205,16 +169,14 @@ model TransactionSplit {
 }
 
 model TransactionInfoSync {
-  id        String   @id @default(uuid())
-  idUser    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id            String       @id @default(uuid())
+  idUser        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   emailProvider String
+  emailTitle    String
   providerMsgId String
   emailReceived String
-  emailTitle    String
-
   idTransaction String?      @unique
   transaction   Transaction? @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
 
@@ -223,19 +185,22 @@ model TransactionInfoSync {
 }
 
 model TransactionAdjust {
-  id        String   @id @default(uuid())
-  idUser    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  reason String
-  amount Decimal @db.Decimal(19, 4)
-
-  user          User        @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  id            String      @id @default(uuid())
+  idUser        String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  reason        String
+  amount        Decimal     @db.Decimal(19, 4)
   idTransaction String      @unique
   transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [idUser], references: [id], onDelete: Cascade)
 
   @@index([idUser])
+}
+
+enum IconSource {
+  System
+  User
 }
 
 enum CategoryType {
