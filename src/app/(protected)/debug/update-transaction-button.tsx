@@ -1,6 +1,6 @@
 "use server";
-import { getWallets } from "@/lib/actions/wallet.actions";
 import { WiseButton } from "@/lib/components";
+import { getWallets } from "@/server-action";
 
 export const UpdateTransactionButton = () => {
   async function getWalletInfo() {

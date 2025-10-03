@@ -1,4 +1,4 @@
-import { toggleNeedSplit } from "@/lib/actions/transaction.actions";
+import { toggleNeedSplit } from "@/server-action/transaction.action";
 import { keyQueryWalletDetail } from "@/lib/api/app.query";
 import { Refetch } from "@/lib/api/app.refetch";
 import { MutationKeys, queryClient } from "@/lib/configs";

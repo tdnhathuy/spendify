@@ -7,6 +7,7 @@ import {
 } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ParamsPagination } from "@/lib/types";
+import { getWallets } from "@/server-action";
 import { useQuery } from "@tanstack/react-query";
 
 export const useQueryTrans = (params: ParamsPagination) => {
@@ -32,7 +33,7 @@ export const useQueryCategory = () => {
 export const useQueryWallet = () => {
   return useQuery({
     queryKey: [QueryKeys.getWallet],
-    queryFn: ServiceWallet.get,
+    queryFn: getWallets,
   });
 };
 
