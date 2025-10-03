@@ -5,7 +5,7 @@ import { useTransactionItem } from "@/modules/dashboard/components/transaction-i
 import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 
-export const TagWallet = () => {
+export const TagWallet = ({ disabled = false }: { disabled?: boolean }) => {
   const { transaction, walletName, walletIcon } = useTransactionItem();
 
   const handleClick = () => {
@@ -20,6 +20,7 @@ export const TagWallet = () => {
       title={walletName}
       variant={"wallet"}
       onClick={handleClick}
+      disabled={disabled}
     />
   );
 };

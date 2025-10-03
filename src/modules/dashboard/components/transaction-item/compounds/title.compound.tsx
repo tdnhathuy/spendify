@@ -1,19 +1,41 @@
 import { IconPicker } from "@/lib/components";
-import { useTransactionItem } from "../list-trans-item.hook";
+import { TagCategory } from "@/modules/dashboard/components/transaction-item/compounds/tag-category.compound";
+import { TagSplit } from "@/modules/dashboard/components/transaction-item/compounds/tag-split.compound";
+import { TagWallet } from "@/modules/dashboard/components/transaction-item/compounds/tag-wallet.compound";
 import { BiTransferAlt } from "react-icons/bi";
+import { useTransactionItem } from "../list-trans-item.hook";
 
 export const Title = () => {
-  const { isTransfer, categoryName } = useTransactionItem();
+  const { isTransfer, isAdjust, categoryName } = useTransactionItem();
 
-  const title = isTransfer ? "Transfer" : categoryName;
+  const title = categoryName;
 
-  if (!title) return null;
+  if (isTransfer) return <TileTransfer />;
+  if (isAdjust) return <TileAdjust />;
 
-  return <h1 className="font-semibold text-sm">{title}</h1>;
+  return (
+    <span className="flex  items-center gap-2">
+      <span className="font-semibold text-sm">{title}</span>
+      <TagCategory />
+      <TagWallet />
+      <TagSplit />
+    </span>
+  );
 };
 
-export const TileTransfer = () => {
-  const { isTransfer, transaction } = useTransactionItem();
+const TileAdjust = () => {
+  const { transaction } = useTransactionItem();
+
+  return (
+    <span className="font-semibold text-sm flex gap-2">
+      <span>Adjust balance wallet </span>
+      <TagWallet disabled />
+    </span>
+  );
+};
+
+const TileTransfer = () => {
+  const { isTransfer, isAdjust, transaction } = useTransactionItem();
   const { walletFrom, walletTo } = transaction.transfer || {};
 
   if (!isTransfer) return null;

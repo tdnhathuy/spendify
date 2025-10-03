@@ -35,6 +35,7 @@ interface WiseTagProps {
   variant?: VariantProps<typeof variants>["variant"];
   allowPropagation?: boolean; // Thêm prop để control event propagation
   className?: string;
+  disabled?: boolean;
 }
 
 export const WiseTag = (props: WiseTagProps) => {
@@ -45,6 +46,7 @@ export const WiseTag = (props: WiseTagProps) => {
     variant,
     allowPropagation = false,
     className,
+    disabled = false,
   } = props;
 
   const renderIcon = () => {
@@ -60,6 +62,7 @@ export const WiseTag = (props: WiseTagProps) => {
     <div
       className={cn(variants({ variant }), className)}
       onClick={(e) => {
+        if (disabled) return;
         if (!allowPropagation) {
           e.stopPropagation();
         }
