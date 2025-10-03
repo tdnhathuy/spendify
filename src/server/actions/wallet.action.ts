@@ -1,27 +1,24 @@
 "use server";
 
-import { withParams } from "@/server/helpers";
+import { prisma } from "@/server/prisma/prisma.server";
+import { getAuthenticatedUser } from "@/server/helpers/with-auth.server";
 
-// Define the type for params that getWallet expects
-type GetWalletParams = {
-  walletId?: string;
-  includeTransactions?: boolean;
-};
+export const removeSplit = async (splitId: string) => {
+  const { idUser } = await getAuthenticatedUser();
 
-export const getWallet = withParams<GetWalletParams, string>(
-  async ({ idUser }, params) => {
-    console.log("idUser", idUser);
-    console.log("params", params);
+  // Delete split with security check
+  const deleted = await prisma.transactionSplit.deleteMany({
+    where: {
+      id: splitId,
+      transaction: {
+        idUser, // Only delete if belongs to this user
+      },
+    },
+  });
 
-    // Now you can use params with type safety
-    if (params.walletId) {
-      console.log("Getting wallet with ID:", params.walletId);
-    }
-
-    if (params.includeTransactions) {
-      console.log("Including transactions in response");
-    }
-
-    return "1232";
+  if (deleted.count === 0) {
+    throw new Error("Split not found or unauthorized");
   }
-);
+
+  return { success: true };
+};

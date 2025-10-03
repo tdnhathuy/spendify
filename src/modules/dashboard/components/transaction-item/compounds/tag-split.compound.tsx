@@ -3,16 +3,28 @@
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
 import { IconPicker, WisePopoverContent } from "@/lib/components";
 import { formatMoney } from "@/lib/helpers";
+import { ITransactionSplit } from "@/lib/types";
 import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
+import { X } from "lucide-react";
 import { useState } from "react";
 import { LuSplit } from "react-icons/lu";
 import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
+import { removeSplit } from "@/server/actions/wallet.action";
 
 export const TagSplit = () => {
   const { transaction } = useTransactionItem();
   const [open, setOpen] = useState(false);
 
   if (!transaction.splits || transaction.splits.length === 0) return null;
+
+  const onClickRemoveSplit = (split: ITransactionSplit) => async () => {
+    try {
+      setOpen(false);
+      await removeSplit(split.id);
+    } catch (error) {
+      console.error("Failed to remove split:", error);
+    }
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
@@ -36,13 +48,23 @@ export const TagSplit = () => {
         {transaction.splits.map((split) => {
           const amount = formatMoney(split.amount);
           return (
-            <span
+            <div
               key={split.id}
-              className="flex gap-2 items-center text-sm font-semibold"
+              className="flex gap-2 items-center text-sm font-semibold w-48 justify-between"
             >
-              <span>{`Split ${amount} to`}</span>
-              <IconPicker icon={split.wallet?.icon} size="sm" disabled />
-            </span>
+              <span className="flex items-center gap-2">
+                <IconPicker icon={split.wallet?.icon} size="sm" disabled />
+                <span>{`Split ${amount} to`}</span>
+              </span>
+
+              <button
+                className="cursor-pointer"
+                tabIndex={-1}
+                onClick={onClickRemoveSplit(split)}
+              >
+                <X size={16} />
+              </button>
+            </div>
           );
         })}
       </WisePopoverContent>
