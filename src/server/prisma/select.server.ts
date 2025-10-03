@@ -92,6 +92,7 @@ export const selectWallet = {
   },
   includeInReport: true,
   icon: { select: selectIcon },
+  
 } satisfies Prisma.WalletSelect;
 
 export const selectWalletDetail = {

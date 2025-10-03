@@ -1,10 +1,11 @@
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
+import { removeMoneyFormat } from "@/lib/helpers";
 import { adjustBalance, ParamsAdjustBalance } from "@/server-action";
 
 export const FooterDialogAdjustBalance = ({ amount }: { amount: string }) => {
   const { data } = useDialog("adjust-balance");
-  const onClickAdjust = () => {
+  const onClickAdjust = async () => {
     // const id = data?.id || "";
     // const url = apiPath.wallet.id.adjust_balance(id);
 
@@ -13,10 +14,12 @@ export const FooterDialogAdjustBalance = ({ amount }: { amount: string }) => {
     // };
     // client.post(url, { json });
     const params: ParamsAdjustBalance = {
-      amount: Number(amount),
       idWallet: data?.id || "",
+      newAmount: Number(removeMoneyFormat(amount)),
     };
-    adjustBalance(params);
+
+    const trans = await adjustBalance(params);
+    console.log("trans", trans);
   };
 
   return (

@@ -2,7 +2,12 @@
 
 import { DTOWallet } from "@/lib/dto";
 import { isNotNull } from "@/lib/helpers";
-import { getAuthenticatedUser, prisma, selectWallet } from "@/server";
+import {
+  getAuthenticatedUser,
+  prisma,
+  selectTrans,
+  selectWallet,
+} from "@/server";
 
 export async function getWallets() {
   const { idUser } = await getAuthenticatedUser();
@@ -18,9 +23,36 @@ export async function getWallets() {
 
 export interface ParamsAdjustBalance {
   idWallet: string;
-  amount: number;
+  newAmount: number;
 }
 export async function adjustBalance(params: ParamsAdjustBalance) {
+  const { idWallet, newAmount } = params;
   const { idUser } = await getAuthenticatedUser();
-  console.log("params", params);
+
+  const wallet = await prisma.wallet.findUniqueOrThrow({
+    where: { id: idWallet, idUser },
+    select: selectWallet,
+  });
+
+  const { currentBalance } = DTOWallet.fromDB(wallet)!;
+
+  const amount = newAmount - currentBalance;
+
+  const trans = await prisma.transaction.create({
+    data: {
+      amount,
+      wallet: { connect: { id: idWallet } },
+      user: { connect: { id: idUser } },
+      adjust: {
+        create: {
+          reason: `Adjust Balance (${currentBalance.toLocaleString()} → ${newAmount.toLocaleString()})`,
+          amount,
+          idUser,
+        },
+      },
+    },
+    select: selectTrans,
+  });
+
+  return trans.id;
 }

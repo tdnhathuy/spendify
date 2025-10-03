@@ -1,7 +1,6 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { WalletBalanceService } from "@/lib/services/wallet-balance.service";
-import { DBWallet, DBWalletDetail, DBWalletSimple } from "@/server";
 import { IWallet, IWalletDetail, IWalletSimple } from "@/lib/types";
+import { DBWallet, DBWalletDetail, DBWalletSimple } from "@/server";
 
 const calculateCurrentBalance = (wallet: DBWallet): number => {
   const initBalance = wallet.initBalance.toNumber();
@@ -23,6 +22,10 @@ const calculateCurrentBalance = (wallet: DBWallet): number => {
         balance -= amount;
       }
       // Category type 'Other' không ảnh hưởng đến balance
+    }
+
+    if (!!transaction.adjust) {
+      balance += transaction.adjust.amount.toNumber();
     }
   }
 
