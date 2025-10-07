@@ -2,23 +2,23 @@
     FROM node:20-alpine AS builder
     WORKDIR /app
     
-    # tiện cho 1 số native deps (sharp, v.v.)
+    # native deps hay cần (sharp, v.v.)
     RUN apk add --no-cache libc6-compat curl
     
     # PNPM
     RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
     
-    # 1) Cài deps theo lockfile, nhưng KHÔNG chạy postinstall (tránh prisma generate sớm)
+    # 1) Cài deps theo lockfile, KHÔNG chạy postinstall (tránh prisma generate sớm)
     COPY pnpm-lock.yaml package.json ./
     RUN pnpm install --frozen-lockfile --ignore-scripts
     
-    # 2) Copy source vào
+    # 2) Copy source
     COPY . .
     
-    # 3) Re-install để link scripts (tiếp tục bỏ postinstall)
+    # 3) Re-install (vẫn bỏ postinstall)
     RUN pnpm install --frozen-lockfile --ignore-scripts
     
-    # 4) Nếu có prisma/schema.prisma thì mới generate, còn không thì bỏ qua
+    # 4) Nếu có prisma/schema.prisma thì mới generate
     RUN [ -f prisma/schema.prisma ] \
       && pnpm exec prisma generate --schema=prisma/schema.prisma \
       || echo "No prisma/schema.prisma — skip prisma generate"
@@ -36,23 +36,22 @@
     ENV PORT=3000
     ENV HOST=0.0.0.0
     
-    # tạo server.js ép Next bind 0.0.0.0 (khỏi cần standalone)
-    RUN node -e "require('fs').writeFileSync('server.js', `
-    const { createServer } = require('http');
-    const next = require('next');
-    const app = next({ dev: false });
-    const handle = app.getRequestHandler();
-    const port = parseInt(process.env.PORT||'3000',10);
-    const host = process.env.HOST || '0.0.0.0';
-    app.prepare().then(()=>{
-      createServer((req,res)=>handle(req,res)).listen(port, host, err=>{
-        if(err) throw err;
-        console.log('> Ready on http://'+host+':'+port);
-      });
-    });
-    ` )"
+    # Tạo server.js ép bind 0.0.0.0 (dùng printf, KHÔNG heredoc)
+    RUN printf '%s\n' \
+    "const { createServer } = require('http');" \
+    "const next = require('next');" \
+    "const app = next({ dev: false });" \
+    "const handle = app.getRequestHandler();" \
+    "const port = parseInt(process.env.PORT||'3000',10);" \
+    "const host = process.env.HOST || '0.0.0.0';" \
+    "app.prepare().then(()=>{" \
+    "  createServer((req,res)=>handle(req,res)).listen(port, host, err=>{" \
+    "    if(err) throw err;" \
+    "    console.log('> Ready on http://'+host+':'+port);" \
+    "  });" \
+    "});" > server.js
     
-    # copy build artefacts và prod node_modules
+    # copy artefacts + prod node_modules
     COPY --from=builder /app/.next ./.next
     COPY --from=builder /app/public ./public
     COPY --from=builder /app/node_modules ./node_modules
