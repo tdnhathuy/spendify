@@ -2,10 +2,7 @@
     FROM node:20-alpine AS builder
     WORKDIR /app
     
-    # native deps hay cần (sharp, v.v.)
     RUN apk add --no-cache libc6-compat curl
-    
-    # PNPM
     RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
     
     # 1) Cài deps theo lockfile, KHÔNG chạy postinstall (tránh prisma generate sớm)
@@ -26,9 +23,6 @@
     # 5) Build Next
     RUN pnpm build
     
-    # 6) Chỉ giữ production deps
-    RUN pnpm prune --prod
-    
     # ---------- runner ----------
     FROM node:20-alpine AS runner
     WORKDIR /app
@@ -36,7 +30,7 @@
     ENV PORT=3000
     ENV HOST=0.0.0.0
     
-    # Tạo server.js ép bind 0.0.0.0 (dùng printf, KHÔNG heredoc)
+    # Tạo server.js ép bind 0.0.0.0
     RUN printf '%s\n' \
     "const { createServer } = require('http');" \
     "const next = require('next');" \
@@ -51,7 +45,7 @@
     "  });" \
     "});" > server.js
     
-    # copy artefacts + prod node_modules
+    # Copy artefacts + node_modules (KHÔNG prune để tránh postinstall)
     COPY --from=builder /app/.next ./.next
     COPY --from=builder /app/public ./public
     COPY --from=builder /app/node_modules ./node_modules
