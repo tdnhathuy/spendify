@@ -1,49 +1,66 @@
-# ---------- build ----------
+# ---------- builder ----------
     FROM node:20-alpine AS builder
     WORKDIR /app
     
-    # tiện cho 1 số native deps
+    # tiện cho 1 số native deps (sharp, v.v.)
     RUN apk add --no-cache libc6-compat curl
     
     # PNPM
     RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
     
-    # 1) Cài deps nhưng KHÔNG chạy postinstall (tránh Prisma generate sớm)
+    # 1) Cài deps theo lockfile, nhưng KHÔNG chạy postinstall (tránh prisma generate sớm)
     COPY pnpm-lock.yaml package.json ./
     RUN pnpm install --frozen-lockfile --ignore-scripts
     
-    # 2) Copy toàn bộ source (giờ mới có thư mục prisma nếu có)
+    # 2) Copy source vào
     COPY . .
     
-    # 3) Re-install để link scripts nếu cần, NHƯNG vẫn bỏ qua postinstall
+    # 3) Re-install để link scripts (tiếp tục bỏ postinstall)
     RUN pnpm install --frozen-lockfile --ignore-scripts
     
-    # 4) (Tuỳ) Generate Prisma NẾU có schema, còn không thì bỏ qua
+    # 4) Nếu có prisma/schema.prisma thì mới generate, còn không thì bỏ qua
     RUN [ -f prisma/schema.prisma ] \
       && pnpm exec prisma generate --schema=prisma/schema.prisma \
       || echo "No prisma/schema.prisma — skip prisma generate"
     
-    # 5) Build Next (repo của bạn đã set output: 'standalone')
+    # 5) Build Next
     RUN pnpm build
     
-    # ---------- run ----------
+    # 6) Chỉ giữ production deps
+    RUN pnpm prune --prod
+    
+    # ---------- runner ----------
     FROM node:20-alpine AS runner
     WORKDIR /app
     ENV NODE_ENV=production
-    # ép Next bind 0.0.0.0 (không dính bẫy HOSTNAME = tên container)
-    ENV HOSTNAME=0.0.0.0
     ENV PORT=3000
+    ENV HOST=0.0.0.0
     
-    # copy đúng phần cần cho standalone
+    # tạo server.js ép Next bind 0.0.0.0 (khỏi cần standalone)
+    RUN node -e "require('fs').writeFileSync('server.js', `
+    const { createServer } = require('http');
+    const next = require('next');
+    const app = next({ dev: false });
+    const handle = app.getRequestHandler();
+    const port = parseInt(process.env.PORT||'3000',10);
+    const host = process.env.HOST || '0.0.0.0';
+    app.prepare().then(()=>{
+      createServer((req,res)=>handle(req,res)).listen(port, host, err=>{
+        if(err) throw err;
+        console.log('> Ready on http://'+host+':'+port);
+      });
+    });
+    ` )"
+    
+    # copy build artefacts và prod node_modules
+    COPY --from=builder /app/.next ./.next
     COPY --from=builder /app/public ./public
-    COPY --from=builder /app/.next/standalone ./
-    COPY --from=builder /app/.next/static ./.next/static
+    COPY --from=builder /app/node_modules ./node_modules
+    COPY --from=builder /app/package.json ./package.json
     
     EXPOSE 3000
-    # healthcheck cho chắc
     RUN apk add --no-cache curl
     HEALTHCHECK --interval=30s --timeout=5s --start-period=20s CMD curl -fsS http://127.0.0.1:3000/ || exit 1
     
-    # chạy server standalone của Next
-    CMD ["node", ".next/standalone/server.js"]
+    CMD ["node", "server.js"]
     
