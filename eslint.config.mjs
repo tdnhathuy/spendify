@@ -23,6 +23,11 @@ const eslintConfig = [
       "@typescript-eslint/no-unsafe-function-type": "off",
       "@typescript-eslint/no-wrapper-object-types": "off",
     },
+    overrides: [
+      {
+        excludedFiles: ["src/generated/**/*"],
+      },
+    ],
   }),
 ];
 

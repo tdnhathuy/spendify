@@ -18,30 +18,31 @@ export const DebugDND = () => {
   // Convert categories to hierarchical items
   useEffect(() => {
     if (expense.length === 0) return;
-    
+
     const categoryItems: Item[] = [];
-    
-    expense.forEach(category => {
+
+    expense.forEach((category) => {
       // Add parent category
       categoryItems.push({
         id: category.id,
         content: category.name,
-        isParent: true
+        isParent: true,
       });
-      
+
       // Add children right after parent
       if (category.children) {
-        category.children.forEach(child => {
+        category.children.forEach((child) => {
           categoryItems.push({
             id: child.id,
             content: child.name,
-            isChild: true
+            isChild: true,
           });
         });
       }
     });
-    
+
     setItems(categoryItems);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expense.length]);
 
   const handleDragEnd = (result: any) => {
@@ -53,23 +54,26 @@ export const DebugDND = () => {
     const { source, destination, draggableId } = result;
 
     // Nếu drop vào cùng vị trí
-    if (source.droppableId === destination.droppableId && source.index === destination.index) {
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
       return;
     }
 
-    console.log('Drag result:', {
+    console.log("Drag result:", {
       draggableId,
       source: source.droppableId,
-      destination: destination.droppableId
+      destination: destination.droppableId,
     });
 
     // Xác định parent mới
     let newParentId = null;
-    if (destination.droppableId !== 'main') {
+    if (destination.droppableId !== "main") {
       newParentId = destination.droppableId;
     }
 
-    console.log('Will update:', { categoryId: draggableId, newParentId });
+    console.log("Will update:", { categoryId: draggableId, newParentId });
 
     // TODO: Gọi API để update parent
     // updateCategoryParent.mutate({
@@ -81,7 +85,7 @@ export const DebugDND = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Drag & Drop Demo</h2>
-      
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="space-y-4">
           {expense.map((category, categoryIndex) => (
@@ -111,16 +115,22 @@ export const DebugDND = () => {
                     <p className="text-xs text-gray-500 mb-2">
                       Kéo items vào đây để tạo children của {category.name}
                     </p>
-                    
+
                     {category.children?.map((child, childIndex) => (
-                      <Draggable key={child.id} draggableId={child.id} index={childIndex}>
+                      <Draggable
+                        key={child.id}
+                        draggableId={child.id}
+                        index={childIndex}
+                      >
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={`p-3 mb-2 bg-green-50 border-green-200 border rounded-lg cursor-move text-green-700 ${
-                              snapshot.isDragging ? "shadow-lg" : "hover:shadow-md"
+                              snapshot.isDragging
+                                ? "shadow-lg"
+                                : "hover:shadow-md"
                             }`}
                           >
                             <div className="flex items-center justify-between">
@@ -135,7 +145,7 @@ export const DebugDND = () => {
                         )}
                       </Draggable>
                     ))}
-                    
+
                     {provided.placeholder}
                   </div>
                 )}
@@ -156,20 +166,27 @@ export const DebugDND = () => {
                 }`}
               >
                 <p className="text-sm text-gray-600 mb-4">
-                  Standalone items (kéo vào parent categories ở trên để tạo children)
+                  Standalone items (kéo vào parent categories ở trên để tạo
+                  children)
                 </p>
-                
+
                 {expense
-                  .filter(cat => !cat.children || cat.children.length === 0)
+                  .filter((cat) => !cat.children || cat.children.length === 0)
                   .map((category, index) => (
-                    <Draggable key={`standalone-${category.id}`} draggableId={category.id} index={index}>
+                    <Draggable
+                      key={`standalone-${category.id}`}
+                      draggableId={category.id}
+                      index={index}
+                    >
                       {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className={`p-3 mb-2 bg-white border rounded-lg cursor-move ${
-                            snapshot.isDragging ? "shadow-lg" : "hover:shadow-md"
+                            snapshot.isDragging
+                              ? "shadow-lg"
+                              : "hover:shadow-md"
                           }`}
                         >
                           <div className="flex items-center justify-between">
@@ -184,7 +201,7 @@ export const DebugDND = () => {
                       )}
                     </Draggable>
                   ))}
-                
+
                 {provided.placeholder}
               </div>
             )}
