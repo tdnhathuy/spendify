@@ -108,7 +108,7 @@ model Category {
   updatedAt    DateTime      @updatedAt
   isDeletable  Boolean       @default(false)
   icon         Icon?         @relation(fields: [idIcon], references: [id])
-  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id])
+  parent       Category?     @relation("CategoryToCategory", fields: [idParent], references: [id], onDelete: Cascade)
   children     Category[]    @relation("CategoryToCategory")
   user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
   transactions Transaction[]

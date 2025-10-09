@@ -6,12 +6,13 @@ import { prisma } from "@/server/prisma/prisma.server";
 export type AuthenticatedUser = {
   idUser: string;
   email: string;
+  name: string;
 };
 
 /**
  * Helper to get authenticated user in Server Actions
  * Usage in Server Actions:
- * 
+ *
  * export const myAction = async (params: MyParams) => {
  *   "use server";
  *   const { idUser, email } = await getAuthenticatedUser();
@@ -20,7 +21,8 @@ export type AuthenticatedUser = {
  */
 export async function getAuthenticatedUser(): Promise<AuthenticatedUser> {
   const session = await auth();
-  
+  console.log("session", session);
+
   if (!session?.user?.email) {
     throw new Error("Unauthorized - Please sign in");
   }
@@ -37,8 +39,8 @@ export async function getAuthenticatedUser(): Promise<AuthenticatedUser> {
   }
 
   return {
+    name: session.user.name || "",
     idUser: user.id,
     email,
   };
 }
-
