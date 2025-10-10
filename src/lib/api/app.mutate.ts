@@ -1,4 +1,3 @@
-import { toggleNeedSplit } from "@/server-action/transaction.action";
 import { keyQueryWalletDetail } from "@/lib/api/app.query";
 import { Refetch } from "@/lib/api/app.refetch";
 import { MutationKeys, queryClient } from "@/lib/configs";
@@ -9,6 +8,12 @@ import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
 import { IWallet } from "@/lib/types";
+import {
+  assignCategory,
+  createTransaction,
+  deleteTransaction,
+  toggleNeedSplit,
+} from "@/server-action";
 import { useMutation } from "@tanstack/react-query";
 
 export const useMutateSetup = () => {
@@ -59,7 +64,7 @@ export const useMutateUpdateWallet = () => {
 export const useMutateCreateTrans = () => {
   return useMutation({
     mutationKey: [MutationKeys.createTransaction],
-    mutationFn: ServiceTrans.create,
+    mutationFn: createTransaction,
     onSuccess: () => {
       Refetch.trans();
       Refetch.wallet();
@@ -70,11 +75,7 @@ export const useMutateCreateTrans = () => {
 export const useMutateAssignCategory = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignCategory],
-    mutationFn: ServiceTrans.assignCategory,
-    onSuccess: (trans) => {
-      updateQueryTransaction(trans);
-      Refetch.wallet();
-    },
+    mutationFn: assignCategory,
   });
 };
 
@@ -92,12 +93,7 @@ export const useMutateAssignWallet = () => {
 export const useMutateDeleteTrans = (idTrans: string) => {
   return useMutation({
     mutationKey: [MutationKeys.deleteTransaction, idTrans],
-    mutationFn: ServiceTrans.delete,
-    onSuccess: () => {
-      Refetch.trans();
-      Refetch.wallet();
-      // deleteQueryTransaction(idTrans);
-    },
+    mutationFn: deleteTransaction,
   });
 };
 

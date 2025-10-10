@@ -21,10 +21,17 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/server-actions": ["./src/server-action/index.ts"]
     },
     "exactOptionalPropertyTypes": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/modules/dashboard/components/transaction-item/compounds/actions.controller.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/modules/dashboard/components/transaction-item/compounds/actions.controller.tsx"
+  ],
   "exclude": ["node_modules"]
 }

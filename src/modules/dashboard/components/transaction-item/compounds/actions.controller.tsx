@@ -20,7 +20,7 @@ export const usePopoverListTrans = () => {
   const { mutateAsync: toggleNeedSplit } = useMutateToggleNeedSplit();
 
   const onDelete = async () => {
-    await deleteTrans(transaction.id);
+    await deleteTrans({ idTransaction: transaction.id });
   };
 
   const onSplit = () => {

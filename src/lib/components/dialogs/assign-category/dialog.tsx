@@ -57,11 +57,6 @@ export const DialogAssignCategory = () => {
       >
         <ModeSelection mode={mode} setMode={setMode} />
 
-        {/* <ListCategory
-          listCategory={listCategory}
-          onSelectCategory={onSelectCategory}
-        /> */}
-
         <GridCategory data={listCategory} onSelectCategory={onSelectCategory} />
       </WiseDialogContent>
     </Dialog>

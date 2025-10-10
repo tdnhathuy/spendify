@@ -21,7 +21,6 @@ export type AuthenticatedUser = {
  */
 export async function getAuthenticatedUser(): Promise<AuthenticatedUser> {
   const session = await auth();
-  console.log("session", session);
 
   if (!session?.user?.email) {
     throw new Error("Unauthorized - Please sign in");

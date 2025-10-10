@@ -16,13 +16,7 @@ export const FooterDialogCreateTrans = ({
 
   const onClickCreate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    createTrans({
-      amount: removeMoneyFormat(amount),
-      date: new Date(),
-      desc: "",
-      idCategory: null,
-      idWallet: null,
-    });
+    createTrans({ amount: removeMoneyFormat(amount) });
     onSuccess();
   };
 
