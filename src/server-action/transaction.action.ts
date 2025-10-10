@@ -1,7 +1,7 @@
 "use server";
 
 import { getAuthenticatedUser } from "@/server/helpers";
-import { prisma, selectTrans } from "@/server/prisma";
+import { prisma } from "@/server/prisma";
 
 export interface PayloadCreateTransaction {
   amount: string;
@@ -20,7 +20,7 @@ export async function createTransaction(payload: PayloadCreateTransaction) {
     },
   });
 
-  return !!result;
+  return result.id;
 }
 
 export interface PayloadAssignCategory {
@@ -29,11 +29,12 @@ export interface PayloadAssignCategory {
 }
 export async function assignCategory(params: PayloadAssignCategory) {
   const { idTransaction, idCategory } = params;
-  return prisma.transaction.update({
+  const result = await prisma.transaction.update({
     where: { id: idTransaction },
     data: { idCategory },
-    select: selectTrans,
   });
+
+  return result.id;
 }
 
 export const toggleNeedSplit = async (idTransaction: string) => {
@@ -62,5 +63,5 @@ export async function deleteTransaction(params: PayloadDeleteTransaction) {
     where: { id, idUser },
   });
 
-  return !!result;
+  return result.id;
 }
