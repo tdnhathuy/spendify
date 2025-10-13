@@ -27,7 +27,7 @@ export const Page = ({
         "mx-auto w-full max-w-screen-md",
         "scrollbar",
         "bg-foreground  my-auto",
-        "my-4 rounded-sm"
+        "m-4 rounded-sm",
       )}
     >
       <div className=" p-4 ">
@@ -46,7 +46,7 @@ export const Page = ({
         className={cn(
           "flex flex-col gap-2",
           "overflow-y-auto overflow-x-hidden scrollbar",
-          "pr-3",
+          "pr-3 text-white",
           className
         )}
       >

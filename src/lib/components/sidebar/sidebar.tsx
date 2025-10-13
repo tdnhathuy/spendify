@@ -19,7 +19,7 @@ export function AppSidebar() {
   const { toggleSidebar, open } = useSidebar();
 
   return (
-    <Sidebar className="bg-black p-2" collapsible="icon">
+    <Sidebar className="bg-black p-4" collapsible="icon">
       <SidebarContent className=" p-2 gap-2 bg-foreground rounded-lg h-full">
         <SidebarGroup className="flex flex-1 gap-1">
           <SidebarButton
