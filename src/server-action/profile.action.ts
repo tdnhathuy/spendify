@@ -82,4 +82,69 @@ const setupCategory = async (idUser: string) => {
 export async function setupWallet() {
   const { idUser } = await getAuthenticatedUser();
 
+  await prisma.wallet.deleteMany({ where: { idUser } });
+
+  await prisma.wallet.createMany({
+    data: [
+      {
+        idUser,
+        name: "Cash",
+        type: "Cash",
+        initBalance: 5292000,
+        includeInReport: true,
+      },
+      {
+        idUser,
+        name: "MOMO",
+        type: "Debit",
+        initBalance: 23384,
+        includeInReport: true,
+      },
+      {
+        idUser,
+        name: "VCB",
+        type: "Debit",
+        initBalance: 47658263,
+        includeInReport: true,
+      },
+
+      //1
+
+      {
+        idUser,
+        name: "Binance",
+        type: "Crypto",
+        initBalance: 210000000,
+        includeInReport: false,
+      },
+      {
+        idUser,
+        name: "HSBC",
+        type: "Credit",
+        initBalance: 200000000,
+        includeInReport: false,
+      },
+      {
+        idUser,
+        name: "OUB",
+        type: "Credit",
+        initBalance: 201000000,
+        includeInReport: false,
+      },
+      {
+        idUser,
+        name: "SC",
+        type: "Credit",
+        initBalance: 168000000,
+        includeInReport: false,
+      },
+      {
+        idUser,
+        name: "Shopee",
+        type: "Credit",
+        initBalance: 12000000,
+        includeInReport: false,
+      },
+    ],
+  });
 }

@@ -27,11 +27,12 @@ export const SidebarButton = (props: Props) => {
       <WiseButton
         {...btnProps}
         className={cn(
-          "w-full cursor-pointer items-center justify-start p-0 relative overflow-hidden",
-          "bg-transparent hover:bg-focus",
+          "w-full items-center justify-start p-0 relative overflow-hidden",
           isActive && "bg-focus",
-          btnProps?.className
+          btnProps?.className,
+          "text-white"
         )}
+        variant={"ghost"}
         asChild
       >
         <div>
