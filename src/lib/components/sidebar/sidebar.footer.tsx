@@ -6,7 +6,7 @@ import { LogOutIcon } from "lucide-react";
 
 export const AppSidebarFooter = () => {
   return (
-    <SidebarFooter className="bg-sidebar-foreground  ">
+    <SidebarFooter className="">
       <WiseDialog content={<DialogLogout />}>
         <SidebarButton icon={<LogOutIcon />} label="Sign Out" />
       </WiseDialog>

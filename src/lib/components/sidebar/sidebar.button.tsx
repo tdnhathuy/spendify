@@ -28,8 +28,8 @@ export const SidebarButton = (props: Props) => {
         {...btnProps}
         className={cn(
           "w-full cursor-pointer items-center justify-start p-0 relative overflow-hidden",
-          "bg-transparent hover:bg-primary",
-          isActive && "bg-primary",
+          "bg-transparent hover:bg-focus",
+          isActive && "bg-focus",
           btnProps?.className
         )}
         asChild

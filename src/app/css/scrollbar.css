@@ -2,7 +2,7 @@
   .scrollbar {
     /* Firefox */
     scrollbar-width: thin;
-    scrollbar-color: #9ca3af #f3f4f6; /* thumb, track */
+    scrollbar-color: #344c75 #f3f4f6; /* thumb, track */
   }
 
   .scrollbar::-webkit-scrollbar {

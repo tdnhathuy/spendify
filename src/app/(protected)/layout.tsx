@@ -8,12 +8,11 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <div className="flex min-h-svh w-full scrollbar ">
-        <AppSidebar />
-        {children}
-        <TabBar />
-      </div>
+    <SidebarProvider className="bg-black gap-0 flex ">
+      <AppSidebar />
+
+      <section className="flex-1 flex overflow-hidden h-screen">{children}</section>
+      {/* <TabBar /> */}
     </SidebarProvider>
   );
 }

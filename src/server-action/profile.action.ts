@@ -78,3 +78,8 @@ const setupCategory = async (idUser: string) => {
     }
   }
 };
+
+export async function setupWallet() {
+  const { idUser } = await getAuthenticatedUser();
+
+}

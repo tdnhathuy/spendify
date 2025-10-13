@@ -11,7 +11,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
         {children}
-
         <RootDialog />
         <RootSheet />
       </SessionProvider>

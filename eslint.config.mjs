@@ -25,6 +25,7 @@ const eslintConfig = [
     },
     overrides: [
       {
+        files: ["**/*.ts", "**/*.tsx"],
         excludedFiles: ["src/generated/**/*"],
       },
     ],

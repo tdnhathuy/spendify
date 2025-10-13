@@ -20,14 +20,14 @@ export const Page = ({
   className,
 }: Props) => {
   return (
-    <section
+    <div
       className={cn(
-        "gap-4 flex flex-col min-w-0 flex-1 flex-col)} ",
-        "min-w-0 flex-1 overflow-y-auto overflow-x-hidden  ",
-        "px-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))] pb-[max(36px,env(safe-area-inset-bottom))]",
-        "pb-48 lg:pb-0",
+        "flex flex-col min-w-0 flex-1 flex-col)} ",
+        "px-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))] ",
         "mx-auto w-full max-w-screen-md",
-        "scrollbar"
+        "scrollbar",
+        "bg-foreground  my-auto",
+        "my-4 rounded-sm"
       )}
     >
       <div className=" p-4 ">
@@ -42,7 +42,16 @@ export const Page = ({
         )}
       </div>
 
-      <div className={cn("flex flex-col gap-2", className)}>{children}</div>
-    </section>
+      <div
+        className={cn(
+          "flex flex-col gap-2",
+          "overflow-y-auto overflow-x-hidden scrollbar",
+          "pr-3",
+          className
+        )}
+      >
+        {children}
+      </div>
+    </div>
   );
 };
