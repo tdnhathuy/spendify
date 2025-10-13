@@ -2,22 +2,30 @@ import { useMutateCreateTrans } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import { removeMoneyFormat } from "@/lib/helpers";
+import { Dispatch, SetStateAction } from "react";
 
 interface FooterDialogCreateTransProps {
   amount: string;
-  onSuccess: () => void;
+  setAmount: Dispatch<SetStateAction<string>>;
 }
 
 export const FooterDialogCreateTrans = ({
   amount,
-  onSuccess,
+  setAmount,
 }: FooterDialogCreateTransProps) => {
-  const { mutate: createTrans, isPending } = useMutateCreateTrans();
+  const { mutateAsync: createTrans, isPending } = useMutateCreateTrans();
 
-  const onClickCreate = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickCreate = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    createTrans({ amount: removeMoneyFormat(amount) });
-    onSuccess();
+    createTrans(
+      { amount: removeMoneyFormat(amount) },
+      {
+        onSuccess: () => {
+          dialogs.close("create-trans");
+          setAmount("");
+        },
+      }
+    );
   };
 
   const onClickCancel = () => {

@@ -22,13 +22,7 @@ export const DialogCreateTrans = () => {
       <WiseDialogContent
         title="Create Transaction"
         footer={
-          <FooterDialogCreateTrans
-            amount={amount}
-            onSuccess={() => {
-              dialogs.close("create-trans");
-              setAmount("");
-            }}
-          />
+          <FooterDialogCreateTrans amount={amount} setAmount={setAmount} />
         }
         className="p-0"
       >

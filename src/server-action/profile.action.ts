@@ -13,19 +13,23 @@ const syncConfig = [
 ];
 
 export async function setupProfile() {
-  const { idUser, email, name } = await getAuthenticatedUser();
+  try {
+    const { idUser, email, name } = await getAuthenticatedUser();
 
-  await prisma.user.delete({ where: { id: idUser } });
+    await prisma.user.delete({ where: { id: idUser } });
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-      syncConfig: { create: syncConfig },
-    },
-    select: { id: true },
-  });
-  await setupCategory(user.id);
+    const user = await prisma.user.create({
+      data: {
+        email,
+        name,
+        syncConfig: { create: syncConfig },
+      },
+      select: { id: true },
+    });
+    await setupCategory(user.id);
+  } catch (error) {
+    console.log("error", error);
+  }
 }
 
 const setupCategory = async (idUser: string) => {
