@@ -29,32 +29,36 @@ export const WalletItem = (props: Props) => {
 
   return (
     <WrapperWallet
-      className={cn("bg-gradient-to-t shadow-md border-none", {
-        "from-green-400 to-green-500": wallet.type === "Cash",
-        "from-blue-400 to-blue-500": wallet.type === "Debit",
-        "from-violet-400 to-violet-500": wallet.type === "Credit",
-        "from-orange-300 to-orange-400": wallet.type === "Crypto",
-      })}
+      className={cn(
+        "border-border transition-all bg-foreground hover:bg-focus rounded-sm",
+        {
+          // "from-green-400 to-green-500": wallet.type === "Cash",
+          // "from-blue-400 to-blue-500": wallet.type === "Debit",
+          // "from-violet-400 to-violet-500": wallet.type === "Credit",
+          // "from-orange-300 to-orange-400": wallet.type === "Crypto",
+        }
+      )}
     >
       <div className="flex flex-1 p-4 gap-4 flex-col ">
+        <span className="flex flex-col text-white">
+          <span className="flex gap-2 justify-between items-center">
+            <span className="text-xs text-white/50">Current Balance</span>
+            <PopoverWalletItem wallet={wallet} />
+          </span>
+
+          <span className="font-bold text-xl">
+            {formatMoney(wallet.currentBalance)}
+          </span>
+        </span>
+
         <span className="flex gap-2">
-          <span className="flex  w-fit p-2 rounded-md bg-white/20">
-            <IconPicker size="sm" icon={wallet.icon} disabled />
+          <span className="flex h-fit w-fit p-1 rounded-sm bg-focus">
+            <IconPicker className="size-4" icon={wallet.icon} disabled />
           </span>
 
           <span className="flex flex-1 flex-col  justify-center text-white ">
             <span className="text-base font-bold">{wallet.name}</span>
-            <span className="text-xs ">{wallet.type}</span>
-          </span> 
-          <PopoverWalletItem wallet={wallet} />
-        </span>
-
-        <span className="flex flex-col text-white">
-          <span className="font-bold text-xl">
-            {formatMoney(wallet.currentBalance)}
           </span>
-
-          <span className="text-xs text-gray-700">Current Balance</span>
         </span>
       </div>
     </WrapperWallet>

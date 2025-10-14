@@ -4,7 +4,7 @@ import { IWallet } from "@/lib/types";
 import { usePopoverWalletItem } from "@/modules/wallet/components/wallet-item.popover.controller";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import { BiEdit, BiSolidAdjustAlt } from "react-icons/bi";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
 import { IoSwapHorizontal } from "react-icons/io5";
 
 export type PopoverWalletItemProps = {
@@ -17,11 +17,11 @@ export const PopoverWalletItem = (props: PopoverWalletItemProps) => {
     <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         asChild
-        className="hover:bg-gray-100 rounded-sm p-1 py-2 h-fit"
+        className="hover:bg-white/80 transition-all hover:text-black rounded-sm p-px px-1 h-fit"
         onClick={(e) => e.stopPropagation()}
       >
         <span>
-          <BsThreeDotsVertical size={16} />
+          <BsThreeDots size={16} />
         </span>
       </PopoverTrigger>
 

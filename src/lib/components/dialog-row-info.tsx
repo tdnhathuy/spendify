@@ -14,7 +14,7 @@ export const RowInfoDialog = (props: PropsDialogRowInfo) => {
       className={cn("flex items-center gap-2 ", onClick && "cursor-pointer")}
       onClick={onClick}
     >
-      <span className="bg-gray-100 p-2 w-8 h-8 flex justify-center items-center rounded-sm text-xl">
+      <span className="bg-foreground p-2 w-8 h-8 flex justify-center items-center rounded-sm text-xl">
         {icon}
       </span>
 

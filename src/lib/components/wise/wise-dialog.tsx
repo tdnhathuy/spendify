@@ -48,14 +48,16 @@ export const WiseDialogContent = (props: WiseDialogContentProps) => {
       autoFocus={false}
       showCloseButton={false}
       className={cn(
-        "-translate-y-[75%] p-0 gap-0 flex flex-col overflow-hidden",
+        "-translate-y-[75%] p-0 gap-0 flex flex-col overflow-hidden bg-background text-white",
+        "border-border",
+        "shadow-lg",
         props.ctnClassName
       )}
     >
       <DialogHeader
         {...props.headerProps}
         className={cn(
-          "border-b p-2 px-4 relative gap-0",
+          "border-b p-4 px-4 relative gap-0",
           props.headerClassName
         )}
       >
@@ -94,7 +96,7 @@ export const WiseDialogContent = (props: WiseDialogContentProps) => {
       {props.footer && (
         <DialogFooter
           {...props.footerProps}
-          className={cn("p-2 border-t", classFooter)}
+          className={cn("p-4", classFooter)}
         >
           {props.footer}
         </DialogFooter>

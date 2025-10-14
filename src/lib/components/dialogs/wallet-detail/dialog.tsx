@@ -12,8 +12,9 @@ import {
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { formatDate, formatMoney } from "@/lib/helpers";
-import { Loader, Wallet } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { IWalletDetail } from "@/lib/types";
+import { Edit2, Loader, Wallet } from "lucide-react";
+import { useForm, useFormContext } from "react-hook-form";
 import { useDidUpdate } from "rooks";
 
 export const DialogWallet = () => {
@@ -41,13 +42,10 @@ export const DialogWallet = () => {
 
   const {
     name,
-    icon,
     type,
     initBalance,
-    currentBalance,
     totalTransaction,
     cardNumber,
-    cardStatementDate,
     cardStatementPassword,
   } = form.watch();
 
@@ -67,34 +65,33 @@ export const DialogWallet = () => {
             </span>
           ) : (
             <>
-              <span className="flex flex-col  justify-center items-center bg-green-100 py-4 border-t border-b">
-                <span className="flex items-center gap-2">
-                  <IconPicker icon={icon} disabled size="sm" />
-                  <span className="text-lg font-semibold">{name}</span>
-                </span>
-                <span className="text-xl font-semibold">
-                  {formatMoney(Number(currentBalance))}
-                </span>
-              </span>
+              <TopInfo detail={detail!} />
 
               <div className="p-4 gap-2 flex flex-col">
-                <RowInfoDialog icon={<Wallet />} label="Wallet" value={name} />
-                <RowInfoDialog icon={<Wallet />} label="Wallet" value={type} />
-                <RowInfoDialog
-                  icon={<Wallet />}
-                  label="Card Number"
-                  value={cardNumber || ""}
-                />
-                <RowInfoDialog
-                  icon={<Wallet />}
-                  label="Card Statement Password"
-                  value={cardStatementPassword || ""}
-                />
                 <RowInfoDialog
                   icon={<Wallet />}
                   label="Initial Balance"
                   value={formatMoney(initBalance)}
                 />
+
+                <RowInfoDialog
+                  icon={<Wallet />}
+                  label="Wallet type"
+                  value={type}
+                />
+
+                <RowInfoDialog
+                  icon={<Wallet />}
+                  label="Card Number"
+                  value={cardNumber || ""}
+                />
+
+                <RowInfoDialog
+                  icon={<Wallet />}
+                  label="Card Statement Password"
+                  value={cardStatementPassword || ""}
+                />
+
                 <RowInfoDialog
                   icon={<Wallet />}
                   label="Total Transaction"
@@ -106,5 +103,34 @@ export const DialogWallet = () => {
         </WiseDialogContent>
       </Form>
     </Dialog>
+  );
+};
+
+const TopInfo = ({ detail }: { detail: IWalletDetail }) => {
+  const { watch } = useFormContext<TypeSchemaWallet>();
+
+  const { icon, name, currentBalance } = watch();
+
+  const onClickEdit = () => {
+    dialogs.open("create-wallet", detail);
+  };
+
+  return (
+    <div className="flex  items-center bg-foreground p-4 gap-4">
+      <span className="bg-focus p-2 rounded-sm">
+        <IconPicker icon={icon} disabled size="lg" />
+      </span>
+
+      <span className="flex flex-col flex-1">
+        <span className="text-xl font-semibold">{name}</span>
+        <span className="text-lg font-semibold">
+          {formatMoney(Number(currentBalance))}
+        </span>
+      </span>
+
+      <button className="hover:bg-focus p-2 rounded-sm" onClick={onClickEdit}>
+        <Edit2 size={16} />
+      </button>
+    </div>
   );
 };

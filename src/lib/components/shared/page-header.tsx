@@ -10,10 +10,10 @@ export const PageHeader = ({
   rightComponent,
 }: PageHeaderProps) => {
   return (
-    <header className="flex justify-between">
+    <header className="flex justify-between text-white">
       <span>
         <h1 className="text-2xl font-bold">{title}</h1>
-        <p className="text-sm text-gray-500">{description}</p>
+        <p className="text-sm">{description}</p>
       </span>
 
       {rightComponent}

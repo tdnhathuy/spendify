@@ -13,7 +13,7 @@ export const PopoverItem = (props: Props) => {
   return (
     <PopoverClose
       onClick={props.onClick}
-      className="flex rounded-sm text-sm items-center font-medium  gap-2 w-full cursor-pointer hover:bg-gray-200 p-2 px-3"
+      className="flex rounded-sm text-sm items-center font-medium  gap-2 w-full cursor-pointer hover:bg-focus p-2 "
     >
       {props.children ? (
         props.children

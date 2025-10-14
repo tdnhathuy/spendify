@@ -8,7 +8,7 @@ export const PageDashboard = () => {
       title="Dashboard"
       headerProps={{ rightComponent: <ButtonCreateTrans /> }}
     >
-      <HeaderDashboard />
+      {/* <HeaderDashboard /> */}
       <ListTrans />
     </Page>
   );
