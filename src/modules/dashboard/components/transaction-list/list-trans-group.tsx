@@ -17,7 +17,7 @@ export const ListTransGroup = memo((props: ListTransGroupProps) => {
     <div className="w-full">
       <HeaderListTrans {...props} />
 
-      <ul className="gap-1 flex flex-col">
+      <ul className="gap-2 flex flex-col">
         {data.map((transaction) => {
           return (
             <TransactionItemRoot key={transaction.id} transaction={transaction}>

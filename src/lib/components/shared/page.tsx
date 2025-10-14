@@ -22,15 +22,15 @@ export const Page = ({
   return (
     <div
       className={cn(
-        "flex flex-col min-w-0 flex-1 flex-col)} ",
-        "px-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))] ",
+        "flex flex-col min-w-0 flex-1",
+        "px-[max(16px,env(safe-area-inset-left))] pr-[max(16px,env(safe-area-inset-right))]",
         "mx-auto w-full max-w-screen-md",
         "scrollbar",
-        "bg-foreground  my-auto",
-        "m-4 rounded-sm",
+        "bg-foreground my-auto",
+        "m-2 rounded-sm",
       )}
     >
-      <div className=" p-4 ">
+      <div className="p-2 pl-1">
         {typeof title === "string" ? (
           <PageHeader
             title={title}
@@ -46,7 +46,7 @@ export const Page = ({
         className={cn(
           "flex flex-col gap-2",
           "overflow-y-auto overflow-x-hidden scrollbar",
-          "pr-3 text-white",
+          "pr-1 text-white",
           className
         )}
       >

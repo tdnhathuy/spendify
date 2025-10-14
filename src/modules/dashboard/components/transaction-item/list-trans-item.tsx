@@ -9,15 +9,25 @@ export const TransactionListItem = (props: TransactionListItemProps) => {
       <TransactionItem.Icon />
 
       <div className="flex flex-1 items-start flex-col gap-2">
-        <TransactionItem.Title />
-        <TransactionItem.Desc />
-        <TransactionItem.Date />
-      </div>
+        <Wrapper>
+          <TransactionItem.Title />
+          <TransactionItem.Amount />
+        </Wrapper>
 
-      <div className="flex flex-col items-end">
-        <TransactionItem.Amount />
-        <TransactionItem.PopoverListTrans />
+        <Wrapper>
+          <TransactionItem.Desc />
+          <TransactionItem.PopoverListTrans />
+        </Wrapper>
+
+        <Wrapper>
+          <TransactionItem.Date />
+          <TransactionItem.TagSplit />
+        </Wrapper>
       </div>
     </TransactionItem.Wrapper>
   );
+};
+
+const Wrapper = ({ children }: { children: React.ReactNode }) => {
+  return <div className="flex justify-between w-full">{children}</div>;
 };
