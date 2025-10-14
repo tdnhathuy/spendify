@@ -11,7 +11,9 @@ export default function ProtectedLayout({
     <SidebarProvider className="bg-black gap-0 flex ">
       <AppSidebar />
 
-      <section className="flex-1 flex overflow-hidden h-screen justify-center">{children}</section>
+      <section className="flex-1 flex overflow-hidden h-dvh justify-center">
+        {children}
+      </section>
       {/* <TabBar /> */}
     </SidebarProvider>
   );
