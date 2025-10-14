@@ -27,15 +27,15 @@ type Props = {
 export const WiseSheetContent = (props: Props) => {
   const { children, title = "Title", desc, className, loading } = props;
   return (
-    <SheetContent className="flex flex-col gap-2">
-      <SheetHeader className="border-b">
-        {!!title && <SheetTitle>{title}</SheetTitle>}
+    <SheetContent className="flex flex-col gap-0 text-white">
+      <SheetHeader className=" text-white">
+        {!!title && <SheetTitle className="text-white">{title}</SheetTitle>}
         {!!desc && <SheetDescription>{desc}</SheetDescription>}
       </SheetHeader>
 
       <div
         className={cn(
-          "overflow-y-auto scrollbar flex flex-col h-full px-2 mr-1",
+          "overflow-y-auto scrollbar flex flex-col h-full ",
           className
         )}
       >

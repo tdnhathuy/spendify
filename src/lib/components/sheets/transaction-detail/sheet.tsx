@@ -1,15 +1,13 @@
 import { Form } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
-import { IconPicker } from "@/lib/components/shared/icon-picker";
-import { LabelBlock } from "@/lib/components/shared/label-block";
 import { useSheet } from "@/lib/components/sheets/sheet.store";
+import { SheetTransactionDetailTopInfo } from "@/lib/components/sheets/transaction-detail/components/top-info";
 import { useSheetTransactionDetail } from "@/lib/components/sheets/transaction-detail/sheet.controller";
 import {
   WiseSheetContent,
   WiseSheetFooter,
 } from "@/lib/components/wise/wise-sheet-content";
-import { WiseTextArea } from "@/lib/components/wise/wise-text-arena";
-import { formatDate, formatMoney } from "@/lib/helpers";
+import { formatDate } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
 import { Calendar, Wallet2 } from "lucide-react";
 import { ReactElement } from "react";
@@ -19,31 +17,27 @@ import { useDidUpdate } from "rooks";
 export const SheetTransactionDetail = () => {
   const { sheetProps, data } = useSheet("transaction-detail");
 
-  const { category, wallet } = data || {};
-
-  const amount = data?.amount || 0;
-
   const { actions, form } = useSheetTransactionDetail();
 
-  // useDidUpdate(() => {
-  //   if (sheetProps.open && !!data) {
-  //     form.reset({
-  //       amount: data.amount.toString(),
-  //       category: {
-  //         icon: data.category?.icon,
-  //         name: data.category?.name,
-  //         id: data.category?.id,
-  //       },
-  //       wallet: {
-  //         icon: data.wallet?.icon,
-  //         name: data.wallet?.name,
-  //         id: data.wallet?.id,
-  //       },
-  //       date: new Date(data.date),
-  //       note: data.description || "",
-  //     });
-  //   }
-  // }, [data, sheetProps.open]);
+  useDidUpdate(() => {
+    if (sheetProps.open && !!data) {
+      form.reset({
+        amount: data.amount.toString(),
+        category: {
+          icon: data.category?.icon,
+          name: data.category?.name,
+          id: data.category?.id,
+        },
+        wallet: {
+          icon: data.wallet?.icon,
+          name: data.wallet?.name,
+          id: data.wallet?.id,
+        },
+        date: new Date(data.date),
+        note: data.description || "",
+      });
+    }
+  }, [data, sheetProps.open]);
 
   const { icon: cateIcon, name: cateName } = form.watch("category") || {};
   const { name: walletName } = form.watch("wallet") || {};
@@ -58,17 +52,7 @@ export const SheetTransactionDetail = () => {
           footer={<WiseSheetFooter />}
           className="gap-4"
         >
-          <div className="flex items-center gap-2  justify-center py-4 flex-col border-b">
-            <span className="bg-gray-100 p-4 rounded-sm">
-              <IconPicker disabled size="lg" icon={cateIcon} />
-            </span>
-
-            <span className="text-lg font-semibold">{category?.name}</span>
-
-            <span className="text-2xl font-semibold">
-              {formatMoney(amount)}
-            </span>
-          </div>
+          <SheetTransactionDetailTopInfo transaction={data!} />
 
           <div className="flex gap-4 flex-col px-4">
             <Info
@@ -90,15 +74,6 @@ export const SheetTransactionDetail = () => {
               label="Date"
               value={formatDate(data?.date)}
             />
-
-            <LabelBlock label="Note">
-              <WiseTextArea
-                tabIndex={-1}
-                value={data?.description || ""}
-                onChange={() => {}}
-                className="h-24 "
-              />
-            </LabelBlock>
 
             {isDirty && <span className="text-sm text-gray-500">1</span>}
           </div>
@@ -128,8 +103,8 @@ const Info = (props: InfoProps) => {
       onClick={onClick}
       tabIndex={-1}
     >
-      <span className="flex size-10 items-center justify-center p-2 rounded-sm bg-gray-100">
-        {icon}
+      <span className="flex size-10 items-center justify-center p-2 rounded-sm bg-focus">
+        <span className="text-white ">{icon}</span>
       </span>
 
       <span className="flex flex-col text-sm text-left">

@@ -14,7 +14,9 @@ const calculateCurrentBalance = (wallet: DBWallet): number => {
     if (transaction.walletTransferTo) {
       // Đây là transfer OUT (từ wallet này sang wallet khác) - trừ tiền
       balance -= amount;
-    } else if (transaction.category) {
+    }
+
+    if (transaction.category) {
       // Đây là transaction thông thường (income/expense)
       if (transaction.category.type === "Income") {
         balance += amount;
@@ -27,6 +29,11 @@ const calculateCurrentBalance = (wallet: DBWallet): number => {
     if (!!transaction.adjust) {
       balance += transaction.adjust.amount.toNumber();
     }
+  }
+
+  for (const splitsReceived of wallet.splitsReceived) {
+    const amount = splitsReceived.amount.toNumber();
+    balance += amount;
   }
 
   // TODO: Transfer IN sẽ được tính ở nơi khác vì không có trong wallet.transactions
