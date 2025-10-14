@@ -32,6 +32,7 @@ export const useTransactionItem = () => {
     isNeedSplit: transaction.isNeedSplit ?? false,
     isAdjust: transaction.isAdjust ?? false,
     isSplit: !!transaction.splits?.length,
+    isSync: !!transaction.infoSync,
 
     // Validation
     hasCategory,
