@@ -11,6 +11,7 @@ export type ApiRoute =
   | `hook-email`
   | `icon`
   | `setup`
+  | `sync-sms`
   | `sync/mail`
   | `transaction/${string}/mark-transfer`
   | `transaction/${string}/split`
@@ -44,6 +45,7 @@ export const apiPath = {
   sync: {
     mail: () => `sync/mail` as ApiRoute,
   } as const,
+  sync_sms: () => `sync-sms` as ApiRoute,
   transaction: {
     $: () => `transaction` as ApiRoute,
     assign_category: () => `transaction/assign-category` as ApiRoute,

@@ -15,7 +15,8 @@ export default auth(async (request) => {
   // Skip NextAuth own routes completely
   if (
     url.pathname.startsWith("/api/auth") ||
-    url.pathname.startsWith("/api/hook")
+    url.pathname.startsWith("/api/hook") ||
+    url.pathname.startsWith("/api/sync-sms")
   ) {
     return NextResponse.next();
   }
