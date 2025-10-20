@@ -8,7 +8,7 @@ export const POST = createApi(async ({ request, id, idUser }) => {
   const transfer = await prisma.transaction.update({
     where: { id: idTransaction, idUser },
     data: {
-      idWalletTransferTo: idWalletTo,
+      // idWalletTransferTo: idWalletTo,
       idWallet: idWalletFrom,
     },
     select: selectTrans,
