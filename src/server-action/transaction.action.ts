@@ -2,6 +2,8 @@
 
 import { getAuthenticatedUser } from "@/server/helpers";
 import { prisma } from "@/server/prisma";
+import { createHash, hash } from "crypto";
+import { uuidv4 } from "zod";
 
 export interface PayloadCreateTransaction {
   amount: string;
@@ -65,3 +67,45 @@ export async function deleteTransaction(params: PayloadDeleteTransaction) {
 
   return result.id;
 }
+
+export interface PayloadCreateSyncTransaction {
+  email: string;
+  amount: number;
+  date: Date;
+  note: string;
+
+  walletId: string | null;
+  categoryId: string | null;
+}
+
+export const createSyncTransaction = async (
+  params: PayloadCreateSyncTransaction
+) => {
+  const { amount, email, note, walletId, categoryId, date } = params;
+  const hashNote = createHash("sha256").update(note).digest("hex");
+
+  const { id: idUser } = await prisma.user.findFirstOrThrow({
+    where: { email },
+    select: { id: true },
+  });
+
+  await prisma.transaction.create({
+    data: {
+      amount,
+      note,
+      date,
+      idWallet: walletId,
+      idCategory: categoryId,
+      idUser,
+      infoSync: {
+        create: {
+          emailProvider: "sms",
+          emailReceived: email,
+          emailTitle: note,
+          idUser,
+          providerMsgId: hashNote,
+        },
+      },
+    },
+  });
+};
