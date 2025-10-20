@@ -33,13 +33,13 @@ export async function getAuthenticatedUser(): Promise<AuthenticatedUser> {
     select: { id: true },
   });
 
-  if (!user) {
-    throw new Error("User not found");
-  }
+  // if (!user) {
+  //   throw new Error("User not found");
+  // }
 
   return {
     name: session.user.name || "",
-    idUser: user.id,
+    idUser: user?.id || "",
     email,
   };
 }

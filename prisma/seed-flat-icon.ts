@@ -36,6 +36,13 @@ export const flatIcon = {
   bonus: "5110795",
   profit: "3526048",
   trading: "7314483",
+  blood: "8889563",
+  parking: "3420233",
+  health: "2382533",
+  medicine: "647237",
+  massage: "8119629",
+  badminton: "8540840",
+  items: "2278984",
 };
 // const prisma = new PrismaClient();
 

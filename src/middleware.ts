@@ -11,6 +11,8 @@ export const config = {
 
 export default auth(async (request) => {
   const url = request.nextUrl.clone();
+  return NextResponse.next();
+
 
   // Skip NextAuth own routes completely
   if (

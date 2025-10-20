@@ -28,6 +28,7 @@ export const defaultExpenseCategory = [
     children: [
       { name: "Lặt vặt", idIcon: flatIcon.market },
       { name: "Đồ gia dụng", idIcon: flatIcon.appliances },
+      { name: "Đồ điện tử", idIcon: flatIcon.items },
     ],
   },
   {
@@ -35,6 +36,7 @@ export const defaultExpenseCategory = [
     idIcon: flatIcon.family,
     children: [
       { name: "Cha mẹ", idIcon: flatIcon.parent },
+      { name: "Tèo", idIcon: flatIcon.blood },
       { name: "Người yêu", idIcon: flatIcon.lover },
     ],
   },
@@ -63,6 +65,16 @@ export const defaultExpenseCategory = [
       { name: "Phí Quản lý", idIcon: flatIcon.management },
       { name: "Internet", idIcon: flatIcon.internet },
       { name: "Thuê nhà", idIcon: flatIcon.rent },
+      { name: "Gửi xe", idIcon: flatIcon.parking },
+    ],
+  },
+  {
+    name: "Sức khỏe",
+    idIcon: flatIcon.health,
+    children: [
+      { name: "Thuốc", idIcon: flatIcon.medicine },
+      { name: "Massage", idIcon: flatIcon.massage },
+      { name: "Cầu lông", idIcon: flatIcon.badminton },
     ],
   },
 ];

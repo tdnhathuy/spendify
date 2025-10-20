@@ -8,9 +8,6 @@
     "start": "next start ",
     "lint": "next lint",
     "gen:api": "tsx scripts/gen-api-routes.ts",
-    "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:seed-flat-icon": "tsx prisma/seed-flat-icon.ts",
-    "prisma:update": "tsx scripts/migrate-transfers.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {

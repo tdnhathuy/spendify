@@ -1,9 +1,10 @@
 "use server";
 
-import { CategoryType } from "@/generated/prisma";
-import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
-import { getAuthenticatedUser } from "@/server/helpers/with-auth.server";
+import { auth } from "@/auth";
 import { prisma } from "@/server/prisma";
+import { seedSvgIcons } from "../../prisma/seed";
+import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
+import { CategoryType } from "@/generated/prisma";
 
 const syncConfig = [
   { fromEmail: "tpbank@tpb.com.vn" },
@@ -12,139 +13,115 @@ const syncConfig = [
   { fromEmail: "VCBDigibank@info.vietcombank.com.vn" },
 ];
 
+// hoặc: import { CategoryType, Prisma } from "@prisma/client";
+
 export async function setupProfile() {
-  try {
-    const { idUser, email, name } = await getAuthenticatedUser();
+  const session = await auth();
+  const email = session?.user?.email?.trim();
+  const name = session?.user?.name?.trim() || "";
 
-    await prisma.user.delete({ where: { id: idUser } });
+  if (!email) return; // Không có email => bỏ
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name,
-        syncConfig: { create: syncConfig },
-      },
-      select: { id: true },
-    });
-    await setupCategory(user.id);
-  } catch (error) {
-    console.log("error", error);
-  }
+  // 1) PRECOMPUTE ngoài transaction (tránh chờ bên trong tx)
+  const incomeData = defaultIncomeCategory
+    ? await Promise.all(
+        defaultIncomeCategory.map(async (income) => ({
+          name: income.name,
+          type: CategoryType.Income,
+          idIcon: await getIdFlatIcon(income.idIcon),
+        }))
+      )
+    : [];
+
+  const expenseParents = defaultExpenseCategory
+    ? await Promise.all(
+        defaultExpenseCategory.map(async (parent) => {
+          const parentIcon = await getIdFlatIcon(parent.idIcon);
+          const children =
+            parent.children && parent.children.length
+              ? await Promise.all(
+                  parent.children.map(async (child) => ({
+                    name: child.name,
+                    type: CategoryType.Spend,
+                    idIcon: await getIdFlatIcon(child.idIcon),
+                  }))
+                )
+              : [];
+          return {
+            name: parent.name,
+            type: CategoryType.Spend,
+            idIcon: parentIcon,
+            children,
+          };
+        })
+      )
+    : [];
+
+  // 2) Chạy trong transaction NGẮN + TĂNG timeout
+  await prisma.$transaction(
+    async (tx) => {
+      // xoá user cũ (cascade theo schema)
+      const existed = await tx.user.findUnique({ where: { email } });
+      if (existed) {
+        await tx.user.delete({ where: { email } });
+      }
+
+      // tạo user mới
+      const { id: idUser } = await tx.user.create({
+        data: { email, name },
+        select: { id: true },
+      });
+
+      // Income categories -> createMany 1 lần
+      if (incomeData.length) {
+        await tx.category.createMany({
+          data: incomeData.map((c) => ({ ...c, idUser })),
+          // skipDuplicates: true, // bật nếu bạn có unique(name, user) chẳng hạn
+        });
+      }
+
+      // Expense parents + nested children
+      for (const p of expenseParents) {
+        await tx.category.create({
+          data: {
+            idUser,
+            name: p.name,
+            type: p.type,
+            idIcon: p.idIcon,
+            children:
+              p.children.length > 0
+                ? {
+                    createMany: {
+                      data: p.children.map((c) => ({
+                        name: c.name,
+                        type: c.type, // Spend
+                        idIcon: c.idIcon,
+                        idUser,
+                      })),
+                    },
+                  }
+                : undefined,
+          } as any,
+        });
+      }
+    },
+    {
+      timeout: 15000, // ms - tăng lên tuỳ dữ liệu
+      maxWait: 5000, // ms - đợi lock tối đa
+    }
+  );
 }
 
-const setupCategory = async (idUser: string) => {
-  const result = await prisma.icon.findMany({
-    where: { iconGlobal: { idFlatIcon: { not: null } } },
-    select: {
-      iconGlobal: { select: { idFlatIcon: true } },
-      id: true,
+const getIdFlatIcon = async (idIcon: string) => {
+  const result = await prisma.icon.findFirstOrThrow({
+    where: {
+      idFlatIcon: idIcon,
     },
+    select: { id: true },
   });
-
-  const systemIcon = result.map((item) => ({
-    id: item.id,
-    idFlatIcon: item.iconGlobal?.idFlatIcon,
-  }));
-
-  const defaultIncome = defaultIncomeCategory.map((x) => ({
-    name: x.name,
-    idUser,
-    idIcon: systemIcon.find((i) => i.idFlatIcon === x.idIcon)?.id,
-    type: "Income" as CategoryType,
-  }));
-
-  await prisma.category.createMany({ data: defaultIncome as any });
-
-  for (const parent of defaultExpenseCategory) {
-    const result = await prisma.category.create({
-      data: {
-        name: parent.name,
-        idUser,
-        idIcon: systemIcon.find((x) => x.idFlatIcon === parent.idIcon)?.id,
-        type: "Expense" as CategoryType,
-      } as any,
-    });
-
-    for (const child of parent.children) {
-      await prisma.category.create({
-        data: {
-          name: child.name,
-          idUser,
-          idParent: result.id,
-          idIcon: systemIcon.find((x) => x.idFlatIcon === child.idIcon)?.id,
-          type: "Expense" as CategoryType,
-        } as any,
-      });
-    }
-  }
+  return result.id;
 };
 
-export async function setupWallet() {
-  const { idUser } = await getAuthenticatedUser();
-
-  await prisma.wallet.deleteMany({ where: { idUser } });
-
-  await prisma.wallet.createMany({
-    data: [
-      {
-        idUser,
-        name: "Cash",
-        type: "Cash",
-        initBalance: 5292000,
-        includeInReport: true,
-      },
-      {
-        idUser,
-        name: "MOMO",
-        type: "Debit",
-        initBalance: 23384,
-        includeInReport: true,
-      },
-      {
-        idUser,
-        name: "VCB",
-        type: "Debit",
-        initBalance: 47658263,
-        includeInReport: true,
-      },
-
-      //1
-
-      {
-        idUser,
-        name: "Binance",
-        type: "Crypto",
-        initBalance: 210000000,
-        includeInReport: false,
-      },
-      {
-        idUser,
-        name: "HSBC",
-        type: "Credit",
-        initBalance: 200000000,
-        includeInReport: false,
-      },
-      {
-        idUser,
-        name: "OUB",
-        type: "Credit",
-        initBalance: 201000000,
-        includeInReport: false,
-      },
-      {
-        idUser,
-        name: "SC",
-        type: "Credit",
-        initBalance: 168000000,
-        includeInReport: false,
-      },
-      {
-        idUser,
-        name: "Shopee",
-        type: "Credit",
-        initBalance: 12000000,
-        includeInReport: false,
-      },
-    ],
-  });
+export async function setupGlobalIcons() {
+  await seedSvgIcons();
 }

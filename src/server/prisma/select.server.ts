@@ -3,20 +3,20 @@ import { prisma } from "@/server/prisma/prisma.server";
 
 export const selectIconUser = {
   id: true,
-  url: true,
+  svgUrl: true,
   idFlatIcon: true,
-} satisfies Prisma.IconUserSelect;
+} satisfies Prisma.IconSelect;
 
 export const selectIconGlobal = {
   id: true,
-  url: true,
+  svgUrl: true,
   idFlatIcon: true,
-} satisfies Prisma.IconGlobalSelect;
+} satisfies Prisma.IconSelect;
 
 export const selectIcon = {
   id: true,
-  iconGlobal: { select: selectIconGlobal },
-  iconUser: { select: selectIconUser },
+  svgUrl: true,
+  idFlatIcon: true,
 } satisfies Prisma.IconSelect;
 
 export const selectCategory = {
@@ -53,90 +53,68 @@ export const selectWallet = {
   id: true,
   name: true,
   type: true,
-  initBalance: true,
+  // initBalance: true,
   transactions: {
     select: {
       id: true,
       amount: true,
       category: { select: { type: true } },
-      adjust: { select: { id: true, reason: true, amount: true } },
-      infoSync: { select: { id: true, emailProvider: true } },
-      walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
+      // adjust: { select: { id: true, reason: true, amount: true } },
+      // infoSync: { select: { id: true, emailProvider: true } },
+      // walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
 
       // Split information
       splits: {
         select: {
           id: true,
           amount: true,
-          note: true,
-          wallet: { select: selectWalletSimple },
+          // note: true,
+          // wallet: { select: selectWalletSimple },
         },
       },
     },
   },
-  // Split transactions received by this wallet
-  splitsReceived: {
-    select: {
-      id: true,
-      amount: true,
-      note: true,
-      createdAt: true,
-      transaction: {
-        select: {
-          id: true,
-          date: true,
-          wallet: { select: selectWalletSimple }, // Wallet gốc
-        },
-      },
-    },
-  },
-  includeInReport: true,
   icon: { select: selectIcon },
-  
 } satisfies Prisma.WalletSelect;
 
 export const selectWalletDetail = {
   ...selectWallet,
-  cardNumber: true,
-  cardStatementDate: true,
-  cardStatementPassword: true,
 } satisfies Prisma.WalletSelect;
 
-export const selectConfigSync = {
-  id: true,
-  idUser: true,
-  fromEmail: true,
-  walletId: true,
-  toWallet: { select: selectWallet },
-} satisfies Prisma.SyncConfigSelect;
+// export const selectConfigSync = {
+//   id: true,
+//   idUser: true,
+//   fromEmail: true,
+//   walletId: true,
+//   toWallet: { select: selectWallet },
+// } satisfies Prisma.SyncConfigSelect;
 
-export const selectInfoSync = {
-  id: true,
-  emailProvider: true,
-  emailReceived: true,
-  emailTitle: true,
-} satisfies Prisma.TransactionInfoSyncSelect;
+// export const selectInfoSync = {
+//   id: true,
+//   emailProvider: true,
+//   emailReceived: true,
+//   emailTitle: true,
+// } satisfies Prisma.TransactionInfoSyncSelect;
 
 export const selectTrans = {
   id: true,
   amount: true,
   note: true,
   date: true,
-  adjust: true,
+  // adjust: true,
 
   category: { select: selectCategory },
   wallet: { select: selectWalletSimple },
-  infoSync: { select: selectInfoSync },
 
-  walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
+  // walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
 
-  isNeedSplit: true,
+  // isNeedSplit: true,
   splits: {
     select: {
       id: true,
       amount: true,
-      note: true,
-      wallet: { select: selectWalletSimple },
+      // note: true,
+      // wallet: { select: selectWalletSimple },
     },
   },
 } satisfies Prisma.TransactionSelect;
@@ -163,9 +141,9 @@ export type DBWalletSimple = Prisma.WalletGetPayload<{
   select: typeof selectWalletSimple;
 }>;
 
-export type DBSyncConfig = Prisma.SyncConfigGetPayload<{
-  select: typeof selectConfigSync;
-}>;
+// export type DBSyncConfig = Prisma.SyncConfigGetPayload<{
+//   select: typeof selectConfigSync;
+// }>;
 
 export type DBWalletDetail = Prisma.WalletGetPayload<{
   select: typeof selectWalletDetail;
@@ -179,9 +157,9 @@ export type DBIcon = Prisma.IconGetPayload<{
   select: typeof selectIcon;
 }>;
 
-export type DBSystemIcon = Prisma.IconGlobalGetPayload<{
-  select: typeof selectIconGlobal;
-}>;
+// export type DBSystemIcon = Prisma.IconGlobalGetPayload<{
+//   select: typeof selectIconGlobal;
+// }>;
 
 export type DBTransaction = Prisma.TransactionGetPayload<{
   select: typeof selectTrans;

@@ -1,8 +1,8 @@
-import { PrismaClient } from "@/generated/prisma";
 import fs from "fs/promises";
 import { values } from "lodash";
 import path from "path";
 import { flatIcon } from "./seed-flat-icon";
+import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -31,31 +31,35 @@ export const getSvgByFolderName = async (folderName: string) => {
   return result;
 };
 
-const createIcon = (code: string, group: string, isFlatIcon: boolean) => {
-  return {
-    ...(isFlatIcon ? { idFlatIcon: code } : { url: code }),
-  };
-};
-const seed = async () => {
-  await prisma.iconGlobal.deleteMany();
-
+export const seedSvgIcons = async () => {
   const bankIcons = await getSvgByFolderName("bank");
   const eWalletIcons = await getSvgByFolderName("e-wallet");
 
-  [
-    ...values(flatIcon).map((code) => createIcon(code, "flatIcon", true)),
-    ...bankIcons.map((icon) => createIcon(icon, "bank", false)),
-    ...eWalletIcons.map((icon) => createIcon(icon, "e-wallet", false)),
-  ].forEach(async (icon) => {
-    await prisma.icon.create({
-      data: {
-        source: "System",
-        iconGlobal: {
-          create: icon,
-        },
-      },
-    });
-  });
+  const isDefault = true;
+
+  await prisma.icon.deleteMany({});
+
+  await Promise.all(
+    bankIcons.map((svgUrl) => {
+      const name = svgUrl.split("/")[3].split(".")[0];
+      return prisma.icon.create({ data: { name, svgUrl, isDefault } });
+    })
+  );
+
+  await Promise.all(
+    eWalletIcons.map((svgUrl) => {
+      const name = svgUrl.split("/")[3].split(".")[0];
+      return prisma.icon.create({ data: { name, svgUrl, isDefault } });
+    })
+  );
+
+  await Promise.all(
+    values(flatIcon).map((idFlatIcon) => {
+      return prisma.icon.create({
+        data: { name: idFlatIcon, idFlatIcon, isDefault },
+      });
+    })
+  );
 };
 
-seed();
+seedSvgIcons();
