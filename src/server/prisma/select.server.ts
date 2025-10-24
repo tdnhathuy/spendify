@@ -17,6 +17,7 @@ export const selectIcon = {
   id: true,
   svgUrl: true,
   idFlatIcon: true,
+  isDefault: true,
 } satisfies Prisma.IconSelect;
 
 export const selectCategory = {
@@ -53,25 +54,11 @@ export const selectWallet = {
   id: true,
   name: true,
   type: true,
-  // initBalance: true,
   transactions: {
     select: {
       id: true,
       amount: true,
       category: { select: { type: true } },
-      // adjust: { select: { id: true, reason: true, amount: true } },
-      // infoSync: { select: { id: true, emailProvider: true } },
-      // walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
-
-      // Split information
-      splits: {
-        select: {
-          id: true,
-          amount: true,
-          // note: true,
-          // wallet: { select: selectWalletSimple },
-        },
-      },
     },
   },
   icon: { select: selectIcon },
@@ -101,22 +88,9 @@ export const selectTrans = {
   amount: true,
   note: true,
   date: true,
-  // adjust: true,
 
   category: { select: selectCategory },
-  wallet: { select: selectWalletSimple },
-
-  // walletTransferTo: { select: selectWalletSimple }, // Wallet đích cho transfer
-
-  // isNeedSplit: true,
-  splits: {
-    select: {
-      id: true,
-      amount: true,
-      // note: true,
-      // wallet: { select: selectWalletSimple },
-    },
-  },
+  wallet: { select: selectWallet },
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

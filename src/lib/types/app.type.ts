@@ -1,4 +1,5 @@
 import { CategoryType, WalletType } from "@/generated/prisma";
+import { DBWallet } from "@/server";
 import { ButtonHTMLAttributes } from "react";
 
 export type FormAction = ButtonHTMLAttributes<HTMLButtonElement>["formAction"];
@@ -40,7 +41,6 @@ export interface Response<T> {
 export type IWallet = {
   id: string;
   name: string;
-  initBalance: number;
   currentBalance: number;
   icon: IIcon | null;
   type: WalletType;
@@ -63,7 +63,7 @@ export interface IWalletDetail extends IWallet {
 export type IIcon = {
   id: string;
   url: string;
-  isSystemIcon: boolean;
+  isDefault: boolean;
 };
 
 export interface BaseCategory {
@@ -91,19 +91,11 @@ export interface ITransaction {
   id: string;
   amount: number;
   category: BaseCategory | null;
-  categoryParent: BaseCategory | null;
+  // categoryParent: BaseCategory | null;
 
-  wallet: IWalletSimple | null;
+  wallet: IWallet | null;
   date: Date;
-  description: string | null;
-
-  infoSync: IInfoSync | null;
-  isAdjust: boolean;
-
-  transfer: ITransfer | null;
-
-  isNeedSplit: boolean;
-  splits: ITransactionSplit[] | null;
+  note: string;
 }
 
 export interface ITransfer {

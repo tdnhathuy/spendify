@@ -1,13 +1,10 @@
 import { QueryKeys } from "@/lib/configs";
-import {
-  ServiceCategory,
-  ServiceIcon,
-  ServiceTrans,
-  ServiceWallet,
-} from "@/lib/services";
+import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ParamsPagination } from "@/lib/types";
 import { getWallets } from "@/server-action";
+import { getCategories } from "@/server-action/category.action";
+import { getIcons } from "@/server-action/icon.action";
 import { useQuery } from "@tanstack/react-query";
 
 export const useQueryTrans = (params: ParamsPagination) => {
@@ -20,13 +17,15 @@ export const useQueryTrans = (params: ParamsPagination) => {
 export const useQueryCategory = () => {
   const query = useQuery({
     queryKey: [QueryKeys.getCategory],
-    queryFn: ServiceCategory.get,
+    queryFn: getCategories,
   });
 
   return {
     ...query,
-    income: query.data?.filter((item) => item.type === "Income") || [],
-    expense: query.data?.filter((item) => item.type === "Expense") || [],
+    // income: query.data?.filter((item) => item.type === "Income") || [],
+    // expense: query.data?.filter((item) => item.type === "Spend") || [],
+    income: [],
+    expense: [],
   };
 };
 
@@ -59,7 +58,7 @@ export const useQueryConfigSync = () => {
 export const useQueryIcon = (disabled = false) => {
   return useQuery({
     queryKey: [QueryKeys.getIcon],
-    queryFn: ServiceIcon.get,
+    queryFn: getIcons,
     enabled: !disabled,
   });
 };

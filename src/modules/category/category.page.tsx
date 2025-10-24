@@ -11,7 +11,7 @@ import { useState } from "react";
 export const PageCategory = () => {
   const { data: categories = [] } = useQueryCategory();
 
-  const [mode, setMode] = useState<CategoryType>("Expense");
+  const [mode, setMode] = useState<CategoryType>("Spend");
 
   const listCategory = categories.filter((item) => item.type === mode);
 
@@ -25,10 +25,10 @@ export const PageCategory = () => {
         <div className="flex gap-2">
           <WiseButton
             size={"sm"}
-            variant={mode === "Expense" ? "default" : "outline"}
-            onClick={() => setMode("Expense")}
+            variant={mode === "Spend" ? "default" : "outline"}
+            onClick={() => setMode("Spend")}
           >
-            Expense
+            Spend
           </WiseButton>
           <WiseButton
             size={"sm"}
@@ -44,7 +44,6 @@ export const PageCategory = () => {
         </WiseButton>
       </div>
 
-      {/* <ListCategory listCategory={listCategory} /> */}
       <GridCategory data={listCategory} onSelectCategory={onSelectCategory} />
     </Page>
   );

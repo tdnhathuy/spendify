@@ -1,9 +1,26 @@
 "use server";
 
+import { DTOTrans } from "@/lib/dto";
+import { ParamsPagination } from "@/lib/types";
 import { getAuthenticatedUser } from "@/server/helpers";
-import { prisma } from "@/server/prisma";
-import { createHash, hash } from "crypto";
-import { uuidv4 } from "zod";
+import { prisma, selectTrans } from "@/server/prisma";
+import { createHash } from "crypto";
+
+export interface PayloadGetTransactions extends ParamsPagination {}
+
+export const getTransactions = async () => {
+  const { idUser } = await getAuthenticatedUser();
+  const response = await prisma.transaction.findMany({
+    where: { idUser },
+    orderBy: { date: "desc" },
+    select: selectTrans,
+  });
+
+  const transactions = response.map(DTOTrans.fromDB);
+
+  console.log("transactions", transactions);
+  return transactions;
+};
 
 export interface PayloadCreateTransaction {
   amount: string;
@@ -13,7 +30,7 @@ export async function createTransaction(payload: PayloadCreateTransaction) {
   const { amount } = payload;
   const result = await prisma.transaction.create({
     data: {
-      amount,
+      amount: Number(amount),
       idUser,
       date: new Date(),
       note: "",

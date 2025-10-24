@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { IconPicker } from "@/lib/components";
+import { Icon } from "@/lib/components/shared/icon";
 import { WiseTag } from "@/lib/components/wise/wise-tag";
 import { ICategory } from "@/lib/types";
 
@@ -17,7 +18,9 @@ export const GridCategory = (props: GridCategoryProps) => {
 
   const renderCategory = (category: ICategory, parent = false) => {
     const { icon, name, id } = category;
-    const ic = <IconPicker icon={icon} disabled className="size-4" />;
+
+    const ic = <Icon icon={icon} />;
+
     return (
       <WiseTag
         key={id}

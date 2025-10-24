@@ -22,7 +22,7 @@ export interface IconPickerProps {
 const defaultIcon: IIcon = {
   id: "",
   url: "https://cdn-icons-png.flaticon.com/512/3875/3875433.png",
-  isSystemIcon: true,
+  isDefault: true,
 };
 
 export const IconPicker = ({
@@ -37,16 +37,14 @@ export const IconPicker = ({
   const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);
   const [isOpen, setIsOpen] = useState(false);
 
-  const iconUser = icons.filter((x) => !x.isSystemIcon);
-  const iconBank = icons.filter(
-    (x) => x.isSystemIcon && x.url.includes("bank")
-  );
+  const iconUser = icons.filter((x) => x && !x.isDefault);
+  const iconBank = icons.filter((x) => x.isDefault && x.url.includes("bank"));
   const iconEWallet = icons.filter(
-    (x) => x.isSystemIcon && x.url.includes("e-wallet")
+    (x) => x.isDefault && x.url.includes("e-wallet")
   );
 
   const iconDefault = icons.filter(
-    (x) => x.isSystemIcon && x.url.includes("https")
+    (x) => x.isDefault && x.url.includes("https")
   );
 
   useEffect(() => {
@@ -79,29 +77,31 @@ export const IconPicker = ({
     );
   };
 
-  const renderIcon = (icon: IIcon) => (
-    <div
-      className={cn(
-        "relative w-full aspect-square",
-        {
-          "size-6": size === "sm",
-          "size-8": size === "md",
-          "size-10": size === "lg",
-          "size-3": size === "xs",
-          "cursor-pointer": !disabled,
-        },
-        className
-      )}
-    >
-      <Image
-        draggable={false}
-        key={icon.id}
-        alt={icon.url || ""}
-        src={icon.url || ""}
-        fill
-      />
-    </div>
-  );
+  const renderIcon = (icon: IIcon) => { 
+    return (
+      <div
+        className={cn(
+          "relative w-full aspect-square",
+          {
+            "size-6": size === "sm",
+            "size-8": size === "md",
+            "size-10": size === "lg",
+            "size-3": size === "xs",
+            "cursor-pointer": !disabled,
+          },
+          className
+        )}
+      >
+        <Image
+          draggable={false}
+          key={icon.id}
+          alt={icon.url || ""}
+          src={icon.url || ""}
+          fill
+        />
+      </div>
+    );
+  };
 
   if (disabled) {
     return renderIcon(icon);

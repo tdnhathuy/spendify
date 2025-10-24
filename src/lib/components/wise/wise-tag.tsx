@@ -1,4 +1,4 @@
-import { IconPicker } from "@/lib/components";
+import { Icon } from "@/lib/components/shared/icon";
 import { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
@@ -33,7 +33,7 @@ interface WiseTagProps {
   title?: string;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   variant?: VariantProps<typeof variants>["variant"];
-  allowPropagation?: boolean; // Thêm prop để control event propagation
+  allowPropagation?: boolean;
   className?: string;
   disabled?: boolean;
 }
@@ -53,7 +53,7 @@ export const WiseTag = (props: WiseTagProps) => {
     if (isValidElement(icon)) return icon;
 
     if (icon) {
-      return <IconPicker icon={icon as IIcon} size="xs" disabled />;
+      return <Icon icon={icon as IIcon} size="xs" />;
     }
     return <PiWarningBold />;
   };

@@ -4,7 +4,8 @@ import { auth } from "@/auth";
 import { prisma } from "@/server/prisma";
 import { seedSvgIcons } from "../../prisma/seed";
 import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
-import { CategoryType } from "@/generated/prisma";
+import { CategoryType, WalletType } from "@/generated/prisma";
+import { getAuthenticatedUser } from "@/server/helpers";
 
 const syncConfig = [
   { fromEmail: "tpbank@tpb.com.vn" },
@@ -124,4 +125,45 @@ const getIdFlatIcon = async (idIcon: string) => {
 
 export async function setupGlobalIcons() {
   await seedSvgIcons();
+}
+
+export async function setupWallet() {
+  const { idUser } = await getAuthenticatedUser();
+
+  const arrIcl = [
+    { name: "Cash", balance: 0 },
+    { name: "MOMO", balance: 0 },
+    { name: "VCB", balance: 0 },
+  ];
+
+  const arrExl = [
+    { name: "Binance", balance: 220000000 },
+    { name: "UOB", balance: 201000000 },
+    { name: "HSBC", balance: 200000000 },
+    { name: "Shopee", balance: 12000000 },
+  ];
+
+  await prisma.wallet.deleteMany({});
+
+  await prisma.wallet.createMany({
+    data: arrIcl.map((x) => ({
+      idUser,
+      name: x.name,
+      type: WalletType.Cash,
+      includeInTotal: true,
+      balance: x.balance,
+      idIcon: null,
+    })),
+  });
+
+  await prisma.wallet.createMany({
+    data: arrExl.map((x) => ({
+      idUser,
+      name: x.name,
+      type: WalletType.Cash,
+      includeInTotal: true,
+      balance: x.balance,
+      idIcon: null,
+    })),
+  });
 }

@@ -43,13 +43,6 @@ export async function adjustBalance(params: ParamsAdjustBalance) {
       amount,
       wallet: { connect: { id: idWallet } },
       user: { connect: { id: idUser } },
-      adjust: {
-        create: {
-          reason: `Adjust Balance (${currentBalance.toLocaleString()} → ${newAmount.toLocaleString()})`,
-          amount,
-          idUser,
-        },
-      },
     },
     select: selectTrans,
   });
