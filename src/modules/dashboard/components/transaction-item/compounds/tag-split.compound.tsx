@@ -15,8 +15,6 @@ export const TagSplit = () => {
   const { transaction } = useTransactionItem();
   const [open, setOpen] = useState(false);
 
-  if (!transaction.splits || transaction.splits.length === 0) return null;
-
   const onClickRemoveSplit = (split: ITransactionSplit) => async () => {
     try {
       setOpen(false);
@@ -41,7 +39,7 @@ export const TagSplit = () => {
         />
       </PopoverAnchor>
 
-      <WisePopoverContent
+      {/* <WisePopoverContent
         side="bottom"
         className="w-fit gap-2 flex flex-col py-2"
       >
@@ -67,7 +65,7 @@ export const TagSplit = () => {
             </div>
           );
         })}
-      </WisePopoverContent>
+      </WisePopoverContent> */}
     </Popover>
   );
 };

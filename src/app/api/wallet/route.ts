@@ -38,7 +38,6 @@ export const POST = createApi(async ({ idUser, request }) => {
   await prisma.wallet.create({
     data: {
       idUser,
-      initBalance: Number(payload.initBalance),
       name: payload.name,
       type: payload.type,
       idIcon: payload.idIcon ?? null,

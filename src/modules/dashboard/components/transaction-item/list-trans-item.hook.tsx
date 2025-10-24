@@ -13,13 +13,13 @@ export const useTransactionItem = () => {
   const { transaction } = context;
 
   // Helper computed values
-  const isTransfer = !!transaction.transfer;
+  const isTransfer = false;
   const isIncome = transaction.category?.type === "Income";
-  const isExpense = transaction.category?.type === "Expense";
+  const isExpense = transaction.category?.type === "Spend";
   const hasCategory = !!transaction.category;
   const hasWallet = !!transaction.wallet;
   const isValid = hasCategory && hasWallet;
-  const hasSplits = transaction.splits && transaction.splits.length > 0;
+  const hasSplits = false;
 
   return {
     // Core data
@@ -29,10 +29,10 @@ export const useTransactionItem = () => {
     isTransfer,
     isIncome,
     isExpense,
-    isNeedSplit: transaction.isNeedSplit ?? false,
-    isAdjust: transaction.isAdjust ?? false,
-    isSplit: !!transaction.splits?.length,
-    isSync: !!transaction.infoSync,
+    isNeedSplit: false,
+    isAdjust: false,
+    isSplit: false,
+    isSync: false,
 
     // Validation
     hasCategory,
@@ -48,7 +48,7 @@ export const useTransactionItem = () => {
     categoryIcon: transaction.category?.icon ?? null,
     walletIcon: transaction.wallet?.icon ?? null,
     amount: transaction.amount,
-    description: transaction.description,
+    description: transaction.note,
     date: transaction.date,
   };
 };

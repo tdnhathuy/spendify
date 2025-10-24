@@ -34,7 +34,7 @@ export const SheetTransactionDetail = () => {
           id: data.wallet?.id,
         },
         date: new Date(data.date),
-        note: data.description || "",
+        note: data.note || "",
       });
     }
   }, [data, sheetProps.open]);

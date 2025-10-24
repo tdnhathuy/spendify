@@ -27,7 +27,7 @@ export const GET = createApi(async ({ idUser, request }) => {
       includePageCount: true,
     });
 
-  const arr = trans.map((transaction) => DTOTrans.fromDB(transaction, idUser));
+  const arr = trans.map((transaction) => DTOTrans.fromDB(transaction));
 
   return responseSuccess(arr, meta);
 });

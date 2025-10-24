@@ -52,10 +52,10 @@ export const POST = createApi(async ({ idUser, request }) => {
 
   await prisma.transaction.create({
     data: {
-      amount: amount,
+      amount: Number(amount),
       idUser,
       idWallet: idWalletFrom, // Wallet nguồn
-      idWalletTransferTo: idWalletTo, // Wallet đích
+      // idWalletTransferTo: idWalletTo, // Wallet đích
       note: `Transfer from wallet to wallet`, // Optional: thêm note mô tả
     },
   });

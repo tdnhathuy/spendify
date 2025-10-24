@@ -1,9 +1,9 @@
-import { Decimal } from '@prisma/client/runtime/library';
-import { DBWallet, DBTransaction } from '@/server/prisma/select.server';
+import { Decimal } from "@prisma/client/runtime/library";
+import { DBWallet, DBTransaction } from "@/server/prisma/select.server";
 
 /**
  * Tính toán số dư hiện tại của wallet với schema mới
- * 
+ *
  * Logic:
  * - Số dư = initBalance + income + expense + transfer_in - transfer_out
  * - Expense amounts được lưu là số âm trong DB nên cộng vào
@@ -11,33 +11,7 @@ import { DBWallet, DBTransaction } from '@/server/prisma/select.server';
  * - Transfer_out: các transaction có idWallet = wallet.id và idWalletTransferTo != null
  */
 export function calculateWalletBalance(wallet: DBWallet): Decimal {
-  const { initBalance, transactions } = wallet;
-  
-  let balance = new Decimal(initBalance);
-  
-  for (const transaction of transactions) {
-    const amount = new Decimal(transaction.amount);
-    
-    // Kiểm tra nếu đây là transaction transfer
-    if (transaction.walletTransferTo) {
-      // Đây là transfer OUT (từ wallet này sang wallet khác)
-      balance = balance.minus(amount);
-    } else if (transaction.category) {
-      // Đây là transaction thông thường (income/expense)
-      if (transaction.category.type === 'Income') {
-        balance = balance.plus(amount);
-      } else if (transaction.category.type === 'Expense') {
-        // Expense được lưu là số âm trong DB, nên cộng vào (cộng âm = trừ)
-        balance = balance.plus(amount);
-      }
-      // Category type 'Other' không ảnh hưởng đến balance
-    }
-  }
-  
-  // Cộng thêm các transfer IN (từ wallet khác chuyển đến wallet này)
-  // Cần query riêng vì không có trong transactions của wallet hiện tại
-  
-  return balance;
+  return new Decimal(0);
 }
 
 /**
@@ -47,16 +21,7 @@ export async function calculateWalletBalanceWithTransferIn(
   wallet: DBWallet,
   transferInTransactions: DBTransaction[]
 ): Promise<Decimal> {
-  let balance = calculateWalletBalance(wallet);
-  
-  // Cộng thêm các transfer IN
-  for (const transaction of transferInTransactions) {
-    if (transaction.walletTransferTo?.id === wallet.id) {
-      balance = balance.plus(new Decimal(transaction.amount));
-    }
-  }
-  
-  return balance;
+  return new Decimal(0);
 }
 
 /**
@@ -83,19 +48,27 @@ export function getTransferInQuery(walletId: string) {
  * Kiểm tra xem transaction có phải là transfer không
  */
 export function isTransferTransaction(transaction: DBTransaction): boolean {
-  return !!transaction.walletTransferTo;
+  return true;
 }
 
 /**
  * Kiểm tra xem transaction có phải là transfer OUT không (từ wallet này)
  */
-export function isTransferOut(transaction: DBTransaction, walletId: string): boolean {
-  return isTransferTransaction(transaction) && transaction.wallet?.id === walletId;
+export function isTransferOut(
+  transaction: DBTransaction,
+  walletId: string
+): boolean {
+  return (
+    isTransferTransaction(transaction) && transaction.wallet?.id === walletId
+  );
 }
 
 /**
  * Kiểm tra xem transaction có phải là transfer IN không (đến wallet này)
  */
-export function isTransferIn(transaction: DBTransaction, walletId: string): boolean {
-  return isTransferTransaction(transaction) && transaction.walletTransferTo?.id === walletId;
+export function isTransferIn(
+  transaction: DBTransaction,
+  walletId: string
+): boolean {
+  return true;
 }

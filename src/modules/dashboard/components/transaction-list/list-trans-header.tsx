@@ -19,7 +19,7 @@ export const HeaderListTrans = (props: ListTransGroupProps) => {
     .reduce(fnCal, 0);
 
   const allExpense = data
-    .filter(({ category }) => category?.type === "Expense")
+    .filter(({ category }) => category?.type === "Spend")
     .reduce(fnCal, 0);
 
   const renderAmount = (amount: number, type: CategoryType = "Income") => {
@@ -35,7 +35,7 @@ export const HeaderListTrans = (props: ListTransGroupProps) => {
           "text-xs font-medium flex items-center gap-px text-right justify-end",
           {
             "text-green-500": type === "Income",
-            "text-red-500": type === "Expense",
+            "text-red-500": type === "Spend",
           }
         )}
       >
@@ -54,7 +54,7 @@ export const HeaderListTrans = (props: ListTransGroupProps) => {
 
       <span className="flex gap-px flex-col ">
         {renderAmount(allIncome, "Income")}
-        {renderAmount(allExpense, "Expense")}
+        {renderAmount(allExpense, "Spend")}
       </span>
     </span>
   );

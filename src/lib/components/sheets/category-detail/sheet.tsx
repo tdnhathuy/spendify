@@ -45,7 +45,7 @@ export const SheetCategoryDetail = () => {
   const { data: categories = [] } = useQueryCategory();
 
   useDidUpdate(async () => {
-    if (detail) form.reset(detail);
+    // if (detail) form.reset(detail);
   }, [detail, dataUpdatedAt]);
 
   const { category, parent } = form.watch();
@@ -75,7 +75,7 @@ export const SheetCategoryDetail = () => {
             <Select
               onValueChange={(value) => {
                 const item = categories.find((item) => item.id === value);
-                form.setValue("parent", item);
+                // form.setValue("parent", item);
               }}
             >
               <SelectTrigger className="w-full">

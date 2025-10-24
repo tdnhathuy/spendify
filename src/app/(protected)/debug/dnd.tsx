@@ -21,28 +21,27 @@ export const DebugDND = () => {
 
     const categoryItems: Item[] = [];
 
-    expense.forEach((category) => {
-      // Add parent category
-      categoryItems.push({
-        id: category.id,
-        content: category.name,
-        isParent: true,
-      });
+    // expense.forEach((category) => {
+    //   // Add parent category
+    //   categoryItems.push({
+    //     id: category.id,
+    //     content: category.name,
+    //     isParent: true,
+    //   });
 
-      // Add children right after parent
-      if (category.children) {
-        category.children.forEach((child) => {
-          categoryItems.push({
-            id: child.id,
-            content: child.name,
-            isChild: true,
-          });
-        });
-      }
-    });
+    //   // Add children right after parent
+    //   if (category.children) {
+    //     category.children.forEach((child) => {
+    //       categoryItems.push({
+    //         id: child.id,
+    //         content: child.name,
+    //         isChild: true,
+    //       });
+    //     });
+    //   }
+    // });
 
     setItems(categoryItems);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expense.length]);
 
   const handleDragEnd = (result: any) => {
@@ -88,9 +87,9 @@ export const DebugDND = () => {
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="space-y-4">
-          {expense.map((category, categoryIndex) => (
+          {/* {expense.map((category, categoryIndex) => (
             <div key={category.id} className="border rounded-lg p-4 bg-gray-50">
-              {/* Parent category header - không draggable */}
+              {/* Parent category header - không draggable *\/}
               <div className="mb-3">
                 <div className="p-3 bg-blue-50 border-blue-200 border rounded-lg font-bold text-blue-700">
                   <div className="flex items-center justify-between">
@@ -100,7 +99,7 @@ export const DebugDND = () => {
                 </div>
               </div>
 
-              {/* Droppable area for children */}
+              {/* Droppable area for children *\/}
               <Droppable droppableId={category.id}>
                 {(provided, snapshot) => (
                   <div
@@ -151,7 +150,7 @@ export const DebugDND = () => {
                 )}
               </Droppable>
             </div>
-          ))}
+          ))} */}
 
           {/* Main droppable area for standalone items */}
           <Droppable droppableId="main">
@@ -170,7 +169,7 @@ export const DebugDND = () => {
                   children)
                 </p>
 
-                {expense
+                {/* {expense
                   .filter((cat) => !cat.children || cat.children.length === 0)
                   .map((category, index) => (
                     <Draggable
@@ -200,7 +199,7 @@ export const DebugDND = () => {
                         </div>
                       )}
                     </Draggable>
-                  ))}
+                  ))} */}
 
                 {provided.placeholder}
               </div>

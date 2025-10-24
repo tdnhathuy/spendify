@@ -16,8 +16,10 @@ const EmailSchema = z.object({
   providerMsgId: z.string().min(1, "Message ID is required"),
   idUser: z.string().min(1, "User ID is required"),
   mail: z.object({
-    from: z.any().refine(val => val !== undefined, "Sender information is required"),
-    date: z.any().refine(val => val !== undefined, "Date is required"),
+    from: z
+      .any()
+      .refine((val) => val !== undefined, "Sender information is required"),
+    date: z.any().refine((val) => val !== undefined, "Date is required"),
     subject: z.any().optional(),
     html: z.any().optional(),
     to: z.any().optional(),
@@ -31,22 +33,26 @@ const EmailSchema = z.object({
 });
 
 // Result type for better error handling
-type Result<T> = 
+type Result<T> =
   | { success: true; data: T }
   | { success: false; error: string; status?: number };
 
 // Helper to extract email address
 export const extractEmailAddress = (emailField: any): string => {
   if (!emailField) return "";
-  
+
   try {
-    if (emailField.value && Array.isArray(emailField.value) && emailField.value.length > 0) {
+    if (
+      emailField.value &&
+      Array.isArray(emailField.value) &&
+      emailField.value.length > 0
+    ) {
       return emailField.value[0].address || "";
     }
   } catch (error) {
     console.error("Error extracting email address:", error);
   }
-  
+
   return "";
 };
 
@@ -55,45 +61,19 @@ export const checkTransactionExists = async (
   providerMsgId: string,
   idUser: string
 ): Promise<Result<boolean>> => {
-  // Validate inputs
-  const validationResult = z.object({
-    providerMsgId: z.string().min(1),
-    idUser: z.string().min(1),
-  }).safeParse({ providerMsgId, idUser });
-
-  if (!validationResult.success) {
-    return { 
-      success: false, 
-      error: "Validation error: Missing required fields",
-      status: 400
-    };
-  }
-
-  try {
-    const isCreated = await prisma.transactionInfoSync.findFirst({
-      where: { providerMsgId, idUser },
-    });
-
-    return { success: true, data: !!isCreated };
-  } catch (error: any) {
-    return { 
-      success: false, 
-      error: `Database error: ${error.message || "Unknown error"}`,
-      status: 500
-    };
-  }
+  return { success: true, data: true };
 };
 
 // Get user information by email
 export const getUserByEmail = async (email: string): Promise<Result<any>> => {
   // Validate email
   const validationResult = z.string().email().safeParse(email);
-  
+
   if (!validationResult.success) {
-    return { 
-      success: false, 
-      error: "Invalid email address", 
-      status: 400 
+    return {
+      success: false,
+      error: "Invalid email address",
+      status: 400,
     };
   }
 
@@ -102,21 +82,15 @@ export const getUserByEmail = async (email: string): Promise<Result<any>> => {
       where: { email },
       select: {
         id: true,
-        syncConfig: {
-          select: {
-            fromEmail: true,
-            walletId: true,
-          },
-        },
       },
     });
-    
+
     return { success: true, data: user };
   } catch (error: any) {
-    return { 
-      success: false, 
+    return {
+      success: false,
       error: `User not found: ${error.message || "Unknown error"}`,
-      status: 404
+      status: 404,
     };
   }
 };
@@ -133,7 +107,7 @@ export const processEmailAndCreateTransaction = async (params: {
 }): Promise<NextResponse> => {
   // Validate inputs using Zod
   const validationResult = EmailSchema.safeParse(params);
-  
+
   if (!validationResult.success) {
     const errorFormat = validationResult.error.format();
     return NextResponse.json(
@@ -157,9 +131,7 @@ export const processEmailAndCreateTransaction = async (params: {
   }
 
   // Find matching wallet configuration
-  const walletConfig = syncConfig.find(
-    (item) => item.fromEmail === emailFrom
-  );
+  const walletConfig = syncConfig.find((item) => item.fromEmail === emailFrom);
 
   if (!walletConfig) {
     return NextResponse.json(
@@ -169,11 +141,11 @@ export const processEmailAndCreateTransaction = async (params: {
   }
 
   const walletId = walletConfig.walletId;
-  
+
   // Get bank name
   const name = from?.value[0]?.name || from?.value[0]?.address || "";
   const bankName = BANK_NAMES[name] || name;
-  
+
   // Validate date
   const dateObj = new Date(date || "");
   if (isNaN(dateObj.getTime())) {
@@ -182,7 +154,7 @@ export const processEmailAndCreateTransaction = async (params: {
       { status: 400 }
     );
   }
-  
+
   const dateStr = dayjs(date).format("DD/MM/YYYY");
   const note = `Sync transaction ${dateStr} from ${bankName}`;
 
@@ -206,16 +178,6 @@ export const processEmailAndCreateTransaction = async (params: {
         updatedAt: new Date(),
         user: { connect: { id: idUser } },
         ...(walletId && { wallet: { connect: { id: walletId } } }),
-
-        infoSync: {
-          create: {
-            emailProvider: emailFrom,
-            emailReceived: emailTo || "",
-            emailTitle: subject || "",
-            idUser: idUser,
-            providerMsgId: providerMsgId,
-          },
-        },
       },
     });
 
@@ -231,7 +193,10 @@ export const processEmailAndCreateTransaction = async (params: {
   } catch (error: any) {
     console.error("Failed to create transaction:", error);
     return NextResponse.json(
-      { ok: false, error: `Database error: ${error.message || "Unknown error"}` },
+      {
+        ok: false,
+        error: `Database error: ${error.message || "Unknown error"}`,
+      },
       { status: 500 }
     );
   }

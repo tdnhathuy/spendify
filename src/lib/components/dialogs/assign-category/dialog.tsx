@@ -17,16 +17,16 @@ import { useDidUpdate } from "rooks";
 export const DialogAssignCategory = () => {
   const { isOpen, data } = useDialog("assign-category");
 
-  const defaultMode = data?.category?.type || "Expense";
+  const defaultMode = data?.category?.type || CategoryType.Spend;
 
   const [mode, setMode] = useState<CategoryType>(defaultMode);
 
   const { income, expense } = useQueryCategory();
 
-  const listCategory = mode === "Income" ? income : expense;
+  const listCategory = mode === CategoryType.Income ? income : expense;
 
   useDidUpdate(() => {
-    setMode(data?.category?.type || "Expense");
+    setMode(data?.category?.type || CategoryType.Spend);
   }, [data]);
 
   const { mutate: assignCategory } = useMutateAssignCategory();

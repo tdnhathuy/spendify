@@ -15,14 +15,15 @@ export const POST = createApi(async ({ idUser, request, id }) => {
       splits.map((split) =>
         tx.transactionSplit.create({
           data: {
-            idUser,
+            // idUser,
             idTransaction: payload.idTransaction,
-            idWallet: split.idWallet,
+            // idWallet: split.idWallet,
+            idWalletTo: split.idWallet,
             amount: split.amount,
-            note: split.note || `Split ${split.amount} from transaction`,
+            // note: split.note || `Split ${split.amount} from transaction`,
           },
           include: {
-            wallet: { select: { id: true, name: true } },
+            toWallet: { select: { id: true, name: true } },
           },
         })
       )
@@ -35,9 +36,9 @@ export const POST = createApi(async ({ idUser, request, id }) => {
     transactionId: payload.idTransaction,
     splits: result.map((split) => ({
       id: split.id,
-      amount: split.amount.toNumber(),
-      wallet: split.wallet,
-      note: split.note,
+      amount: split.amount,
+      wallet: split.toWallet,
+      // note: split.note,
     })),
   });
 });

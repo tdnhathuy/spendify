@@ -4,7 +4,7 @@ import z from "zod";
 export const schemaIcon = z.object({
   id: z.string(),
   url: z.string(),
-  isSystemIcon: z.boolean(),
+  isDefault: z.boolean(),
 });
 
 export const schemaCreateWallet = z.object({

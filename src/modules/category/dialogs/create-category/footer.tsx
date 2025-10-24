@@ -10,13 +10,13 @@ export const FooterDialogCreateCategory = () => {
   const { mutateAsync: createCategory } = useMutateCreateCategory();
 
   const onSubmit = async (data: TypeSchemaCreateCategory) => {
-    const payload: PayloadCreateCategory = {
-      idIcon: data.category?.icon?.id ?? "",
-      name: data.category?.name ?? "",
-      idParent: data.parent?.id ?? undefined,
-      type: data.parent?.type ?? "Expense",
-    };
-    await createCategory(payload);
+    // const payload: PayloadCreateCategory = {
+    //   idIcon: data.category?.icon?.id ?? "",
+    //   name: data.category?.name ?? "",
+    //   idParent: data.parent?.id ?? undefined,
+    //   type: data.parent?.type ?? "Expense",
+    // };
+    // await createCategory(payload);
   };
 
   const onError = (errors: FieldErrors<TypeSchemaCreateCategory>) => {

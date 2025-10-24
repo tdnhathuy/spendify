@@ -38,14 +38,14 @@ export const DialogTrans = () => {
 
   useDidUpdate(() => {
     if (!data) return;
-    form.reset({
-      amount: String(data.amount),
-      category: formatOption(data.category, "id", "name"),
-      wallet: formatOption(data.wallet, "id", "name"),
-      type: data?.category?.type || "Expense",
-      date: new Date(data.date),
-      desc: data.description || "",
-    });
+    // form.reset({
+    //   amount: String(data.amount),
+    //   category: formatOption(data.category, "id", "name"),
+    //   wallet: formatOption(data.wallet, "id", "name"),
+    //   type: data?.category?.type || "Income",
+    //   date: new Date(data.date),
+    //   desc: data.note || "",
+    // });
   }, [data]);
 
   const { watch } = form;

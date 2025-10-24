@@ -30,7 +30,6 @@ export const DialogCreateWallet = () => {
     if (isOpen) {
       form.reset({
         icon: data?.icon ?? null,
-        initBalance: data?.initBalance?.toString() ?? "",
         name: data?.name ?? "",
         type: data?.type || "Cash",
         includeInReport: data?.includeInReport || false,

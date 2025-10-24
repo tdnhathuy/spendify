@@ -29,7 +29,7 @@ export const DialogCreateConfigSync = () => {
 
   const onSelectWallet = (wallet: IWallet) => {
     form.setValue("wallet", formatOption(wallet, "id", "name"));
-    wallet.icon && form.setValue("icon", wallet.icon);
+    wallet.icon && form.setValue("icon",  wallet.icon);
   };
 
   const { wallet } = form.getValues();

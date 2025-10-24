@@ -31,7 +31,6 @@ export const DialogWallet = () => {
       name: detail?.name || "",
       icon: detail?.icon,
       type: detail?.type || "Cash",
-      initBalance: Number(detail?.initBalance || 0),
       currentBalance: Number(detail?.currentBalance || 0),
       totalTransaction: detail?.totalTransaction || 0,
       cardNumber: detail?.cardNumber || "",

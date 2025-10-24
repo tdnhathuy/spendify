@@ -33,26 +33,27 @@ const TileAdjust = () => {
 };
 
 const TileTransfer = () => {
-  const { isTransfer, isAdjust, transaction } = useTransactionItem();
-  const { walletFrom, walletTo } = transaction.transfer || {};
+  return "!";
+  // const { isTransfer, isAdjust, transaction } = useTransactionItem();
+  // const { walletFrom, walletTo } = transaction.transfer || {};
 
-  if (!isTransfer) return null;
+  // if (!isTransfer) return null;
 
-  return (
-    <span className="font-semibold text-sm  items-center gap-2 flex">
-      <span>Transfer</span>
+  // return (
+  //   <span className="font-semibold text-sm  items-center gap-2 flex">
+  //     <span>Transfer</span>
 
-      <WrapperIcon>
-        <IconPicker className="size-5" icon={walletFrom?.icon} disabled />
-      </WrapperIcon>
+  //     <WrapperIcon>
+  //       <IconPicker className="size-5" icon={walletFrom?.icon} disabled />
+  //     </WrapperIcon>
 
-      <BiTransferAlt />
+  //     <BiTransferAlt />
 
-      <WrapperIcon>
-        <IconPicker className="size-5" icon={walletTo?.icon} disabled />
-      </WrapperIcon>
-    </span>
-  );
+  //     <WrapperIcon>
+  //       <IconPicker className="size-5" icon={walletTo?.icon} disabled />
+  //     </WrapperIcon>
+  //   </span>
+  // );
 };
 
 const WrapperIcon = ({ children }: { children: React.ReactNode }) => {

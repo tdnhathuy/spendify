@@ -9,7 +9,7 @@ export const ModeSelection = (props: {
 
   return (
     <div className="flex gap-2 ">
-      {[CategoryType.Expense, CategoryType.Income].map((type) => {
+      {[CategoryType.Spend, CategoryType.Income].map((type) => {
         return (
           <WiseButton
             key={type}

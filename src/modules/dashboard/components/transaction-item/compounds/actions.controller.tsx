@@ -63,9 +63,9 @@ export const usePopoverListTrans = () => {
     setOpen,
 
     status: {
-      isCanMarkTransfer: !!transaction.infoSync,
-      isCanDelete: !transaction.infoSync,
-      isCanUnmarkTransfer: !!transaction.transfer && !!transaction.infoSync,
+      isCanMarkTransfer: true,
+      isCanDelete: true,
+      isCanUnmarkTransfer: true,
       isCanSplit: true,
     },
   };
