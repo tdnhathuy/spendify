@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm gen:api && next dev --turbopack",
+    "dev": "prisma generate && pnpm gen:api && next dev --turbopack",
     "build": "pnpm gen:api && prisma generate && next build",
-    "start": "next start ",
+    "start": "next start",
     "lint": "next lint",
     "gen:api": "tsx scripts/gen-api-routes.ts"
   },
