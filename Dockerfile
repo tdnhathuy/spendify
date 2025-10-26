@@ -27,7 +27,7 @@ USER node
 COPY --chown=node:node --from=builder /app/.next/standalone ./
 COPY --chown=node:node --from=builder /app/.next/static ./.next/static
 COPY --chown=node:node --from=builder /app/public ./public
-COPY --chown=node:node --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --chown=node:node --from=builder /app/src/generated/prisma ./src/generated/prisma
 COPY --chown=node:node --from=builder /app/prisma ./prisma
 EXPOSE 3000
 CMD ["node", "server.js"]
