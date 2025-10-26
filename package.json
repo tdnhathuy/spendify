@@ -7,8 +7,7 @@
     "build": "pnpm gen:api && prisma generate && next build",
     "start": "next start ",
     "lint": "next lint",
-    "gen:api": "tsx scripts/gen-api-routes.ts",
-    "postinstall": "prisma generate"
+    "gen:api": "tsx scripts/gen-api-routes.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
