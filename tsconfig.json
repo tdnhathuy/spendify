@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,7 +17,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -21,8 +25,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/server-actions": ["./src/server-action/index.ts"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@/server-actions": [
+        "./src/server-action/index.ts"
+      ]
     },
     "exactOptionalPropertyTypes": true
   },
@@ -31,7 +39,10 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/modules/dashboard/components/transaction-item/compounds/actions.controller.tsx"
+    "src/modules/dashboard/components/transaction-item/compounds/actions.controller.tsx",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
