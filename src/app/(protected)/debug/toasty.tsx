@@ -12,7 +12,7 @@ export const DebugToasty = () => {
     <Page title={"Toasty"}>
       <WiseButton
         onClick={async () => {
-          const a = await autoWallet.asyncToast({ id: "123" });
+          const a = await autoWallet.asyncToast();
           console.log("a", a);
         }}
         disabled={autoWallet.isPending}
