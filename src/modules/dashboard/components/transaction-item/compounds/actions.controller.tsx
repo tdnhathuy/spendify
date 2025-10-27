@@ -1,4 +1,5 @@
 "use client";
+import { useMutateToasty } from "@/hooks/use-query-toast";
 import {
   useMutateDeleteTrans,
   useMutateToggleNeedSplit,
@@ -15,9 +16,10 @@ export const usePopoverListTrans = () => {
 
   const { transaction } = useTransactionItem();
 
-  const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
-  const { mutateAsync: unmarkTransfer } = useMutateUnmarkTransfer();
-  const { mutateAsync: toggleNeedSplit } = useMutateToggleNeedSplit();
+  // const { mutateAsync: deleteTrans } = useMutateDeleteTrans(transaction.id);
+  const { asyncToast: deleteTrans } = useMutateDeleteTrans(transaction.id);
+  const { asyncToast: unmarkTransfer } = useMutateUnmarkTransfer();
+  const { asyncToast: toggleNeedSplit } = useMutateToggleNeedSplit();
 
   const onDelete = async () => {
     await deleteTrans({ idTransaction: transaction.id });

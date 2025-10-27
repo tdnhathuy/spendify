@@ -27,6 +27,12 @@ export const configToastMessage: Partial<
     error: "Lấy danh sách ví thất bại",
   },
 
+  deleteTransaction: {
+    loading: "Đang xóa giao dịch",
+    success: "Xóa giao dịch thành công",
+    error: "Xóa giao dịch thất bại",
+  },
+
   default: {
     loading: defaultLoading,
     success: defaultSuccess,

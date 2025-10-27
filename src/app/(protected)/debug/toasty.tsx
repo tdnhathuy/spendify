@@ -11,10 +11,7 @@ export const DebugToasty = () => {
   return (
     <Page title={"Toasty"}>
       <WiseButton
-        onClick={async () => {
-          const a = await autoWallet.asyncToast();
-          console.log("a", a);
-        }}
+        onClick={autoWallet.asyncToast}
         disabled={autoWallet.isPending}
       >
         {autoWallet.isPending ? "Đang xử lý..." : "Fetch Wallet (Auto)"}

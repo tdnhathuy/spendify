@@ -1,3 +1,4 @@
+import { useMutateToasty } from "@/hooks/use-query-toast";
 import { useMutateCreateTrans } from "@/lib/api/app.mutate";
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
@@ -13,19 +14,14 @@ export const FooterDialogCreateTrans = ({
   amount,
   setAmount,
 }: FooterDialogCreateTransProps) => {
-  const { mutateAsync: createTrans, isPending } = useMutateCreateTrans();
+  // const { mutateAsync: createTrans, isPending } = useMutateCreateTrans();
+  const { asyncToast: createTrans, isLoading } =
+    useMutateToasty(useMutateCreateTrans);
 
   const onClickCreate = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    createTrans(
-      { amount: removeMoneyFormat(amount) },
-      {
-        onSuccess: () => {
-          dialogs.close("create-trans");
-          setAmount("");
-        },
-      }
-    );
+    dialogs.close("create-trans");
+    createTrans({ amount: removeMoneyFormat(amount) });
   };
 
   const onClickCancel = () => {
@@ -35,7 +31,7 @@ export const FooterDialogCreateTrans = ({
   return (
     <>
       <WiseButton
-        disabled={isPending}
+        disabled={isLoading}
         variant={"outline"}
         size="sm"
         onClick={onClickCancel}
@@ -44,7 +40,7 @@ export const FooterDialogCreateTrans = ({
       </WiseButton>
 
       <WiseButton
-        disabled={isPending || !amount}
+        disabled={isLoading || !amount}
         variant={"default"}
         size="sm"
         onClick={onClickCreate}

@@ -1,3 +1,4 @@
+import { useMutateToasty } from "@/hooks/use-query-toast";
 import { keyQueryWalletDetail } from "@/lib/api/app.query";
 import { Refetch } from "@/lib/api/app.refetch";
 import { MutationKeys, queryClient } from "@/lib/configs";
@@ -99,7 +100,7 @@ export const useMutateAssignWallet = () => {
 };
 
 export const useMutateDeleteTrans = (idTrans: string) => {
-  return useMutation({
+  const mutation = useMutation({
     mutationKey: [MutationKeys.deleteTransaction, idTrans],
     mutationFn: deleteTransaction,
     onSuccess: () => {
@@ -107,6 +108,7 @@ export const useMutateDeleteTrans = (idTrans: string) => {
       Refetch.wallet();
     },
   });
+  return useMutateToasty(() => mutation, "deleteTransaction");
 };
 
 export const useMutateCreateConfigSync = () => {
@@ -137,11 +139,13 @@ export const useMutateMarkTransfer = () => {
 };
 
 export const useMutateUnmarkTransfer = () => {
-  return useMutation({
-    mutationKey: [MutationKeys.unmarkTransfer],
-    mutationFn: ServiceTransfer.unmarkTransfer,
-    onSuccess: Refetch.trans,
-  });
+  return useMutateToasty(() =>
+    useMutation({
+      mutationKey: [MutationKeys.unmarkTransfer],
+      mutationFn: ServiceTransfer.unmarkTransfer,
+      onSuccess: Refetch.trans,
+    })
+  );
 };
 
 export const useMutateUpdateConfigSync = () => {
@@ -184,9 +188,11 @@ export const useMutateSplitTransaction = () => {
 };
 
 export const useMutateToggleNeedSplit = () => {
-  return useMutation({
-    mutationKey: [MutationKeys.toggleNeedSplit],
-    mutationFn: toggleNeedSplit,
-    onSuccess: Refetch.trans,
-  });
+  return useMutateToasty(() =>
+    useMutation({
+      mutationKey: [MutationKeys.toggleNeedSplit],
+      mutationFn: toggleNeedSplit,
+      onSuccess: Refetch.trans,
+    })
+  );
 };
