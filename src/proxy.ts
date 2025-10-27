@@ -13,13 +13,11 @@ export default auth(async (request) => {
   const url = request.nextUrl.clone();
   // return NextResponse.next();
 
+  const pathname = url.pathname;
 
-  // Skip NextAuth own routes completely
-  if (
-    url.pathname.startsWith("/api/auth") ||
-    url.pathname.startsWith("/api/hook") ||
-    url.pathname.startsWith("/api/sync-sms")
-  ) {
+  const arrIgnoreRoutes = ["/api/auth", "/api/hook", "/api/sync-sms"];
+
+  if (arrIgnoreRoutes.includes(pathname)) {
     return NextResponse.next();
   }
 

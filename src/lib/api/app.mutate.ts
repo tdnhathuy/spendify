@@ -12,9 +12,17 @@ import {
   assignCategory,
   createTransaction,
   deleteTransaction,
+  getWallets,
   toggleNeedSplit,
 } from "@/server-action";
 import { useMutation } from "@tanstack/react-query";
+
+export const useMutateWallet = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.getWallet],
+    mutationFn: getWallets,
+  });
+};
 
 export const useMutateSetup = () => {
   return useMutation({

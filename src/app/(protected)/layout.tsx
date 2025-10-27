@@ -1,6 +1,6 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { AppSidebar } from "@/lib/components/sidebar/sidebar";
-import { TabBar } from "@/lib/components/tab-bar/tab-bar";
 
 export default function ProtectedLayout({
   children,
@@ -10,7 +10,7 @@ export default function ProtectedLayout({
   return (
     <SidebarProvider className="bg-black gap-0 flex ">
       <AppSidebar />
-
+      <Toaster />
       <section className="flex-1 flex overflow-hidden h-dvh justify-center">
         {children}
       </section>

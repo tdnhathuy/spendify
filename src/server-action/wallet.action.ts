@@ -9,7 +9,8 @@ import {
   selectWallet,
 } from "@/server";
 
-export async function getWallets() {
+export async function getWallets({ id }: { id: string }) {
+  console.log("id", id);
   const { idUser } = await getAuthenticatedUser();
 
   const wallets = await prisma.wallet.findMany({

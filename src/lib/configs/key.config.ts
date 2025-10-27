@@ -8,7 +8,9 @@ export const QueryKeys = {
   getWalletDetail: "getWalletDetail",
   getConfigSync: "getConfigSync",
 };
+
 export const MutationKeys = {
+  getWallet: "getWallet",
   createWallet: "createWallet",
   updateWallet: "updateWallet",
   deleteWallet: "deleteWallet",
@@ -26,4 +28,6 @@ export const MutationKeys = {
   updateCategoryParent: "updateCategoryParent",
   splitTransaction: "splitTransaction",
   toggleNeedSplit: "toggleNeedSplit",
-};
+} as const;
+
+export type MutationKeysType = (typeof MutationKeys)[keyof typeof MutationKeys];

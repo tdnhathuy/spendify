@@ -1,24 +1,12 @@
 import { DebugDND } from "@/app/(protected)/debug/dnd";
-import { ListCategoryDebug } from "@/app/(protected)/debug/list-category";
-import { WiseButton } from "@/lib/components";
+import { DebugToasty } from "@/app/(protected)/debug/toasty";
 import { Page } from "@/lib/components/shared/page";
 
-const importFlatIcon = async () => {
-  "use server";
-
-  // await prisma.icon.create({
-  //   data: {
-  //     source: "System",
-  //     iconGlobal: { create: { idFlatIcon: "3762131" } },
-  //   },
-  // });
-};
-
 export default function DebugPage() {
+  return <DebugToasty />;
+
   return (
     <Page title={"Debug"}>
-      {/* <WiseButton onClick={importFlatIcon}>Import</WiseButton>
-      <ListCategoryDebug /> */}
       <DebugDND />
     </Page>
   );
