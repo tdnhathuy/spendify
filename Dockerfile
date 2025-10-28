@@ -2,7 +2,7 @@
 
 FROM node:20-bookworm AS base
 WORKDIR /app
-RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+RUN corepack enable && corepack prepare pnpm@10.19.0 --activate
 
 # Install deps (cả devDeps để có prisma CLI)
 FROM base AS deps
