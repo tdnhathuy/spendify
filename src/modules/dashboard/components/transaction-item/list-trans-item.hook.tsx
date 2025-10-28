@@ -33,6 +33,7 @@ export const useTransactionItem = () => {
     isAdjust: false,
     isSplit: false,
     isSync: false,
+    isInitTransaction: transaction.isInitTransaction,
 
     // Validation
     hasCategory,

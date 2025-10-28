@@ -104,6 +104,7 @@ export const selectTrans = {
 
   category: { select: selectCategory },
   wallet: { select: selectWallet },
+  isInitTransaction: true,
 } satisfies Prisma.TransactionSelect;
 
 export const profileInclude = {

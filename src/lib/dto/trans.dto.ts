@@ -13,6 +13,7 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
 
     category: DTOCategory.fromDB(transaction.category),
     wallet: DTOWallet.fromDB(transaction.wallet),
+    isInitTransaction: transaction.isInitTransaction,
   };
 
   return result;

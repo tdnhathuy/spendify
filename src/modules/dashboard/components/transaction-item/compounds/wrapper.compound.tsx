@@ -11,6 +11,7 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
     isNeedSplit,
     isAdjust,
     isSplit,
+    isInitTransaction,
     //
   } = useTransactionItem();
 
@@ -25,6 +26,7 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
         "hover:no-underline flex  bg-black/15 text-white rounded border-l-4 ",
         "transition-all duration-300",
         "border-gray-700 hover:bg-focus",
+        isInitTransaction && "border-blue-500",
         isSplit && "border-blue-500",
         isValid && "border-green-500",
         isTransfer && "border-yellow-500",

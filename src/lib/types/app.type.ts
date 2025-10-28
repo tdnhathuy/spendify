@@ -96,6 +96,7 @@ export interface ITransaction {
   wallet: IWallet | null;
   date: Date;
   note: string;
+  isInitTransaction: boolean;
 }
 
 export interface ITransfer {

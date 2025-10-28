@@ -18,7 +18,6 @@ export const getTransactions = async () => {
 
   const transactions = response.map(DTOTrans.fromDB);
 
-  console.log("transactions", transactions);
   return transactions;
 };
 

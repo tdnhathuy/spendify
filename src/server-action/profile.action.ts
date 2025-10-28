@@ -132,9 +132,9 @@ export async function setupWallet() {
   const { idUser } = await getAuthenticatedUser();
 
   const arrIcl = [
-    { name: "Cash", balance: 0, type: WalletType.Cash },
-    { name: "MOMO", balance: 0, type: WalletType.Debit },
-    { name: "VCB", balance: 0, type: WalletType.Debit },
+    { name: "Cash", balance: 4360000, type: WalletType.Cash },
+    { name: "MOMO", balance: 62000, type: WalletType.Debit },
+    { name: "VCB", balance: 51633056, type: WalletType.Debit },
   ];
 
   const arrExl = [
@@ -163,7 +163,7 @@ export async function setupWallet() {
       createWallet({
         name: x.name,
         type: x.type,
-        includeInTotal: true,
+        includeInTotal: false,
         idIcon: null,
         initBalance: x.balance,
       })
