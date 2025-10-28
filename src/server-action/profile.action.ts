@@ -6,6 +6,7 @@ import { seedSvgIcons } from "../../prisma/seed";
 import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
 import { CategoryType, WalletType } from "@/generated/prisma";
 import { getAuthenticatedUser } from "@/server/helpers";
+import { createWallet } from "@/server-action/wallet.action";
 
 const syncConfig = [
   { fromEmail: "tpbank@tpb.com.vn" },
@@ -131,39 +132,63 @@ export async function setupWallet() {
   const { idUser } = await getAuthenticatedUser();
 
   const arrIcl = [
-    { name: "Cash", balance: 0 },
-    { name: "MOMO", balance: 0 },
-    { name: "VCB", balance: 0 },
+    { name: "Cash", balance: 0, type: WalletType.Cash },
+    { name: "MOMO", balance: 0, type: WalletType.Debit },
+    { name: "VCB", balance: 0, type: WalletType.Debit },
   ];
 
   const arrExl = [
-    { name: "Binance", balance: 220000000 },
-    { name: "UOB", balance: 201000000 },
-    { name: "HSBC", balance: 200000000 },
-    { name: "Shopee", balance: 12000000 },
+    { name: "Binance", balance: 220000000, type: WalletType.Crypto },
+    { name: "UOB", balance: 201000000, type: WalletType.Credit },
+    { name: "HSBC", balance: 200000000, type: WalletType.Credit },
+    { name: "Shopee", balance: 12000000, type: WalletType.Credit },
   ];
 
   await prisma.wallet.deleteMany({});
 
-  await prisma.wallet.createMany({
-    data: arrIcl.map((x) => ({
-      idUser,
-      name: x.name,
-      type: WalletType.Cash,
-      includeInTotal: true,
-      balance: x.balance,
-      idIcon: null,
-    })),
-  });
+  await Promise.all(
+    arrIcl.map((x) =>
+      createWallet({
+        name: x.name,
+        type: x.type,
+        includeInTotal: true,
+        idIcon: null,
+        initBalance: x.balance,
+      })
+    )
+  );
 
-  await prisma.wallet.createMany({
-    data: arrExl.map((x) => ({
-      idUser,
-      name: x.name,
-      type: WalletType.Cash,
-      includeInTotal: true,
-      balance: x.balance,
-      idIcon: null,
-    })),
-  });
+  await Promise.all(
+    arrExl.map((x) =>
+      createWallet({
+        name: x.name,
+        type: x.type,
+        includeInTotal: true,
+        idIcon: null,
+        initBalance: x.balance,
+      })
+    )
+  );
+
+  // await prisma.wallet.createMany({
+  //   data: arrIcl.map((x) => ({
+  //     idUser,
+  //     name: x.name,
+  //     type: WalletType.Cash,
+  //     includeInTotal: true,
+  //     balance: x.balance,
+  //     idIcon: null,
+  //   })),
+  // });
+
+  // await prisma.wallet.createMany({
+  //   data: arrExl.map((x) => ({
+  //     idUser,
+  //     name: x.name,
+  //     type: WalletType.Cash,
+  //     includeInTotal: false,
+  //     balance: x.balance,
+  //     idIcon: null,
+  //   })),
+  // });
 }

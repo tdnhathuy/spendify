@@ -54,15 +54,23 @@ export const selectWallet = {
   id: true,
   name: true,
   type: true,
-  transactions: {
-    select: {
-      id: true,
-      amount: true,
-      category: { select: { type: true } },
-    },
-  },
   icon: { select: selectIcon },
+  includeInTotal: true,
 } satisfies Prisma.WalletSelect;
+
+// export const selectWalletWithBalance = {
+//   id: true,
+//   name: true,
+//   type: true,
+//   transactions: {
+//     select: {
+//       id: true,
+//       amount: true,
+//       category: { select: { type: true } },
+//     },
+//   },
+//   icon: { select: selectIcon },
+// } satisfies Prisma.WalletSelect;
 
 export const selectWalletDetail = {
   ...selectWallet,
@@ -82,6 +90,11 @@ export const selectWalletDetail = {
 //   emailReceived: true,
 //   emailTitle: true,
 // } satisfies Prisma.TransactionInfoSyncSelect;
+
+export const selectTransToCalc = {
+  id: true,
+  amount: true,
+} satisfies Prisma.TransactionSelect;
 
 export const selectTrans = {
   id: true,

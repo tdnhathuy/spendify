@@ -56,6 +56,20 @@ export async function assignCategory(params: PayloadAssignCategory) {
   return result.id;
 }
 
+export interface PayloadAssignWallet {
+  idTransaction: string;
+  idWallet: string;
+}
+export async function assignWallet(params: PayloadAssignWallet) {
+  const { idTransaction, idWallet } = params;
+  const result = await prisma.transaction.update({
+    where: { id: idTransaction },
+    data: { idWallet },
+  });
+
+  return result.id;
+}
+
 export const toggleNeedSplit = async (idTransaction: string) => {};
 
 export interface PayloadDeleteTransaction {

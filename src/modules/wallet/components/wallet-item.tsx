@@ -29,6 +29,7 @@ export const WalletItem = (props: Props) => {
 
   return (
     <WrapperWallet
+      // onClick={() => sheets.open("wallet-detail", wallet)}
       className={cn(
         "border-border transition-all bg-foreground hover:bg-focus rounded-sm",
         {

@@ -1,13 +1,27 @@
 "use server";
 
+import { WalletType } from "@/generated/prisma";
 import { DTOWallet } from "@/lib/dto";
 import { isNotNull } from "@/lib/helpers";
 import {
   getAuthenticatedUser,
   prisma,
   selectTrans,
+  selectTransToCalc,
   selectWallet,
 } from "@/server";
+
+export const getBalanceWallet = async (idWallet: string) => {
+  const { idUser } = await getAuthenticatedUser();
+  const trans = await prisma.transaction.findMany({
+    where: { idWallet, idUser },
+    select: selectTransToCalc,
+  });
+
+  const balance = trans.reduce((acc, curr) => acc + curr.amount, 0);
+
+  return balance || 0;
+};
 
 export async function getWallets() {
   const { idUser } = await getAuthenticatedUser();
@@ -18,7 +32,14 @@ export async function getWallets() {
     select: selectWallet,
   });
 
-  return wallets.map(DTOWallet.fromDB).filter(isNotNull);
+  const result = wallets.map(DTOWallet.fromDB).filter(isNotNull);
+
+  return await Promise.all(
+    result.map(async (w) => {
+      const currentBalance = await getBalanceWallet(w.id);
+      return { ...w, currentBalance };
+    })
+  );
 }
 
 export interface ParamsAdjustBalance {
@@ -48,4 +69,33 @@ export async function adjustBalance(params: ParamsAdjustBalance) {
   });
 
   return trans.id;
+}
+
+export interface PayloadCreateWallet {
+  name: string;
+  type: WalletType;
+  includeInTotal: boolean;
+  idIcon: string | null;
+  initBalance: number;
+}
+export async function createWallet(params: PayloadCreateWallet) {
+  const { name, type, includeInTotal, idIcon, initBalance } = params;
+  const { idUser } = await getAuthenticatedUser();
+
+  const wallet = await prisma.wallet.create({
+    data: { name, type, includeInTotal, idIcon, idUser, balance: 0 },
+  });
+
+  await prisma.transaction.create({
+    data: {
+      amount: initBalance,
+      date: new Date(),
+      note: "Initial balance",
+      isInitTransaction: true,
+      idWallet: wallet.id,
+      idUser,
+    },
+  });
+
+  return wallet;
 }

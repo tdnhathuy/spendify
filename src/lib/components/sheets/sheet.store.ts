@@ -1,11 +1,12 @@
 // dialogs.ts
-import { ICategory, ITransaction } from "@/lib/types";
+import { ICategory, ITransaction, IWallet } from "@/lib/types";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 
 type SheetMap = {
   "transaction-detail": ITransaction;
   "category-detail": ICategory | null;
+  "wallet-detail": IWallet | null;
 };
 
 type DialogsState<M extends Record<string, any>> = {

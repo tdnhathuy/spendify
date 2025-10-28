@@ -1,4 +1,5 @@
 import { Dialog } from "@/components/ui/dialog";
+import { useMutateToasty } from "@/hooks/use-query-toast";
 import { useMutateAssignWallet } from "@/lib/api/app.mutate";
 import { useQueryWallet } from "@/lib/api/app.query";
 import { FooterDialogAssignWallet } from "@/lib/components/dialogs/assign-wallet/footer";
@@ -11,7 +12,7 @@ export const DialogAssignWallet = () => {
   const { isOpen, data } = useDialog("assign-wallet");
 
   const { data: wallets = [] } = useQueryWallet();
-  const { mutate: assignWallet } = useMutateAssignWallet();
+  const { mutate: assignWallet } = useMutateToasty(useMutateAssignWallet);
 
   const onClick = (wallet: IWallet) => () => {
     if (!data?.id) return;

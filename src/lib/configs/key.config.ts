@@ -28,6 +28,7 @@ export const MutationKeys = {
   updateCategoryParent: "updateCategoryParent",
   splitTransaction: "splitTransaction",
   toggleNeedSplit: "toggleNeedSplit",
+  getBalanceWallet: "getBalanceWallet",
 } as const;
 
 export type MutationKeysType = (typeof MutationKeys)[keyof typeof MutationKeys];

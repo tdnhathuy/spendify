@@ -105,11 +105,12 @@ model Category {
 }
 
 model Transaction {
-  id            String   @id @default(uuid())
-  note          String?
-  amount        Float
-  date          DateTime @default(now())
-  isNeedToSplit Boolean  @default(false)
+  id                String   @id @default(uuid())
+  note              String?
+  amount            Float
+  date              DateTime @default(now())
+  isNeedToSplit     Boolean  @default(false)
+  isInitTransaction Boolean  @default(false)
 
   // Xóa Category ⇒ SetNull
   category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)

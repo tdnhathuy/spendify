@@ -9,6 +9,7 @@ import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
 import {
   assignCategory,
+  assignWallet,
   createTransaction,
   deleteTransaction,
   getWallets,
@@ -78,11 +79,7 @@ export const useMutateAssignCategory = () => {
 export const useMutateAssignWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignWallet],
-    mutationFn: ServiceTrans.assignWallet,
-    onSuccess: (trans) => {
-      updateQueryTransaction(trans);
-      Refetch.wallet();
-    },
+    mutationFn: assignWallet,
   });
 };
 
