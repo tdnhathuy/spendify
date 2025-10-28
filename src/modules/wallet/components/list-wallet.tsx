@@ -9,7 +9,6 @@ interface Props {
 
 export const ListWallet = (props: Props) => {
   const { data: listWallet = [] } = useQueryWallet();
-  console.log('listWallet', listWallet)
 
   const listIncludeInReport = listWallet.filter(
     (wallet) => wallet.includeInReport

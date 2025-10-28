@@ -6,102 +6,121 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useQueryIcon } from "@/lib/api/app.query";
+import { WiseIcon, type IconSize } from "@/lib/components/wise/wise-icon";
 import type { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 export interface IconPickerProps {
   icon: IIcon | undefined | null;
   onChange?: (icon: IIcon) => void;
   disabled?: boolean;
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: IconSize;
   className?: string;
 }
 
-const defaultIcon: IIcon = {
-  id: "",
-  url: "https://cdn-icons-png.flaticon.com/512/3875/3875433.png",
-  isDefault: true,
-};
+interface IconSection {
+  title: string;
+  icons: IIcon[];
+}
 
-export const IconPicker = ({
+const IconPickerComponent = ({
   icon: selectedIcon,
   onChange,
-  disabled,
+  disabled = false,
   size = "md",
   className,
 }: IconPickerProps) => {
   const { data: icons = [] } = useQueryIcon(disabled);
 
-  const [icon, setIcon] = useState<IIcon>(selectedIcon ?? defaultIcon);
   const [isOpen, setIsOpen] = useState(false);
+  const [icon, setIcon] = useState<IIcon | null | undefined>(selectedIcon);
 
-  const iconUser = icons.filter((x) => x && !x.isDefault);
-  const iconBank = icons.filter((x) => x.isDefault && x.url.includes("bank"));
-  const iconEWallet = icons.filter(
-    (x) => x.isDefault && x.url.includes("e-wallet")
-  );
+  // Memoize icon filtering để tránh tính toán lại mỗi lần render
+  const iconSections = useMemo<IconSection[]>(() => {
+    const iconUser = icons.filter((x) => x && !x.isDefault);
+    const iconBank = icons.filter((x) => x.isDefault && x.url.includes("bank"));
+    const iconEWallet = icons.filter(
+      (x) => x.isDefault && x.url.includes("e-wallet")
+    );
+    const iconDefault = icons.filter(
+      (x) => x.isDefault && x.url.includes("https")
+    );
 
-  const iconDefault = icons.filter(
-    (x) => x.isDefault && x.url.includes("https")
-  );
+    return [
+      { title: "User", icons: iconUser },
+      { title: "Default", icons: iconDefault },
+      { title: "Bank", icons: iconBank },
+      { title: "E-Wallet", icons: iconEWallet },
+    ];
+  }, [icons]);
 
+  // Sync internal state với prop
   useEffect(() => {
-    if (selectedIcon) setIcon(selectedIcon);
+    setIcon(selectedIcon);
   }, [selectedIcon]);
 
-  const handleSelectIcon = (icon: IIcon) => {
-    setIcon(icon);
-    onChange?.(icon);
-    setIsOpen(false);
-  };
+  // Sử dụng useCallback để tránh tạo lại function mỗi lần render
+  const handleSelectIcon = useCallback(
+    (selectedIcon: IIcon) => {
+      setIcon(selectedIcon);
+      onChange?.(selectedIcon);
+      setIsOpen(false);
+    },
+    [onChange]
+  );
 
-  const renderSection = (title: string, icons: IIcon[]) => {
-    if (!icons.length) return null;
-    return (
-      <div className="w-full gap-2 flex flex-col">
-        <h1 className="flex font-semibold px-2">{title}</h1>
-        <div className="flex flex-wrap gap-4 p-2 justify-center ">
-          {icons.map((icon) => (
-            <div
-              key={icon.id}
-              className="bg-gray-100 rounded-md p-2"
-              onClick={() => handleSelectIcon(icon)}
-            >
-              {renderIcon(icon)}
-            </div>
-          ))}
+  // Memoize icon wrapper size classes
+  const iconWrapperClasses = useMemo(
+    () =>
+      cn(
+        "relative w-full aspect-square",
+        {
+          "size-6": size === "sm",
+          "size-8": size === "md",
+          "size-10": size === "lg",
+          "size-3": size === "xs",
+          "cursor-pointer": !disabled,
+        },
+        className
+      ),
+    [size, disabled, className]
+  );
+
+  const renderIcon = useCallback(
+    (displayIcon: IIcon | null | undefined) => (
+      <div className={iconWrapperClasses}>
+        <WiseIcon icon={displayIcon} size={size} />
+      </div>
+    ),
+    [iconWrapperClasses, size]
+  );
+
+  const renderSection = useCallback(
+    ({ title, icons }: IconSection) => {
+      if (!icons.length) return null;
+
+      return (
+        <div key={title} className="w-full gap-2 flex flex-col">
+          <h2 className="flex font-semibold px-2 text-sm">{title}</h2>
+          <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2 p-2">
+            {icons.map((iconItem) => (
+              <button
+                type="button"
+                key={iconItem.id}
+                className="bg-gray-100 hover:bg-gray-200 transition-colors rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary aspect-square flex items-center justify-center"
+                onClick={() => handleSelectIcon(iconItem)}
+                aria-label={`Select ${iconItem.url}`}
+              >
+                <WiseIcon icon={iconItem} size={40} />
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
-    );
-  };
-
-  const renderIcon = (icon: IIcon) => { 
-    return (
-      <div
-        className={cn(
-          "relative w-full aspect-square",
-          {
-            "size-6": size === "sm",
-            "size-8": size === "md",
-            "size-10": size === "lg",
-            "size-3": size === "xs",
-            "cursor-pointer": !disabled,
-          },
-          className
-        )}
-      >
-        <Image
-          draggable={false}
-          key={icon.id}
-          alt={icon.url || ""}
-          src={icon.url || ""}
-          fill
-        />
-      </div>
-    );
-  };
+      );
+    },
+    [handleSelectIcon, size]
+  );
 
   if (disabled) {
     return renderIcon(icon);
@@ -109,22 +128,26 @@ export const IconPicker = ({
 
   return (
     <Popover modal open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger tabIndex={-1} disabled={disabled}>
-        {renderIcon(icon)}
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          tabIndex={-1}
+          disabled={disabled}
+          className="focus:outline-none"
+          aria-label="Open icon picker"
+        >
+          {renderIcon(icon)}
+        </button>
       </PopoverTrigger>
 
       <PopoverContent className="p-2 pr-1 w-[90vw] lg:w-[50vw]">
-        <div
-          className={cn(
-            "scrollbar overflow-y-scroll h-72 w-full gap-2 flex flex-col "
-          )}
-        >
-          {renderSection("User", iconUser)}
-          {renderSection("Default", iconDefault)}
-          {renderSection("Bank", iconBank)}
-          {renderSection("E-Wallet", iconEWallet)}
+        <div className="scrollbar overflow-y-scroll h-72 w-full gap-3 flex flex-col">
+          {iconSections.map(renderSection)}
         </div>
       </PopoverContent>
     </Popover>
   );
 };
+
+// Memoize component để tránh re-render không cần thiết
+export const IconPicker = memo(IconPickerComponent);

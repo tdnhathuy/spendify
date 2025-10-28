@@ -23,6 +23,16 @@ export const getBalanceWallet = async (idWallet: string) => {
   return balance || 0;
 };
 
+export const getInitBalanceWallet = async (idWallet: string) => {
+  const { idUser } = await getAuthenticatedUser();
+  const trans = await prisma.transaction.findFirst({
+    where: { idWallet: idWallet, idUser, isInitTransaction: true },
+    select: { amount: true },
+  });
+
+  return trans?.amount || 0;
+};
+
 export async function getWallets() {
   const { idUser } = await getAuthenticatedUser();
 
@@ -37,7 +47,8 @@ export async function getWallets() {
   return await Promise.all(
     result.map(async (w) => {
       const currentBalance = await getBalanceWallet(w.id);
-      return { ...w, currentBalance };
+      const initBalance = await getInitBalanceWallet(w.id);
+      return { ...w, currentBalance, initBalance };
     })
   );
 }

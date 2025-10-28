@@ -65,7 +65,6 @@ export function useSheet<K extends keyof SheetMap>(
           open: { ...s.open, [key]: open },
           data: {
             ...s.data,
-            // [key]: open ? ((s.data[key] ?? null) as SheetMap[K] | null) : null,
             [key]: (s.data[key] ?? null) as SheetMap[K] | null,
           },
         }));

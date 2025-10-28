@@ -45,6 +45,7 @@ export type IWallet = {
   icon: IIcon | null;
   type: WalletType;
   includeInReport: boolean;
+  initBalance: number;
 };
 
 export type IWalletSimple = {

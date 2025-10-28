@@ -1,4 +1,4 @@
-import { Icon } from "@/lib/components/shared/icon";
+import { WiseIcon } from "@/lib/components/wise/wise-icon";
 import { IIcon } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
@@ -53,7 +53,7 @@ export const WiseTag = (props: WiseTagProps) => {
     if (isValidElement(icon)) return icon;
 
     if (icon) {
-      return <Icon icon={icon as IIcon} size="xs" />;
+      return <WiseIcon icon={icon as IIcon} size="xs" />;
     }
     return <PiWarningBold />;
   };

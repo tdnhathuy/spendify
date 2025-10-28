@@ -1,5 +1,6 @@
 import { WalletType } from "@/generated/prisma";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
+import { sheets } from "@/lib/components/sheets/sheet.store";
 import { formatMoney } from "@/lib/helpers";
 import { IWallet } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -29,9 +30,9 @@ export const WalletItem = (props: Props) => {
 
   return (
     <WrapperWallet
-      // onClick={() => sheets.open("wallet-detail", wallet)}
+      onClick={() => sheets.open("wallet-detail", wallet)}
       className={cn(
-        "border-border transition-all bg-foreground hover:bg-focus rounded-sm",
+        "border-border transition-all bg-foreground hover:bg-focus rounded-sm cursor-pointer",
         {
           // "from-green-400 to-green-500": wallet.type === "Cash",
           // "from-blue-400 to-blue-500": wallet.type === "Debit",

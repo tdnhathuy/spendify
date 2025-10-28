@@ -1,12 +1,11 @@
 "use server";
 
 import { auth } from "@/auth";
+import { CategoryType, WalletType } from "@/generated/prisma";
+import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
+import { createWallet } from "@/server-action/wallet.action";
 import { prisma } from "@/server/prisma";
 import { seedSvgIcons } from "../../prisma/seed";
-import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
-import { CategoryType, WalletType } from "@/generated/prisma";
-import { getAuthenticatedUser } from "@/server/helpers";
-import { createWallet } from "@/server-action/wallet.action";
 
 const syncConfig = [
   { fromEmail: "tpbank@tpb.com.vn" },
@@ -129,8 +128,6 @@ export async function setupGlobalIcons() {
 }
 
 export async function setupWallet() {
-  const { idUser } = await getAuthenticatedUser();
-
   const arrIcl = [
     { name: "Cash", balance: 4360000, type: WalletType.Cash },
     { name: "MOMO", balance: 62000, type: WalletType.Debit },
@@ -169,26 +166,4 @@ export async function setupWallet() {
       })
     )
   );
-
-  // await prisma.wallet.createMany({
-  //   data: arrIcl.map((x) => ({
-  //     idUser,
-  //     name: x.name,
-  //     type: WalletType.Cash,
-  //     includeInTotal: true,
-  //     balance: x.balance,
-  //     idIcon: null,
-  //   })),
-  // });
-
-  // await prisma.wallet.createMany({
-  //   data: arrExl.map((x) => ({
-  //     idUser,
-  //     name: x.name,
-  //     type: WalletType.Cash,
-  //     includeInTotal: false,
-  //     balance: x.balance,
-  //     idIcon: null,
-  //   })),
-  // });
 }
