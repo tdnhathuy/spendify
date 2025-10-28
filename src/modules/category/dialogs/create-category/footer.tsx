@@ -1,4 +1,3 @@
-import { PayloadCreateCategory } from "@/app/api/category/route";
 import { useMutateCreateCategory } from "@/lib/api/app.mutate";
 import { dialogs, WiseButton } from "@/lib/components";
 import { FieldErrors, useFormContext } from "react-hook-form";

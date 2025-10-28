@@ -13,16 +13,16 @@ export const FooterDialogSplitTransaction = (props: {
     if (!data) return;
     e.preventDefault();
 
-    splitTransaction({
-      idTransaction: data.idTransaction,
-      splits: [
-        {
-          idWallet: props.wallet?.id || "",
-          amount: props.amount,
-          note: "",
-        },
-      ],
-    });
+    // splitTransaction({
+    //   idTransaction: data.idTransaction,
+    //   splits: [
+    //     {
+    //       idWallet: props.wallet?.id || "",
+    //       amount: props.amount,
+    //       note: "",
+    //     },
+    //   ],
+    // });
   };
 
   return (

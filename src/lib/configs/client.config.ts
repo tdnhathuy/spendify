@@ -25,7 +25,7 @@ const client = ky.create({
 
 export async function api<T>(
   method: "get" | "post" | "patch" | "delete" | "put",
-  url: ApiRoute,
+  url: any,
   options?: Options
 ): Promise<T> {
   const x = await client[method](url, options).json<Response<T>>();

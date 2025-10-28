@@ -44,7 +44,7 @@ export const usePopoverListTrans = () => {
   };
 
   const onUnmarkTransfer = async () => {
-    await unmarkTransfer(transaction.id);
+    // await unmarkTransfer(transaction.id);
   };
 
   const onClick = (type: Actions) => () => {

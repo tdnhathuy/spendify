@@ -1,5 +1,4 @@
 "use client";
-import { PayloadMarkTransfer } from "@/app/api/transaction/[id]/mark-transfer/route";
 import {
   useMutateCreateTransfer,
   useMutateMarkTransfer,
@@ -19,7 +18,7 @@ export const FooterDialogTransfer = () => {
   const onTransfer: SubmitHandler<TypeSchemaTransfer> = async (data) => {
     if (data.isMarkTransfer) {
       const { idTransaction = "", amount, walletFrom, walletTo } = data;
-      const payload: PayloadMarkTransfer = {
+      const payload: any = {
         amount,
         idTransaction,
         idWalletTo: walletTo?.id || "",

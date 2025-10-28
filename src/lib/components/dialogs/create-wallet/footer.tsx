@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   useMutateCreateWallet,
   useMutateDeleteWallet,
@@ -32,17 +32,17 @@ export const FooterDialogCreateWallet = () => {
 
   const onSubmit = async (form: TypeSchemaCreateWallet) => {
     if (isUpdate) {
-      await updateWallet({
-        id: data.id,
-        cardNumber: form.cardNumber ?? "",
-        cardStatementPassword: form.cardStatementPassword ?? "",
-        cardStatementDate: form.cardStatementDate ?? "",
-        initBalance: Number(form.initBalance),
-        name: form.name,
-        type: form.type,
-        includeInReport: form.includeInReport ?? false,
-        idIcon: form.icon?.id || null,
-      });
+      // await updateWallet({
+      //   id: data.id,
+      //   cardNumber: form.cardNumber ?? "",
+      //   cardStatementPassword: form.cardStatementPassword ?? "",
+      //   cardStatementDate: form.cardStatementDate ?? "",
+      //   initBalance: Number(form.initBalance),
+      //   name: form.name,
+      //   type: form.type,
+      //   includeInReport: form.includeInReport ?? false,
+      //   idIcon: form.icon?.id || null,
+      // });
 
       dialogs.close("create-wallet");
       return;

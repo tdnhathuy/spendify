@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useMutateUpdateConfigSync } from "@/lib/api/app.mutate";
 import { useQueryConfigSync, useQueryWallet } from "@/lib/api/app.query";
 import { dialogs, PopoverContentConfigSync } from "@/lib/components/dialogs";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
@@ -20,7 +19,6 @@ export const PageConfigSync = () => {
   const { data = [] } = useQueryConfigSync();
 
   const { data: wallets = [] } = useQueryWallet();
-  const { mutateAsync: updateConfigSync } = useMutateUpdateConfigSync();
 
   return (
     <Page
@@ -71,10 +69,6 @@ export const PageConfigSync = () => {
                     wallets={wallets ?? []}
                     onSelectWallet={async (wallet) => {
                       console.log("wallet", wallet);
-                      await updateConfigSync({
-                        id: item.id,
-                        walletId: wallet.id,
-                      });
                     }}
                   />
                 </Popover>

@@ -1,5 +1,4 @@
 "use client";
-import { DashboardInfo } from "@/app/api/dashboard/route";
 import { client, QueryKeys } from "@/lib/configs";
 import { formatMoney } from "@/lib/helpers";
 import { ResponsePagination } from "@/lib/types/app.type";
@@ -13,7 +12,7 @@ export const HeaderDashboard = () => {
     queryFn: () => {
       return client
         .get("dashboard")
-        .json<ResponsePagination<DashboardInfo>>()
+        .json<ResponsePagination<any>>()
         .then((x) => x.data);
     },
   });

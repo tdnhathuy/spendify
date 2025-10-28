@@ -3,69 +3,17 @@
 
 export type ApiRoute =
   | `auth/${string}`
-  | `category/update-parent`
-  | `category`
-  | `config-sync/${string}`
-  | `config-sync`
-  | `dashboard`
   | `hook-email`
-  | `icon`
-  | `setup`
   | `sync-sms`
-  | `sync/mail`
-  | `transaction/${string}/mark-transfer`
-  | `transaction/${string}/split`
-  | `transaction/${string}/unmark-transfer`
-  | `transaction/${string}`
-  | `transaction/assign-category`
-  | `transaction/assign-wallet`
-  | `transaction`
-  | `transfer`
-  | `user`
-  | `wallet/${string}/adjust-balance`
-  | `wallet/${string}`
-  | `wallet`;
+  | `sync/mail`;
 
 export const apiPath = {
   auth: {
     nextauth: (nextauth: string) => `auth/${nextauth}` as ApiRoute,
   } as const,
-  category: {
-    $: () => `category` as ApiRoute,
-    update_parent: () => `category/update-parent` as ApiRoute,
-  } as const,
-  config_sync: {
-    $: () => `config-sync` as ApiRoute,
-    id: (id: string) => `config-sync/${id}` as ApiRoute,
-  } as const,
-  dashboard: () => `dashboard` as ApiRoute,
   hook_email: () => `hook-email` as ApiRoute,
-  icon: () => `icon` as ApiRoute,
-  setup: () => `setup` as ApiRoute,
   sync: {
     mail: () => `sync/mail` as ApiRoute,
   } as const,
   sync_sms: () => `sync-sms` as ApiRoute,
-  transaction: {
-    $: () => `transaction` as ApiRoute,
-    assign_category: () => `transaction/assign-category` as ApiRoute,
-    assign_wallet: () => `transaction/assign-wallet` as ApiRoute,
-    id: {
-      $: (id: string) => `transaction/${id}` as ApiRoute,
-      mark_transfer: (id: string) =>
-        `transaction/${id}/mark-transfer` as ApiRoute,
-      split: (id: string) => `transaction/${id}/split` as ApiRoute,
-      unmark_transfer: (id: string) =>
-        `transaction/${id}/unmark-transfer` as ApiRoute,
-    } as const,
-  } as const,
-  transfer: () => `transfer` as ApiRoute,
-  user: () => `user` as ApiRoute,
-  wallet: {
-    $: () => `wallet` as ApiRoute,
-    id: {
-      $: (id: string) => `wallet/${id}` as ApiRoute,
-      adjust_balance: (id: string) => `wallet/${id}/adjust-balance` as ApiRoute,
-    } as const,
-  } as const,
 } as const;

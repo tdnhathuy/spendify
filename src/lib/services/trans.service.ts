@@ -1,4 +1,3 @@
-import { PayloadSplitTransaction } from "@/app/api/transaction/[id]/split/route";
 import { apiPath } from "@/generated/api-routes.gen";
 import { client } from "@/lib/configs";
 import {
@@ -31,9 +30,8 @@ export const ServiceTrans = {
       .json<Response<ITransaction>>()
       .then((s) => s.data),
 
-  split: (json: PayloadSplitTransaction) => {
-    const url = apiPath.transaction.id.split(json.idTransaction);
-    return client.post(url, { json }).json<Response<ITransaction>>();
+  split: (json: any) => {
+    return "";
   },
 };
 

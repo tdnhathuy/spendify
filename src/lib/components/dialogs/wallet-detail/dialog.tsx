@@ -11,7 +11,7 @@ import {
 } from "@/lib/components/dialogs/wallet-detail/schema";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
-import { formatDate, formatMoney } from "@/lib/helpers";
+import { formatMoney } from "@/lib/helpers";
 import { IWalletDetail } from "@/lib/types";
 import { Edit2, Loader, Wallet } from "lucide-react";
 import { useForm, useFormContext } from "react-hook-form";
@@ -27,16 +27,16 @@ export const DialogWallet = () => {
   const form = useForm<TypeSchemaWallet>({ resolver });
 
   useDidUpdate(() => {
-    form.reset({
-      name: detail?.name || "",
-      icon: detail?.icon,
-      type: detail?.type || "Cash",
-      currentBalance: Number(detail?.currentBalance || 0),
-      totalTransaction: detail?.totalTransaction || 0,
-      cardNumber: detail?.cardNumber || "",
-      cardStatementPassword: detail?.cardStatementPassword || "",
-      cardStatementDate: formatDate(detail?.cardStatementDate),
-    });
+    // form.reset({
+    //   name: detail?.name ?? "",
+    //   icon: detail?.icon ?? "",
+    //   type: detail?.type || "Cash",
+    //   currentBalance: Number(detail?.currentBalance || 0),
+    //   totalTransaction: detail?.totalTransaction || 0,
+    //   cardNumber: detail?.cardNumber || "",
+    //   cardStatementPassword: detail?.cardStatementPassword || "",
+    //   cardStatementDate: formatDate(detail?.cardStatementDate),
+    // });
   }, [detail, dataUpdatedAt]);
 
   const {
@@ -55,7 +55,7 @@ export const DialogWallet = () => {
           title="Wallet Detail"
           headerClassName="border-b-0"
           className="p-0"
-          footer={<FooterDialogWalletDetail walletDetail={detail} />}
+          // footer={<FooterDialogWalletDetail walletDetail={detail} />}
           ctnClassName="w-[420px] h-[70%] -translate-y-[60%]"
         >
           {isLoading ? (
@@ -64,7 +64,7 @@ export const DialogWallet = () => {
             </span>
           ) : (
             <>
-              <TopInfo detail={detail!} />
+              {/* <TopInfo detail={detail!} /> */}
 
               <div className="p-4 gap-2 flex flex-col">
                 <RowInfoDialog

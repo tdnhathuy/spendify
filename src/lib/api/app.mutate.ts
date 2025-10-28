@@ -1,14 +1,12 @@
 import { useMutateToasty } from "@/hooks/use-query-toast";
-import { keyQueryWalletDetail } from "@/lib/api/app.query";
 import { Refetch } from "@/lib/api/app.refetch";
-import { MutationKeys, queryClient } from "@/lib/configs";
+import { MutationKeys } from "@/lib/configs";
 import { updateQueryTransaction } from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
 import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
-import { IWallet } from "@/lib/types";
 import {
   assignCategory,
   createTransaction,
@@ -52,21 +50,10 @@ export const useMutateCreateWallet = () => {
 export const useMutateDeleteWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.deleteWallet],
-    mutationFn: ServiceWallet.delete,
-    onSuccess: Refetch.wallet,
-  });
-};
-
-export const useMutateUpdateWallet = () => {
-  return useMutation({
-    mutationKey: [MutationKeys.updateWallet],
-    mutationFn: ServiceWallet.update,
-    onSuccess: (newWallet: IWallet) => {
-      Refetch.wallet();
-      queryClient.invalidateQueries({
-        queryKey: keyQueryWalletDetail(newWallet.id),
-      });
+    mutationFn: (idWallet: string) => {
+      return Promise.resolve(ServiceWallet.delete(idWallet));
     },
+    onSuccess: Refetch.wallet,
   });
 };
 
@@ -133,7 +120,7 @@ export const useMutateCreateTransfer = () => {
 export const useMutateMarkTransfer = () => {
   return useMutation({
     mutationKey: [MutationKeys.markTransfer],
-    mutationFn: ServiceTransfer.markTransfer,
+    mutationFn: () => Promise.resolve(true),
     onSuccess: Refetch.trans,
   });
 };
@@ -142,18 +129,10 @@ export const useMutateUnmarkTransfer = () => {
   return useMutateToasty(() =>
     useMutation({
       mutationKey: [MutationKeys.unmarkTransfer],
-      mutationFn: ServiceTransfer.unmarkTransfer,
+      mutationFn: () => Promise.resolve(true),
       onSuccess: Refetch.trans,
     })
   );
-};
-
-export const useMutateUpdateConfigSync = () => {
-  return useMutation({
-    mutationKey: [MutationKeys.updateConfigSync],
-    mutationFn: ServiceConfigSync.update,
-    onSuccess: Refetch.configSync,
-  });
 };
 
 export const useMutateCreateCategory = () => {
@@ -180,7 +159,16 @@ export const useMutateUpdateCategoryParent = () => {
 export const useMutateSplitTransaction = () => {
   return useMutation({
     mutationKey: [MutationKeys.splitTransaction],
-    mutationFn: ServiceTrans.split,
+    mutationFn: () => Promise.resolve(true),
+    onSuccess: () => {
+      Refetch.trans();
+    },
+  });
+};
+export const useMutateUpdateWallet = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.splitTransaction],
+    mutationFn: () => Promise.resolve(true),
     onSuccess: () => {
       Refetch.trans();
     },
