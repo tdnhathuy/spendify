@@ -4,16 +4,22 @@
 export type ApiRoute =
   | `auth/${string}`
   | `hook-email`
+  | `hook/create-transaction`
   | `sync-sms`
-  | `sync/mail`;
+  | `sync/mail`
+  | `wallets`;
 
 export const apiPath = {
   auth: {
     nextauth: (nextauth: string) => `auth/${nextauth}` as ApiRoute,
+  } as const,
+  hook: {
+    create_transaction: () => `hook/create-transaction` as ApiRoute,
   } as const,
   hook_email: () => `hook-email` as ApiRoute,
   sync: {
     mail: () => `sync/mail` as ApiRoute,
   } as const,
   sync_sms: () => `sync-sms` as ApiRoute,
+  wallets: () => `wallets` as ApiRoute,
 } as const;

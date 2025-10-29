@@ -1,16 +1,22 @@
-import { IconPicker } from "@/lib/components";
 import { TagCategory } from "@/modules/dashboard/components/transaction-item/compounds/tag-category.compound";
 import { TagWallet } from "@/modules/dashboard/components/transaction-item/compounds/tag-wallet.compound";
-import { BiTransferAlt } from "react-icons/bi";
 import { useTransactionItem } from "../list-trans-item.hook";
 
 export const Title = () => {
-  const { isTransfer, isAdjust, categoryName } = useTransactionItem();
+  const { isTransfer, isAdjust, categoryName, isInitTransaction } =
+    useTransactionItem();
 
   const title = categoryName;
 
   if (isTransfer) return <TileTransfer />;
   if (isAdjust) return <TileAdjust />;
+  if (isInitTransaction)
+    return (
+      <span className="flex items-center gap-2 font-semibold">
+        <span>Init balance wallet</span>
+        <TagWallet disabled />
+      </span>
+    );
 
   return (
     <span className="flex  items-center gap-2">

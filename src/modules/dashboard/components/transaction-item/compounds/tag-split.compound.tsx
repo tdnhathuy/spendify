@@ -1,19 +1,17 @@
 "use client";
 
 import { Popover, PopoverAnchor } from "@/components/ui/popover";
-import { IconPicker, WisePopoverContent } from "@/lib/components";
-import { formatMoney } from "@/lib/helpers";
 import { ITransactionSplit } from "@/lib/types";
 import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
-import { X } from "lucide-react";
+import { removeSplit } from "@/server/actions/wallet.action";
 import { useState } from "react";
 import { LuSplit } from "react-icons/lu";
 import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
-import { removeSplit } from "@/server/actions/wallet.action";
 
 export const TagSplit = () => {
-  const { transaction } = useTransactionItem();
+  const { transaction, isSplit } = useTransactionItem();
   const [open, setOpen] = useState(false);
+  return null;
 
   const onClickRemoveSplit = (split: ITransactionSplit) => async () => {
     try {
