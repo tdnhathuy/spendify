@@ -1,4 +1,4 @@
-import { IconPicker } from "@/lib/components";
+import { WiseIcon } from "@/lib/components/wise/wise-icon";
 import { BiSync, BiTransferAlt } from "react-icons/bi";
 import { FaScaleUnbalanced } from "react-icons/fa6";
 import { useTransactionItem } from "../list-trans-item.hook";
@@ -9,7 +9,7 @@ export const Icon = () => {
   const renderIcon = () => {
     if (isTransfer) return <BiTransferAlt />;
     if (isAdjust) return <FaScaleUnbalanced />;
-    return <IconPicker icon={categoryIcon} disabled size="sm" />;
+    return <WiseIcon icon={categoryIcon} size="lg" />;
   };
 
   return (

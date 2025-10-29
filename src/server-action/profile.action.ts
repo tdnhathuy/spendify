@@ -7,15 +7,6 @@ import { createWallet } from "@/server-action/wallet.action";
 import { prisma } from "@/server/prisma";
 import { seedSvgIcons } from "../../prisma/seed";
 
-const syncConfig = [
-  { fromEmail: "tpbank@tpb.com.vn" },
-  { fromEmail: "no-reply@grab.com" },
-  { fromEmail: "HSBC@notification.hsbc.com.hk" },
-  { fromEmail: "VCBDigibank@info.vietcombank.com.vn" },
-];
-
-// hoặc: import { CategoryType, Prisma } from "@prisma/client";
-
 export async function setupProfile() {
   const session = await auth();
   const email = session?.user?.email?.trim();

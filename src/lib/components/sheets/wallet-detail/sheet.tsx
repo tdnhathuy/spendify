@@ -41,7 +41,9 @@ export const SheetWalletDetail = () => {
               <IconPicker
                 icon={form.watch("icon")}
                 size={70}
-                onChange={(icon) => form.setValue("icon", icon)}
+                onChange={(icon) =>
+                  form.setValue("icon", icon, { shouldDirty: true })
+                }
               />
               <span className="flex flex-col">
                 <span className="text-sm text-gray-500">Current Balance</span>

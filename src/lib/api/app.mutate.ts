@@ -14,6 +14,7 @@ import {
   deleteTransaction,
   getWallets,
   toggleNeedSplit,
+  updateWallet,
 } from "@/server-action";
 import { useMutation } from "@tanstack/react-query";
 
@@ -164,11 +165,9 @@ export const useMutateSplitTransaction = () => {
 };
 export const useMutateUpdateWallet = () => {
   return useMutation({
-    mutationKey: [MutationKeys.splitTransaction],
-    mutationFn: () => Promise.resolve(true),
-    onSuccess: () => {
-      Refetch.trans();
-    },
+    mutationKey: [MutationKeys.updateWallet],
+    mutationFn: updateWallet,
+    onSuccess: Refetch.wallet,
   });
 };
 

@@ -1,8 +1,10 @@
 "use server";
 
 import { WalletType } from "@/generated/prisma";
+import { TypeSchemaWalletDetail } from "@/lib/components/sheets/wallet-detail/schema";
 import { DTOWallet } from "@/lib/dto";
 import { isNotNull } from "@/lib/helpers";
+import { IWallet } from "@/lib/types";
 import {
   getAuthenticatedUser,
   prisma,
@@ -110,3 +112,22 @@ export async function createWallet(params: PayloadCreateWallet) {
 
   return wallet;
 }
+
+export interface PayloadUpdateWallet {
+  wallet: TypeSchemaWalletDetail;
+}
+export const updateWallet = async (params: PayloadUpdateWallet) => {
+  const { wallet } = params;
+  const { idUser } = await getAuthenticatedUser();
+
+  await prisma.wallet.update({
+    where: { id: wallet.id, idUser },
+    data: {
+      idIcon: wallet.icon?.id || null,
+      name: wallet.name,
+    },
+    select: selectWallet,
+  });
+
+  return wallet;
+};
