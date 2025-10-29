@@ -14,10 +14,11 @@ export default auth(async (request) => {
   // return NextResponse.next();
 
   const pathname = url.pathname;
+  console.log("pathname", pathname);
 
-  const arrIgnoreRoutes = ["/api/auth", "/api/hook", "/api/sync-sms"];
+  const arrIgnoreRoutes = ["/api/auth", "/api/wallets"];
 
-  if (arrIgnoreRoutes.includes(pathname)) {
+  if (arrIgnoreRoutes.includes(pathname) || pathname.startsWith("/api/hook")) {
     return NextResponse.next();
   }
 
