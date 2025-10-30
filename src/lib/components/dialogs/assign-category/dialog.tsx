@@ -10,49 +10,49 @@ import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { ICategory } from "@/lib/types";
 import { GridCategory } from "@/modules/category/components/grid-category";
-import { useState } from "react";
-import { useDidUpdate } from "rooks";
+import { useCallback, useMemo, useState } from "react";
 
 export const DialogAssignCategory = () => {
   const { isOpen, data } = useDialog("assign-category");
-
-  const defaultMode = data?.category?.type || CategoryType.Spend;
-
-  const [mode, setMode] = useState<CategoryType>(defaultMode);
-
   const { income, expense } = useQueryCategory();
-
-  const listCategory = mode === CategoryType.Income ? income : expense;
-
-  useDidUpdate(() => {
-    setMode(data?.category?.type || CategoryType.Spend);
-  }, [data]);
-
   const { asyncToast: assignCategory } = useMutateAssignCategory();
 
-  const onSelectCategory = (category: ICategory) => {
-    if (!data?.id) return;
-    dialogs.close("assign-category");
-    assignCategory({
-      idCategory: category.id,
-      idTransaction: data?.id,
-    });
-  };
+  const [mode, setMode] = useState<CategoryType>("Spend");
+
+  const categoryList = useMemo(
+    () => (mode === CategoryType.Income ? income : expense),
+    [mode, income, expense]
+  );
+
+  const handleDialogClose = useCallback(() => {
+    dialogs.close("assign-category", true);
+  }, []);
+
+  const handleSelectCategory = useCallback(
+    (category: ICategory) => {
+      if (!data?.id) return;
+      dialogs.close("assign-category");
+      const idCategory = category.id;
+      const idTransaction = data.id;
+      assignCategory({ idCategory, idTransaction });
+    },
+    [data?.id, assignCategory]
+  );
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={() => dialogs.close("assign-category", true)}
-    >
+    <Dialog open={isOpen} onOpenChange={handleDialogClose}>
       <WiseDialogContent
         title="Assign Category"
         footer={<FooterDialogAssignCategory />}
-        className="gap-4 "
+        className="gap-4"
         ctnClassName="h-[70%] -translate-y-[60%] w-92"
       >
         <ModeSelection mode={mode} setMode={setMode} />
 
-        <GridCategory data={listCategory} onSelectCategory={onSelectCategory} />
+        <GridCategory
+          data={categoryList}
+          onSelectCategory={handleSelectCategory}
+        />
       </WiseDialogContent>
     </Dialog>
   );
