@@ -4,7 +4,7 @@ import { WiseTag } from "@/lib/components/wise/wise-tag";
 import { IWallet } from "@/lib/types";
 import { useStoreDashboard } from "@/modules/dashboard/pages/dashboard.store";
 
-export const TransactionFilter = () => {
+export const TransactionFilterResult = () => {
   const { filter, setFilter } = useStoreDashboard();
   const { data: wallets = [] } = useQueryWallet();
 

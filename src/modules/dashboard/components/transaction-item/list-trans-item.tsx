@@ -1,8 +1,11 @@
 // Re-export the compound component from compounds folder
 
+import { Skeleton } from "@/components/ui/skeleton";
 import * as TransactionItem from "./compounds";
+import { range } from "lodash";
 
 interface TransactionListItemProps {}
+
 export const TransactionListItem = (props: TransactionListItemProps) => {
   return (
     <TransactionItem.Wrapper>
@@ -26,6 +29,24 @@ export const TransactionListItem = (props: TransactionListItemProps) => {
       </div>
     </TransactionItem.Wrapper>
   );
+};
+
+export const SkeletonTransactionListItem = () => {
+  return range(3).map((item) => (
+    <TransactionItem.Wrapper key={item} isSkeleton={true} className="">
+      <div className="flex items-center gap-4 flex-1">
+        <Skeleton className="rounded-full size-12" />
+
+        <div className="flex  flex-1 flex-col gap-2 ">
+          <Skeleton className="h-4 w-[100%]" />
+          <Skeleton className="h-4 w-[70%]" />
+          <Skeleton className="h-4 w-[40%]" />
+        </div>
+
+        <Skeleton className="h-6 rounded-full w-[20%] self-start" />
+      </div>
+    </TransactionItem.Wrapper>
+  ));
 };
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {

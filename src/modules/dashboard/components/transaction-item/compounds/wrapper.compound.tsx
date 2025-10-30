@@ -3,7 +3,15 @@ import { cn } from "@/lib/utils";
 import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
 import { useCallback } from "react";
 
-export const Wrapper = ({ children }: { children: React.ReactNode }) => {
+export const Wrapper = ({
+  children,
+  className,
+  isSkeleton = false,
+}: {
+  children: React.ReactNode;
+  isSkeleton?: boolean;
+  className?: string | undefined;
+}) => {
   const {
     isValid,
     isTransfer,
@@ -22,10 +30,11 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={cn(
-        "flex gap-2 w-full  px-4  py-3 rounded-sm",
+        "flex gap-2 w-full px-4 py-3 rounded-sm",
         "hover:no-underline flex  bg-black/15 text-white rounded border-l-4 ",
         "transition-all duration-300",
         "border-gray-700 hover:bg-focus",
+        className,
         isInitTransaction && "border-blue-500",
         isSplit && "border-blue-500",
         isValid && "border-green-500",
@@ -33,7 +42,7 @@ export const Wrapper = ({ children }: { children: React.ReactNode }) => {
         isNeedSplit && "border-red-500",
         isAdjust && "border-orange-300"
       )}
-      onClick={onClickTransaction}
+      onClick={isSkeleton ? undefined : onClickTransaction}
     >
       {children}
     </div>
