@@ -1,5 +1,5 @@
 import { QueryKeys } from "@/lib/configs";
-import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
+import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ParamsPagination } from "@/lib/types";
 import { getWallets } from "@/server-action";
@@ -20,12 +20,12 @@ export const useQueryCategory = () => {
     queryFn: getCategories,
   });
 
+  const data = query.data || [];
+
   return {
     ...query,
-    // income: query.data?.filter((item) => item.type === "Income") || [],
-    // expense: query.data?.filter((item) => item.type === "Spend") || [],
-    income: [],
-    expense: [],
+    income: data.filter((item) => item.type === "Income"),
+    expense: data.filter((item) => item.type === "Spend"),
   };
 };
 

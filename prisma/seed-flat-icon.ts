@@ -4,6 +4,7 @@ export const flatIcon = {
   img_crash: "3875433",
 
   cash: "925674",
+  cash2: "1052866",
   credit: "9334539",
   balance: "5619329",
 
@@ -43,6 +44,7 @@ export const flatIcon = {
   massage: "8119629",
   badminton: "8540840",
   items: "2278984",
+  binance: "14446125",
 };
 // const prisma = new PrismaClient();
 

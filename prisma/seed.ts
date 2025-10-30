@@ -35,26 +35,26 @@ export const seedSvgIcons = async () => {
   const bankIcons = await getSvgByFolderName("bank");
   const eWalletIcons = await getSvgByFolderName("e-wallet");
 
+  const arrIcons = [...bankIcons, ...eWalletIcons];
+
   const isDefault = true;
 
   await prisma.icon.deleteMany({});
 
   await Promise.all(
-    bankIcons.map((svgUrl) => {
+    arrIcons.map(async (svgUrl) => {
       const name = svgUrl.split("/")[3].split(".")[0];
+
+      const existed = await prisma.icon.findFirst({ where: { name } });
+      if (!!existed) return;
       return prisma.icon.create({ data: { name, svgUrl, isDefault } });
     })
   );
 
   await Promise.all(
-    eWalletIcons.map((svgUrl) => {
-      const name = svgUrl.split("/")[3].split(".")[0];
-      return prisma.icon.create({ data: { name, svgUrl, isDefault } });
-    })
-  );
-
-  await Promise.all(
-    values(flatIcon).map((idFlatIcon) => {
+    values(flatIcon).map(async (idFlatIcon) => {
+      const existed = await prisma.icon.findFirst({ where: { idFlatIcon } });
+      if (!!existed) return;
       return prisma.icon.create({
         data: { name: idFlatIcon, idFlatIcon, isDefault },
       });

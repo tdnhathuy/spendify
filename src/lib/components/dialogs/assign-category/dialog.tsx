@@ -4,7 +4,6 @@ import { Dialog } from "@/components/ui/dialog";
 import { CategoryType } from "@/generated/prisma";
 import { useMutateAssignCategory } from "@/lib/api/app.mutate";
 import { useQueryCategory } from "@/lib/api/app.query";
-import { ListCategory } from "@/lib/components/dialogs/assign-category/components/list-category";
 import { ModeSelection } from "@/lib/components/dialogs/assign-category/components/mode.selection";
 import { FooterDialogAssignCategory } from "@/lib/components/dialogs/assign-category/footer";
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";

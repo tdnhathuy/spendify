@@ -11,10 +11,8 @@ export const config = {
 
 export default auth(async (request) => {
   const url = request.nextUrl.clone();
-  // return NextResponse.next();
 
   const pathname = url.pathname;
-  console.log("pathname", pathname);
 
   const arrIgnoreRoutes = ["/api/auth", "/api/wallets"];
 

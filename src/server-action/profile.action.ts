@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { CategoryType, WalletType } from "@/generated/prisma";
 import { defaultExpenseCategory, defaultIncomeCategory } from "@/lib/configs";
 import { createWallet } from "@/server-action/wallet.action";
+import { getAuthenticatedUser } from "@/server/helpers";
 import { prisma } from "@/server/prisma";
 import { seedSvgIcons } from "../../prisma/seed";
 
@@ -104,14 +105,13 @@ export async function setupProfile() {
   );
 }
 
-const getIdFlatIcon = async (idIcon: string) => {
-  const result = await prisma.icon.findFirstOrThrow({
-    where: {
-      idFlatIcon: idIcon,
-    },
+const getIdFlatIcon = async (idFlatIcon: string) => {
+  const result = await prisma.icon.findFirst({
+    where: { idFlatIcon },
     select: { id: true },
   });
-  return result.id;
+
+  return result?.id || null;
 };
 
 export async function setupGlobalIcons() {
@@ -156,5 +156,84 @@ export async function setupWallet() {
         initBalance: x.balance,
       })
     )
+  );
+}
+
+export async function setupCategories() {
+  const { email, idUser } = await getAuthenticatedUser();
+
+  // 1) PRECOMPUTE tất cả icon IDs NGOÀI transaction (tránh N+1 query)
+  const incomeData = await Promise.all(
+    defaultIncomeCategory.map(async (income) => ({
+      name: income.name,
+      type: CategoryType.Income,
+      idIcon: await getIdFlatIcon(income.idIcon),
+    }))
+  );
+
+  const expenseParents = await Promise.all(
+    defaultExpenseCategory.map(async (parent) => {
+      const parentIcon = await getIdFlatIcon(parent.idIcon);
+      const children =
+        parent.children && parent.children.length
+          ? await Promise.all(
+              parent.children.map(async (child) => ({
+                name: child.name,
+                type: CategoryType.Spend,
+                idIcon: await getIdFlatIcon(child.idIcon),
+              }))
+            )
+          : [];
+      return {
+        name: parent.name,
+        type: CategoryType.Spend,
+        idIcon: parentIcon,
+        children,
+      };
+    })
+  );
+
+  // 2) Chạy trong transaction với timeout
+  await prisma.$transaction(
+    async (tx) => {
+      // Xóa tất cả categories cũ của user
+      await tx.category.deleteMany({ where: { idUser } });
+
+      // Tạo Income categories (createMany 1 lần)
+      if (incomeData.length) {
+        await tx.category.createMany({
+          data: incomeData.map((c) => ({ ...c, idUser })),
+        });
+      }
+
+      // Tạo Expense parents + nested children
+      for (const p of expenseParents) {
+        await tx.category.create({
+          data: {
+            idUser,
+            name: p.name,
+            type: p.type,
+            idIcon: p.idIcon,
+            children:
+              p.children.length > 0
+                ? {
+                    createMany: {
+                      data: p.children.map((c) => ({
+                        name: c.name,
+                        type: c.type,
+                        idIcon: c.idIcon,
+                        idUser,
+                      })),
+                    },
+                  }
+                : undefined,
+          } as any,
+        });
+      }
+    },
+    {
+      timeout: 15000, // 15 giây
+      maxWait: 5000, // 5 giây
+    }
   );
 }
