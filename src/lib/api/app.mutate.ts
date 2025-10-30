@@ -1,9 +1,8 @@
 import { useMutateToasty } from "@/hooks/use-query-toast";
 import { Refetch } from "@/lib/api/app.refetch";
 import { MutationKeys } from "@/lib/configs";
-import { updateQueryTransaction } from "@/lib/helpers/query.helper";
 import { getCachedSession } from "@/lib/helpers/session.helper";
-import { ServiceCategory, ServiceTrans, ServiceWallet } from "@/lib/services";
+import { ServiceCategory, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
@@ -71,10 +70,15 @@ export const useMutateCreateTrans = () => {
 };
 
 export const useMutateAssignCategory = () => {
-  return useMutation({
-    mutationKey: [MutationKeys.assignCategory],
-    mutationFn: assignCategory,
-  });
+  return useMutateToasty(
+    () =>
+      useMutation({
+        mutationKey: [MutationKeys.assignCategory],
+        mutationFn: assignCategory,
+        onSuccess: Refetch.trans,
+      }),
+    "assignCategory"
+  );
 };
 
 export const useMutateAssignWallet = () => {

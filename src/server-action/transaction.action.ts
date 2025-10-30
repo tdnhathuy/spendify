@@ -52,13 +52,27 @@ export interface PayloadAssignCategory {
   idCategory: string;
 }
 export async function assignCategory(params: PayloadAssignCategory) {
+  const { idUser } = await getAuthenticatedUser();
   const { idTransaction, idCategory } = params;
-  const result = await prisma.transaction.update({
-    where: { id: idTransaction },
-    data: { idCategory },
-  });
 
-  return result.id;
+  const [{ type }, { amount }] = await Promise.all([
+    prisma.category.findFirstOrThrow({
+      where: { id: idCategory, idUser },
+      select: { type: true },
+    }),
+    prisma.transaction.findUniqueOrThrow({
+      where: { id: idTransaction, idUser },
+      select: { amount: true },
+    }),
+  ]);
+
+  const newAmount = type === "Income" ? Math.abs(amount) : -Math.abs(amount);
+
+  return prisma.transaction.update({
+    where: { id: idTransaction, idUser },
+    data: { idCategory, amount: newAmount },
+    select: selectTrans,
+  });
 }
 
 export interface PayloadAssignWallet {

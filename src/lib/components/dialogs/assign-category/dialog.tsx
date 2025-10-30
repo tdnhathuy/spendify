@@ -28,15 +28,11 @@ export const DialogAssignCategory = () => {
     setMode(data?.category?.type || CategoryType.Spend);
   }, [data]);
 
-  const { mutate: assignCategory } = useMutateAssignCategory();
+  const { asyncToast: assignCategory } = useMutateAssignCategory();
 
   const onSelectCategory = (category: ICategory) => {
-    if (data?.onSelectCategory) {
-      return data.onSelectCategory(category);
-    }
-
-    dialogs.close("assign-category");
     if (!data?.id) return;
+    dialogs.close("assign-category");
     assignCategory({
       idCategory: category.id,
       idTransaction: data?.id,

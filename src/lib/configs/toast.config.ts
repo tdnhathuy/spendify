@@ -33,6 +33,12 @@ export const configToastMessage: Partial<
     error: "Xóa giao dịch thất bại",
   },
 
+  assignCategory: {
+    loading: "Đang gán danh mục",
+    success: "Gán danh mục thành công",
+    error: "Gán danh mục thất bại",
+  },
+
   default: {
     loading: defaultLoading,
     success: defaultSuccess,
