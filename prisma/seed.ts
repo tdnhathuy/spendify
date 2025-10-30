@@ -62,4 +62,19 @@ export const seedSvgIcons = async () => {
   );
 };
 
-seedSvgIcons();
+// Main function to run seed - only call this explicitly when needed
+export async function main() {
+  await seedSvgIcons();
+  console.log("✅ Seed completed successfully");
+  await prisma.$disconnect();
+}
+
+// Auto-run only when executed directly via CLI (not when imported)
+// @ts-ignore - This works in Node.js but TypeScript might complain
+const isMainModule = typeof require !== "undefined" && require.main === module;
+if (isMainModule) {
+  main().catch((error) => {
+    console.error("❌ Seed failed:", error);
+    process.exit(1);
+  });
+}
