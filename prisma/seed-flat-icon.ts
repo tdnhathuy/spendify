@@ -1,10 +1,9 @@
 // import { PrismaClient } from "@/generated/prisma";
 
 export const flatIcon = {
-  img_crash: "3875433",
-
   cash: "925674",
   cash2: "1052866",
+  cash3: "2953423",
   credit: "9334539",
   balance: "5619329",
 
@@ -46,28 +45,3 @@ export const flatIcon = {
   items: "2278984",
   binance: "14446125",
 };
-// const prisma = new PrismaClient();
-
-// const seed = async () => {
-//   const arr = await prisma.iconGlobal.findMany({
-//     where: { idFlatIcon: { not: null } },
-//     select: { idFlatIcon: true },
-//   });
-//   const arrImported = arr.map((item) => item.idFlatIcon);
-//   for (const key in flatIcon) {
-//     const icon = flatIcon[key as keyof typeof flatIcon];
-//     if (arrImported.includes(icon)) continue;
-//     await prisma.icon.create({
-//       data: {
-//         source: "System",
-//         iconGlobal: {
-//           create: {
-//             idFlatIcon: icon,
-//           },
-//         },
-//       },
-//     });
-//   }
-// };
-
-// seed();

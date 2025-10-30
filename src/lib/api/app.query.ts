@@ -2,7 +2,11 @@ import { QueryKeys } from "@/lib/configs";
 import { ServiceTrans, ServiceWallet } from "@/lib/services";
 import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ParamsPagination } from "@/lib/types";
-import { getWallets } from "@/server-action";
+import {
+  getTransactions,
+  getWallets,
+  PayloadGetTransactions,
+} from "@/server-action";
 import { getCategories } from "@/server-action/category.action";
 import { getIcons } from "@/server-action/icon.action";
 import { useQuery } from "@tanstack/react-query";
@@ -60,5 +64,12 @@ export const useQueryIcon = (disabled = false) => {
     queryKey: [QueryKeys.getIcon],
     queryFn: getIcons,
     enabled: !disabled,
+  });
+};
+
+export const useQueryTransaction = (params: PayloadGetTransactions) => {
+  return useQuery({
+    queryKey: [QueryKeys.getTrans, params],
+    queryFn: () => getTransactions(params),
   });
 };

@@ -1,4 +1,4 @@
-import { convertIdFlatIcon } from "@/lib/helpers";
+import { convertIdFlatIcon, isNotNull } from "@/lib/helpers";
 import { IIcon } from "@/lib/types";
 import { DBIcon } from "@/server";
 
@@ -11,6 +11,12 @@ const fromDB = (icon: DBIcon | null): IIcon | null => {
   };
 };
 
+const fromDBs = (icons: DBIcon[]): IIcon[] => {
+  const result = icons.map(DTOIcon.fromDB).filter(isNotNull);
+  return result;
+};
+
 export const DTOIcon = {
   fromDB,
+  fromDBs,
 };

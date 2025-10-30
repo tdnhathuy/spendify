@@ -1,25 +1,28 @@
+"use client";
 import { useQueryWallet } from "@/lib/api/app.query";
-import { IWallet } from "@/lib/types";
 import { WiseTag } from "@/lib/components/wise/wise-tag";
-import { useDidUpdate } from "rooks";
-import useArray from "use-array-state";
+import { IWallet } from "@/lib/types";
+import { useStoreDashboard } from "@/modules/dashboard/pages/dashboard.store";
 
 export const TransactionFilter = () => {
+  const { filter, setFilter } = useStoreDashboard();
   const { data: wallets = [] } = useQueryWallet();
-  const [array, controls] = useArray<IWallet>([]);
 
   const onClick = (wallet: IWallet) => {
-    const idx = array.findIndex((item) => item.id === wallet.id);
-    if (idx !== -1) controls.remove(idx);
-    else controls.insert(0, wallet);
+    if (filter.walletIds.includes(wallet.id)) {
+      setFilter({
+        ...filter,
+        walletIds: filter.walletIds.filter((id) => id !== wallet.id),
+      });
+    } else {
+      setFilter({ ...filter, walletIds: [...filter.walletIds, wallet.id] });
+    }
   };
 
-  useDidUpdate(() => {}, [array]);
-
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 mt-2 w-full  flex-wrap">
       {wallets.map((wallet) => {
-        const isSelected = array.includes(wallet);
+        const isSelected = filter.walletIds.includes(wallet.id);
         return (
           <WiseTag
             key={wallet.id}
@@ -27,6 +30,7 @@ export const TransactionFilter = () => {
             title={wallet.name}
             variant={isSelected ? "date" : "wallet"}
             onClick={() => onClick(wallet)}
+            className="select-none"
           />
         );
       })}

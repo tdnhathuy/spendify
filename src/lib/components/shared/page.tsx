@@ -11,6 +11,7 @@ interface Props {
   children: React.ReactNode;
   headerProps?: Partial<PageHeaderProps>;
   className?: string;
+  descComponent?: React.ReactNode;
 }
 export const Page = ({
   title,
@@ -18,6 +19,7 @@ export const Page = ({
   description = "",
   headerProps,
   className,
+  descComponent,
 }: Props) => {
   return (
     <div
@@ -27,7 +29,7 @@ export const Page = ({
         "mx-auto w-full max-w-screen-md",
         "scrollbar",
         "bg-foreground my-auto",
-        "m-2 rounded-sm",
+        "m-2 rounded-sm"
       )}
     >
       <div className="p-2 pl-1">
@@ -40,6 +42,8 @@ export const Page = ({
         ) : (
           title
         )}
+        
+        {descComponent}
       </div>
 
       <div
