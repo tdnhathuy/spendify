@@ -11,12 +11,37 @@ import {
 export const PageProfile = () => {
   return (
     <Page title={"Profile"}>
-      <WiseButton onClick={() => setupGlobalIcons()}>Setup icons</WiseButton>
-      <WiseButton onClick={() => setupCategories()}>
+      <WiseButton
+        onClick={() => {
+          console.log("setupGlobalIcons");
+          setupGlobalIcons();
+        }}
+      >
+        Setup icons
+      </WiseButton>
+      <WiseButton
+        onClick={() => {
+          console.log("setupCategories");
+          setupCategories();
+        }}
+      >
         Setup categories
       </WiseButton>
-      <WiseButton onClick={() => setupWallet()}>Setup wallet</WiseButton>
-      <WiseButton disabled onClick={() => setupProfile()}>
+      <WiseButton
+        onClick={() => {
+          console.log("setupWallet");
+          setupWallet();
+        }}
+      >
+        Setup wallet
+      </WiseButton>
+      <WiseButton
+        disabled
+        onClick={() => {
+          console.log("setupProfile");
+          setupProfile();
+        }}
+      >
         Setup profile
       </WiseButton>
 
