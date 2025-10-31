@@ -21,8 +21,6 @@ export const Title = () => {
   return (
     <span className="flex  items-center gap-2">
       <span className="font-semibold text-sm">{title}</span>
-      <TagCategory />
-      <TagWallet />
     </span>
   );
 };

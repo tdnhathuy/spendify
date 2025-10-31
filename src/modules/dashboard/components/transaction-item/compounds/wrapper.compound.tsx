@@ -33,7 +33,7 @@ export const Wrapper = ({
         "flex gap-2 w-full px-4 py-3 rounded-sm",
         "hover:no-underline flex  bg-black/15 text-white rounded border-l-4 ",
         "transition-all duration-300",
-        "border-gray-700 hover:bg-focus",
+        "border-gray-700 hover:bg-focus flex-col",
         className,
         isInitTransaction && "border-blue-500",
         isSplit && "border-blue-500",

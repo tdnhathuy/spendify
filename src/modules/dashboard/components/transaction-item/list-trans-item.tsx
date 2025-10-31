@@ -1,32 +1,58 @@
 // Re-export the compound component from compounds folder
 
 import { Skeleton } from "@/components/ui/skeleton";
-import * as TransactionItem from "./compounds";
 import { range } from "lodash";
+import * as TransactionItem from "./compounds";
 
 interface TransactionListItemProps {}
 
 export const TransactionListItem = (props: TransactionListItemProps) => {
   return (
     <TransactionItem.Wrapper>
-      <TransactionItem.Icon />
+      <div className="flex items-center gap-3">
+        <div>
+          <TransactionItem.Icon />
+        </div>
+        <span className="flex flex-col gap-0 flex-1">
+          <Wrapper>
+            <TransactionItem.Title />
+            <TransactionItem.Amount />
+          </Wrapper>
 
-      <div className="flex flex-1 items-start flex-col gap-2">
+          <TransactionItem.Desc />
+        </span>
+      </div>
+
+      <Wrapper>
+        <div className="flex gap-2">
+          <TransactionItem.TagCategory />
+          <TransactionItem.TagWallet />
+        </div>
+        <TransactionItem.PopoverListTrans />
+      </Wrapper>
+
+      {/* <div className="flex flex-1 items-start flex-col gap-2">
         <Wrapper>
           <TransactionItem.Title />
           <TransactionItem.Amount />
         </Wrapper>
 
         <Wrapper>
-          <TransactionItem.Desc />
-          <TransactionItem.PopoverListTrans />
+          <div className="flex gap-2">
+            <TransactionItem.TagCategory />
+            <TransactionItem.TagWallet />
+          </div>
+
+          <div>
+            <TransactionItem.TagSplit />
+            <TransactionItem.PopoverListTrans />
+          </div>
         </Wrapper>
 
         <Wrapper>
-          <TransactionItem.Date />
-          <TransactionItem.TagSplit />
+          <TransactionItem.Desc />
         </Wrapper>
-      </div>
+      </div> */}
     </TransactionItem.Wrapper>
   );
 };

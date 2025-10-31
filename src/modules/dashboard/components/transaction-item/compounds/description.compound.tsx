@@ -6,13 +6,13 @@ export const Desc = () => {
 
   return (
     <span
-      className="text-xs flex text-gray-500 line-clamp-2 flex-col gap-2"
+      className="text-xs text-gray-500"
       onClick={(e) => e.stopPropagation()}
     >
       {description && (
-        <span className="flex items-center gap-1">
-          <HiOutlinePencilSquare />
-          <span className="line-clamp-1">{description}</span>
+        <span className="block h-[2lh] overflow-hidden line-clamp-2 space-x-1">
+          <HiOutlinePencilSquare className="inline" size={14} />
+          <span>{description}</span>
         </span>
       )}
     </span>
