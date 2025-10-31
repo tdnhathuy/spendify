@@ -154,17 +154,14 @@ export async function splitTransaction(params: PayloadSplitTransaction) {
     }
   );
 
-  const result = await prisma.transaction.update({
-    where: { id: idTransaction, idUser },
+  // Create TransactionSplit directly instead of nested create
+  const result = await prisma.transactionSplit.create({
     data: {
-      splits: {
-        create: {
-          amount,
-          idWalletFrom,
-          idWalletTo,
-          idUser,
-        },
-      },
+      amount,
+      idUser,
+      idWalletFrom,
+      idWalletTo,
+      idTransaction,
     },
   });
 

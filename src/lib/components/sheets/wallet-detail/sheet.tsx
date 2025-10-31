@@ -54,12 +54,12 @@ export const SheetWalletDetail = () => {
             </div>
 
             <div className="flex gap-4 flex-col px-4 pt-4">
-              <WiseInput label="Wallet ID" {...form.register("id")} disabled />
-              <WiseInput label="Wallet name" {...form.register("name")} />
-              <WiseInput
+              {/* <WiseInput label="Wallet ID" {...form.register("id")} disabled /> */}
+              {/* <WiseInput label="Wallet name" {...form.register("name")} /> */}
+              {/* <WiseInput
                 label="Initial balance"
                 {...form.register("initBalance")}
-              />
+              /> */}
             </div>
           </div>
         </WiseSheetContent>
