@@ -30,29 +30,6 @@ export const TransactionListItem = (props: TransactionListItemProps) => {
         </div>
         <TransactionItem.PopoverListTrans />
       </Wrapper>
-
-      {/* <div className="flex flex-1 items-start flex-col gap-2">
-        <Wrapper>
-          <TransactionItem.Title />
-          <TransactionItem.Amount />
-        </Wrapper>
-
-        <Wrapper>
-          <div className="flex gap-2">
-            <TransactionItem.TagCategory />
-            <TransactionItem.TagWallet />
-          </div>
-
-          <div>
-            <TransactionItem.TagSplit />
-            <TransactionItem.PopoverListTrans />
-          </div>
-        </Wrapper>
-
-        <Wrapper>
-          <TransactionItem.Desc />
-        </Wrapper>
-      </div> */}
     </TransactionItem.Wrapper>
   );
 };

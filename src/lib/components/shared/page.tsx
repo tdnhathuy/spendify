@@ -29,7 +29,8 @@ export const Page = ({
         "mx-auto w-full max-w-screen-md",
         "scrollbar",
         "bg-foreground my-auto",
-        "m-2 rounded-sm"
+        "m-2 rounded-sm",
+        "px-2 sm:px-4"
       )}
     >
       <div className="p-2 pl-1">
@@ -42,7 +43,7 @@ export const Page = ({
         ) : (
           title
         )}
-        
+
         {descComponent}
       </div>
 
