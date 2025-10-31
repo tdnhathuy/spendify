@@ -4,6 +4,7 @@ import { useQueryWallet } from "@/lib/api/app.query";
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { FooterDialogSplitTransaction } from "@/lib/components/dialogs/split-transaction/footer";
 import { IconPicker } from "@/lib/components/shared/icon-picker";
+import { WiseInput } from "@/lib/components/wise/input/wise-input";
 import { WiseSelection } from "@/lib/components/wise/select/wise-select";
 import { WiseDialogContent } from "@/lib/components/wise/wise-dialog";
 import { WiseTextInput } from "@/lib/components/wise/wise-text-input";
@@ -46,7 +47,8 @@ export const DialogSplitTransaction = () => {
           }}
         />
 
-        <WiseTextInput
+        <WiseInput
+          type="text"
           placeholder="Amount"
           inputMode="numeric"
           className="caret-accent"
