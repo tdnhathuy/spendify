@@ -12,6 +12,7 @@ export const useTransactionItem = () => {
 
   const { transaction } = context;
 
+  console.log("transaction", transaction);
   // Helper computed values
   const isTransfer = false;
   const isIncome = transaction.category?.type === "Income";
@@ -19,7 +20,7 @@ export const useTransactionItem = () => {
   const hasCategory = !!transaction.category;
   const hasWallet = !!transaction.wallet;
   const isValid = hasCategory && hasWallet;
-  const hasSplits = false;
+  const hasSplits = !!transaction.splits?.length;
 
   return {
     // Core data
@@ -51,5 +52,6 @@ export const useTransactionItem = () => {
     amount: transaction.amount,
     description: transaction.note,
     date: transaction.date,
+    splits: transaction.splits,
   };
 };

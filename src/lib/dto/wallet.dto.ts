@@ -1,6 +1,6 @@
 import { DTOIcon } from "@/lib/dto/icon.dto";
-import { IWallet } from "@/lib/types";
-import { DBWallet } from "@/server";
+import { IWallet, IWalletSimple } from "@/lib/types";
+import { DBWallet, DBWalletSimple } from "@/server";
 
 const fromDB = (wallet: DBWallet | null): IWallet | null => {
   if (!wallet) return null;
@@ -16,6 +16,16 @@ const fromDB = (wallet: DBWallet | null): IWallet | null => {
   };
 };
 
+const fromDBSimple = (wallet: DBWalletSimple | null): IWalletSimple | null => {
+  if (!wallet) return null;
+
+  return {
+    id: wallet.id,
+    name: wallet.name,
+    icon: wallet.icon && DTOIcon.fromDB(wallet.icon),
+  };
+};
 export const DTOWallet = {
   fromDB,
+  fromDBSimple,
 };

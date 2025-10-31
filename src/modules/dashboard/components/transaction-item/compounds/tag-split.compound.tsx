@@ -7,11 +7,15 @@ import { removeSplit } from "@/server/actions/wallet.action";
 import { useState } from "react";
 import { LuSplit } from "react-icons/lu";
 import { WiseTag } from "../../../../../lib/components/wise/wise-tag";
+import { IconPicker, WisePopoverContent } from "@/lib/components";
+import { formatMoney } from "@/lib/helpers";
+import { X } from "lucide-react";
+import { WiseIcon } from "@/lib/components/wise/wise-icon";
 
 export const TagSplit = () => {
-  const { transaction, isSplit } = useTransactionItem();
+  const { transaction, isSplit, hasSplits } = useTransactionItem();
+  console.log("isSplit", isSplit);
   const [open, setOpen] = useState(false);
-  return null;
 
   const onClickRemoveSplit = (split: ITransactionSplit) => async () => {
     try {
@@ -21,6 +25,8 @@ export const TagSplit = () => {
       console.error("Failed to remove split:", error);
     }
   };
+
+  if (!hasSplits) return;
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
@@ -37,7 +43,7 @@ export const TagSplit = () => {
         />
       </PopoverAnchor>
 
-      {/* <WisePopoverContent
+      <WisePopoverContent
         side="bottom"
         className="w-fit gap-2 flex flex-col py-2"
       >
@@ -49,8 +55,8 @@ export const TagSplit = () => {
               className="flex gap-2 items-center text-sm font-semibold w-48 justify-between"
             >
               <span className="flex items-center gap-2">
-                <IconPicker icon={split.wallet?.icon} size="sm" disabled />
                 <span>{`Split ${amount} to`}</span>
+                <WiseIcon icon={split.toWallet?.icon} size="xs" />
               </span>
 
               <button
@@ -63,7 +69,7 @@ export const TagSplit = () => {
             </div>
           );
         })}
-      </WisePopoverContent> */}
+      </WisePopoverContent>
     </Popover>
   );
 };

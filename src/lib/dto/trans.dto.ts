@@ -14,6 +14,12 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
     category: DTOCategory.fromDB(transaction.category),
     wallet: DTOWallet.fromDB(transaction.wallet),
     isInitTransaction: transaction.isInitTransaction,
+    splits: transaction.splits.map((x) => ({
+      id: x.id,
+      amount: x.amount,
+      fromWallet: x.fromWallet ? DTOWallet.fromDBSimple(x.fromWallet) : null,
+      toWallet: x.toWallet ? DTOWallet.fromDBSimple(x.toWallet) : null,
+    })),
   };
 
   return result;

@@ -98,6 +98,7 @@ export interface ITransaction {
   date: Date;
   note: string;
   isInitTransaction: boolean;
+  splits: ITransactionSplit[];
 }
 
 export interface ITransfer {
@@ -121,6 +122,6 @@ export interface IConfigSync {
 export interface ITransactionSplit {
   id: string;
   amount: number;
-  wallet: IWalletSimple | null;
-  note: string | null;
+  fromWallet: IWalletSimple | null;
+  toWallet: IWalletSimple | null;
 }
