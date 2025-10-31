@@ -1,11 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+model User {
+  id                String             @id @default(uuid())
+  email             String             @unique
+  name              String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  categories        Category[]
+  icons             Icon[]
+  transactions      Transaction[]
+  transactionSplits TransactionSplit[]
+  wallets           Wallet[]
+}
+
+model Icon {
+  id         String     @id @default(uuid())
+  name       String
+  svgUrl     String?
+  idFlatIcon String?
+  isDefault  Boolean    @default(false)
+  idUser     String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  categories Category[]
+  user       User?      @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  wallets    Wallet[]
+}
+
+model Wallet {
+  id             String             @id @default(uuid())
+  name           String
+  type           WalletType
+  includeInTotal Boolean            @default(true)
+  balance        Float              @default(0)
+  idIcon         String?
+  idUser         String
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  transactions   Transaction[]      @relation("WalletTransactions")
+  splitsFrom     TransactionSplit[] @relation("SplitFromWallet")
+  splitsTo       TransactionSplit[] @relation("SplitToWallet")
+  icon           Icon?              @relation(fields: [idIcon], references: [id])
+  user           User               @relation(fields: [idUser], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id           String        @id @default(uuid())
+  name         String
+  type         CategoryType
+  idParent     String?
+  idIcon       String?
+  idUser       String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  icon         Icon?         @relation(fields: [idIcon], references: [id])
+  parent       Category?     @relation("CategoryToParent", fields: [idParent], references: [id])
+  children     Category[]    @relation("CategoryToParent")
+  user         User          @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([idParent])
+}
+
+model Transaction {
+  id                String             @id @default(uuid())
+  note              String?
+  amount            Float
+  date              DateTime           @default(now())
+  isNeedToSplit     Boolean            @default(false)
+  idCategory        String?
+  idWallet          String?
+  idUser            String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  isInitTransaction Boolean            @default(false)
+  category          Category?          @relation(fields: [idCategory], references: [id])
+  user              User               @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  wallet            Wallet?            @relation("WalletTransactions", fields: [idWallet], references: [id])
+  splits            TransactionSplit[]
+}
+
+model TransactionSplit {
+  id            String      @id @default(uuid())
+  idWalletFrom  String?
+  idWalletTo    String?
+  amount        Float
+  idTransaction String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  idUser        String
+  transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  fromWallet    Wallet?     @relation("SplitFromWallet", fields: [idWalletFrom], references: [id])
+  toWallet      Wallet?     @relation("SplitToWallet", fields: [idWalletTo], references: [id])
 }
 
 enum WalletType {
@@ -18,136 +113,4 @@ enum WalletType {
 enum CategoryType {
   Income
   Spend
-}
-
-model User {
-  id           String        @id @default(uuid())
-  email        String        @unique
-  name         String
-  icons        Icon[]
-  wallets      Wallet[]
-  categories   Category[]
-  transactions Transaction[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-}
-
-model Icon {
-  id         String  @id @default(uuid())
-  name       String
-  svgUrl     String?
-  idFlatIcon String?
-  isDefault  Boolean @default(false)
-
-  // Xóa User ⇒ Icon bị xóa theo
-  user   User?   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  idUser String?
-
-  // Back relations
-  wallets    Wallet[]
-  categories Category[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Wallet {
-  id             String     @id @default(uuid())
-  name           String
-  type           WalletType
-  includeInTotal Boolean    @default(true)
-  balance        Float      @default(0)
-
-  // Xóa Icon ⇒ idIcon = NULL
-  icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
-  idIcon String?
-
-  // Xóa User ⇒ Wallet bị xóa theo
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  idUser String
-
-  // Xóa Wallet ⇒ Transaction.idWallet = NULL
-  transactions Transaction[] @relation("WalletTransactions")
-
-  // Xóa Wallet ⇒ các Split tham chiếu ví đó = NULL
-  splitsFrom TransactionSplit[] @relation("SplitFromWallet")
-  splitsTo   TransactionSplit[] @relation("SplitToWallet")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Category {
-  id   String       @id @default(uuid())
-  name String
-  type CategoryType
-
-  // Self relation 2 chiều (như cũ)
-  idParent String?
-  parent   Category?  @relation("CategoryToParent", fields: [idParent], references: [id], onDelete: SetNull)
-  children Category[] @relation("CategoryToParent")
-
-  // Xóa Icon ⇒ idIcon = NULL
-  icon   Icon?   @relation(fields: [idIcon], references: [id], onDelete: SetNull)
-  idIcon String?
-
-  // Xóa User ⇒ Category bị xóa theo
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  idUser String
-
-  // Xóa Category ⇒ Transaction.idCategory = NULL
-  transactions Transaction[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([idParent])
-}
-
-model Transaction {
-  id                String   @id @default(uuid())
-  note              String?
-  amount            Float
-  date              DateTime @default(now())
-  isNeedToSplit     Boolean  @default(false)
-  isInitTransaction Boolean  @default(false)
-
-  // Xóa Category ⇒ SetNull
-  category   Category? @relation(fields: [idCategory], references: [id], onDelete: SetNull)
-  idCategory String?
-
-  // Xóa Wallet ⇒ SetNull
-  wallet   Wallet? @relation("WalletTransactions", fields: [idWallet], references: [id], onDelete: SetNull)
-  idWallet String?
-
-  // Xóa User ⇒ Transaction bị xóa theo
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  idUser String
-
-  // Xóa Transaction ⇒ Split của nó bị xóa theo
-  splits TransactionSplit[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model TransactionSplit {
-  id String @id @default(uuid())
-
-  // Xóa Wallet ⇒ SetNull
-  fromWallet   Wallet? @relation("SplitFromWallet", fields: [idWalletFrom], references: [id], onDelete: SetNull)
-  idWalletFrom String?
-
-  // Xóa Wallet ⇒ SetNull
-  toWallet   Wallet? @relation("SplitToWallet", fields: [idWalletTo], references: [id], onDelete: SetNull)
-  idWalletTo String?
-
-  amount Float
-
-  // Xóa Transaction ⇒ Split bị xóa theo
-  transaction   Transaction @relation(fields: [idTransaction], references: [id], onDelete: Cascade)
-  idTransaction String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
