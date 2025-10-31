@@ -1,35 +1,65 @@
 import {
+  WiseSelectInput,
+  WiseSelectInputProps,
   WiseTextInput,
   WiseTextInputProps,
-} from "@/lib/components/wise/input/inputs/text.input";
-import {
-  WiseInputLabel,
-  WiseInputLabelProps,
-} from "@/lib/components/wise/input/label";
+} from "@/lib/components/wise/input/inputs";
 
-export type WiseInputType = "text";
+import { WiseInputLabel } from "@/lib/components/wise/input/label";
 
-export interface WiseInputProps
-  extends Partial<WiseInputLabelProps>,
-    Partial<WiseTextInputProps> {
-  type?: WiseInputType;
+// Define base props that all input types share
+interface BaseWiseInputProps {
+  label?: string;
 }
 
-export const WiseInput = (props: WiseInputProps) => {
-  const { type = "text" } = props;
+type WiseInputProps<T> =
+  | (BaseWiseInputProps & {
+      type: "text";
+    } & WiseTextInputProps)
+  | (BaseWiseInputProps & {
+      type: "select";
+    } & WiseSelectInputProps<T>);
 
+// Type guard functions for better type narrowing
+function isTextInput<T>(
+  props: WiseInputProps<T>
+): props is BaseWiseInputProps & {
+  type: "text";
+} & WiseTextInputProps {
+  return props.type === "text";
+}
+
+function isSelectInput<T>(
+  props: WiseInputProps<T>
+): props is BaseWiseInputProps & {
+  type: "select";
+} & WiseSelectInputProps<T> {
+  return props.type === "select";
+}
+
+// Main component with proper type inference
+export const WiseInput = <T,>(props: WiseInputProps<T>) => {
   const renderInput = () => {
-    const obj: Record<WiseInputType, React.ReactNode> = {
-      text: <WiseTextInput {...props} />,
-    };
+    if (isTextInput(props)) {
+      return <WiseTextInput {...props} />;
+    }
 
-    return obj[type];
+    if (isSelectInput(props)) {
+      return <WiseSelectInput<T> {...props} />;
+    }
+
+    // Exhaustive check - TypeScript will error if we add new types and forget to handle them
+    const _exhaustiveCheck: never = props;
+    return _exhaustiveCheck;
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <WiseInputLabel {...props} />
+    <div className="flex flex-col gap-2 p-0 m-0">
+      {props.label && <WiseInputLabel label={props.label} />}
       {renderInput()}
     </div>
   );
 };
+
+// Export type for external use
+export type { WiseInputProps };

@@ -137,3 +137,31 @@ export const createSyncTransaction = async (
     },
   });
 };
+
+export interface PayloadSplitTransaction {
+  idTransaction: string;
+  idWallet: string;
+  amount: number;
+}
+export async function splitTransaction(params: PayloadSplitTransaction) {
+  const { idUser } = await getAuthenticatedUser();
+  const { idTransaction, idWallet: idWalletTo, amount } = params;
+
+  const { idWallet: idWalletFrom } = await prisma.transaction.findUniqueOrThrow(
+    {
+      where: { id: idTransaction, idUser },
+      select: { idWallet: true },
+    }
+  );
+
+  const result = await prisma.transaction.update({
+    where: { id: idTransaction, idUser },
+    data: {
+      splits: { create: { amount, idWalletFrom, idWalletTo } },
+    },
+  });
+
+  console.log("result", result);
+
+  return true;
+}

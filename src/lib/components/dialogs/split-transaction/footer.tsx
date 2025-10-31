@@ -1,38 +1,46 @@
 import { useMutateSplitTransaction } from "@/lib/api/app.mutate";
-import { useDialog } from "@/lib/components/dialogs/dialog.store";
+import { useDialog } from "@/lib/components";
+import { TypeSchemaSplitTransaction } from "@/lib/components/dialogs/split-transaction/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { IWallet } from "@/lib/types";
+import {
+  SubmitErrorHandler,
+  SubmitHandler,
+  useFormContext,
+} from "react-hook-form";
 
-export const FooterDialogSplitTransaction = (props: {
-  wallet: IWallet | undefined;
-  amount: string;
-}) => {
-  const { data } = useDialog("split-transaction");
+export const FooterDialogSplitTransaction = (props: {}) => {
+  const form = useFormContext<TypeSchemaSplitTransaction>();
+
+  const {data: dialogData} = useDialog("split-transaction");
+
   const { mutateAsync: splitTransaction } = useMutateSplitTransaction();
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (!data) return;
-    e.preventDefault();
 
-    // splitTransaction({
-    //   idTransaction: data.idTransaction,
-    //   splits: [
-    //     {
-    //       idWallet: props.wallet?.id || "",
-    //       amount: props.amount,
-    //       note: "",
-    //     },
-    //   ],
-    // });
+  const onSubmit: SubmitHandler<TypeSchemaSplitTransaction> = (data) => {
+    splitTransaction({
+      amount: Number(data.amount),
+      idTransaction: dialogData?.idTransaction || "",
+      idWallet: data.wallet,
+    });
+    console.log("data", data);
+  };
+
+  const onError: SubmitErrorHandler<TypeSchemaSplitTransaction> = (errors) => {
+    console.log("errors", errors);
   };
 
   return (
-    <form className="flex gap-2" onSubmit={onSubmit}>
+    <>
       <WiseButton size="sm" className="w-24" variant="outline" type="button">
         Cancel
       </WiseButton>
-      <WiseButton size="sm" className="w-24" variant="default" type="submit">
+      <WiseButton
+        size="sm"
+        className="w-24"
+        variant="default"
+        onClick={form.handleSubmit(onSubmit, onError)}
+      >
         Split
       </WiseButton>
-    </form>
+    </>
   );
 };

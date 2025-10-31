@@ -15,4 +15,8 @@ export const Refetch = {
   trans: () => queryClient.invalidateQueries({ queryKey: [getTrans] }),
   configSync: () =>
     queryClient.invalidateQueries({ queryKey: [getConfigSync] }),
+  transAndWallet: () => {
+    Refetch.wallet();
+    Refetch.trans();
+  },
 };

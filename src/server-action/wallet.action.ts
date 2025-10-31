@@ -20,7 +20,14 @@ export const getBalanceWallet = async (idWallet: string) => {
     select: selectTransToCalc,
   });
 
-  const balance = trans.reduce((acc, curr) => acc + curr.amount, 0);
+  const splits = await prisma.transactionSplit.findMany({
+    where: { idWalletTo: idWallet },
+    select: { amount: true },
+  });
+
+  const balance =
+    trans.reduce((acc, curr) => acc + curr.amount, 0) +
+    splits.reduce((acc, curr) => acc + curr.amount, 0);
 
   return balance || 0;
 };

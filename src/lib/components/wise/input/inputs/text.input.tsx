@@ -9,10 +9,11 @@ export const WiseTextInput = (props: WiseTextInputProps) => {
       {...props}
       className={cn(
         "w-full bg-foreground",
-        "focus-visible:border-2 focus-visible:ring-0 ring-0 border-0",
+        "border-border focus-visible:border-white",
         "h-10 text-white rounded-sm selection:bg-blue-950",
         props.className
       )}
+      style={{ height: "42px" }}
     />
   );
 };

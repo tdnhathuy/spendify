@@ -12,6 +12,7 @@ import {
   createTransaction,
   deleteTransaction,
   getWallets,
+  splitTransaction,
   toggleNeedSplit,
   updateWallet,
 } from "@/server-action";
@@ -161,10 +162,8 @@ export const useMutateUpdateCategoryParent = () => {
 export const useMutateSplitTransaction = () => {
   return useMutation({
     mutationKey: [MutationKeys.splitTransaction],
-    mutationFn: () => Promise.resolve(true),
-    onSuccess: () => {
-      Refetch.trans();
-    },
+    mutationFn: splitTransaction,
+    onSuccess: Refetch.transAndWallet,
   });
 };
 export const useMutateUpdateWallet = () => {
