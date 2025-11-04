@@ -89,11 +89,29 @@ CREATE TABLE "TransactionSplit" (
     CONSTRAINT "TransactionSplit_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "TransactionTransfer" (
+    "id" TEXT NOT NULL,
+    "idWalletFrom" TEXT NOT NULL,
+    "idWalletTo" TEXT NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "fee" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "idTransaction" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "idUser" TEXT NOT NULL,
+
+    CONSTRAINT "TransactionTransfer_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "Category_idParent_idx" ON "Category"("idParent");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "TransactionTransfer_idTransaction_key" ON "TransactionTransfer"("idTransaction");
 
 -- AddForeignKey
 ALTER TABLE "Icon" ADD CONSTRAINT "Icon_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -133,4 +151,16 @@ ALTER TABLE "TransactionSplit" ADD CONSTRAINT "TransactionSplit_idWalletFrom_fke
 
 -- AddForeignKey
 ALTER TABLE "TransactionSplit" ADD CONSTRAINT "TransactionSplit_idWalletTo_fkey" FOREIGN KEY ("idWalletTo") REFERENCES "Wallet"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TransactionTransfer" ADD CONSTRAINT "TransactionTransfer_idTransaction_fkey" FOREIGN KEY ("idTransaction") REFERENCES "Transaction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TransactionTransfer" ADD CONSTRAINT "TransactionTransfer_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TransactionTransfer" ADD CONSTRAINT "TransactionTransfer_idWalletFrom_fkey" FOREIGN KEY ("idWalletFrom") REFERENCES "Wallet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TransactionTransfer" ADD CONSTRAINT "TransactionTransfer_idWalletTo_fkey" FOREIGN KEY ("idWalletTo") REFERENCES "Wallet"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

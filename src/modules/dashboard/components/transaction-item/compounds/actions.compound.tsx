@@ -34,7 +34,7 @@ export const PopoverListTrans = () => {
           icon={<FaMoneyBillTransfer />}
           title="Mark Transfer"
           onClick={onClick("transfer")}
-          visible={isCanMarkTransfer && !isCanUnmarkTransfer}
+          visible={true}
         />
 
         <PopoverItem

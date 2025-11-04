@@ -147,19 +147,26 @@ export async function splitTransaction(params: PayloadSplitTransaction) {
   const { idUser } = await getAuthenticatedUser();
   const { idTransaction, idWallet: idWalletTo, amount } = params;
 
-  const { idWallet: idWalletFrom } = await prisma.transaction.findUniqueOrThrow(
-    {
-      where: { id: idTransaction, idUser },
-      select: { idWallet: true },
-    }
-  );
+  // Validate transaction và lấy thông tin
+  const transaction = await prisma.transaction.findUniqueOrThrow({
+    where: { id: idTransaction, idUser },
+    select: { 
+      idWallet: true,
+      transfer: { select: { id: true } }
+    },
+  });
+
+  // Validation: Transaction không được có transfer
+  if (transaction.transfer) {
+    throw new Error("Cannot create split for transaction with transfer");
+  }
 
   // Create TransactionSplit directly instead of nested create
   const result = await prisma.transactionSplit.create({
     data: {
       amount,
       idUser,
-      idWalletFrom,
+      idWalletFrom: transaction.idWallet,
       idWalletTo,
       idTransaction,
     },
@@ -169,3 +176,141 @@ export async function splitTransaction(params: PayloadSplitTransaction) {
 
   return true;
 }
+
+export interface PayloadMarkTransfer {
+  idTransaction: string;
+  idWalletTo: string;
+  amount: number;
+  fee?: number;
+}
+
+/**
+ * Đánh dấu một transaction là transfer giữa 2 ví
+ * - Tạo TransactionTransfer record
+ * - Cập nhật balance của 2 ví (trừ From, cộng To)
+ * - Validation: Transaction không được có splits hoặc transfer trước đó
+ */
+export const markTransfer = async (params: PayloadMarkTransfer) => {
+  const { idUser } = await getAuthenticatedUser();
+  const { idTransaction, idWalletTo, amount, fee = 0 } = params;
+
+  // 1. Validate transaction tồn tại và lấy idWallet nguồn
+  const transaction = await prisma.transaction.findUniqueOrThrow({
+    where: { id: idTransaction, idUser },
+    select: { 
+      idWallet: true,
+      splits: { select: { id: true } },
+      transfer: { select: { id: true } }
+    },
+  });
+
+  // 2. Validation: Transaction phải có wallet
+  if (!transaction.idWallet) {
+    throw new Error("Transaction must have a wallet to create transfer");
+  }
+
+  // 3. Validation: Transaction không được có splits
+  if (transaction.splits.length > 0) {
+    throw new Error("Cannot create transfer for transaction with splits");
+  }
+
+  // 4. Validation: Transaction không được có transfer trước đó
+  if (transaction.transfer) {
+    throw new Error("Transaction already has a transfer");
+  }
+
+  // 5. Validation: Không thể transfer sang cùng 1 ví
+  if (transaction.idWallet === idWalletTo) {
+    throw new Error("Cannot transfer to the same wallet");
+  }
+
+  // 6. Tạo TransactionTransfer và cập nhật balance trong 1 transaction
+  const idWalletFrom = transaction.idWallet; // TypeScript now knows it's not null
+  const result = await prisma.$transaction(async (tx) => {
+    // Tạo TransactionTransfer
+    const transfer = await tx.transactionTransfer.create({
+      data: {
+        amount,
+        fee,
+        idUser,
+        idTransaction,
+        idWalletFrom,
+        idWalletTo,
+      },
+    });
+
+    // Cập nhật balance: Trừ ví nguồn (amount + fee)
+    await tx.wallet.update({
+      where: { id: idWalletFrom },
+      data: {
+        balance: {
+          decrement: amount + fee,
+        },
+      },
+    });
+
+    // Cập nhật balance: Cộng ví đích (amount)
+    await tx.wallet.update({
+      where: { id: idWalletTo },
+      data: {
+        balance: {
+          increment: amount,
+        },
+      },
+    });
+
+    return transfer;
+  });
+
+  return result;
+};
+
+export interface PayloadRemoveTransfer {
+  idTransaction: string;
+}
+
+/**
+ * Xóa transfer và hoàn lại balance cho 2 ví
+ */
+export const removeTransfer = async (params: PayloadRemoveTransfer) => {
+  const { idUser } = await getAuthenticatedUser();
+  const { idTransaction } = params;
+
+  // 1. Lấy thông tin transfer
+  const transfer = await prisma.transactionTransfer.findFirstOrThrow({
+    where: {
+      idTransaction,
+      idUser,
+    },
+  });
+
+  // 2. Xóa transfer và hoàn lại balance trong 1 transaction
+  await prisma.$transaction(async (tx) => {
+    // Xóa TransactionTransfer
+    await tx.transactionTransfer.delete({
+      where: { id: transfer.id },
+    });
+
+    // Hoàn lại balance: Cộng ví nguồn (amount + fee)
+    await tx.wallet.update({
+      where: { id: transfer.idWalletFrom },
+      data: {
+        balance: {
+          increment: transfer.amount + transfer.fee,
+        },
+      },
+    });
+
+    // Hoàn lại balance: Trừ ví đích (amount)
+    await tx.wallet.update({
+      where: { id: transfer.idWalletTo },
+      data: {
+        balance: {
+          decrement: transfer.amount,
+        },
+      },
+    });
+  });
+
+  return true;
+};

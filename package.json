@@ -7,7 +7,15 @@
     "build": "pnpm gen:api && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "gen:api": "tsx scripts/gen-api-routes.ts"
+    "gen:api": "tsx scripts/gen-api-routes.ts",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:create": "prisma migrate dev --create-only",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",

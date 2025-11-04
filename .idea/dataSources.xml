@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="spendify@tdnhathuy.ddns.net" uuid="1abbe5d6-1046-4676-b5c0-6df114521196">
+    <data-source source="LOCAL" name="Postgres 17" uuid="1abbe5d6-1046-4676-b5c0-6df114521196">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://tdnhathuy.ddns.net:5432/spendify</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="Postgres 18" uuid="718c4cbb-98b6-44ee-a257-0849bcd2fa46">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://tdnhathuy.ddns.net:5433/spendify</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
