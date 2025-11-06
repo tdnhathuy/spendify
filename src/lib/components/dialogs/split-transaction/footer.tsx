@@ -1,5 +1,6 @@
+import { useMutateToasty } from "@/hooks/use-query-toast";
 import { useMutateSplitTransaction } from "@/lib/api/app.mutate";
-import { useDialog } from "@/lib/components";
+import { dialogs, useDialog } from "@/lib/components";
 import { TypeSchemaSplitTransaction } from "@/lib/components/dialogs/split-transaction/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
 import {
@@ -11,9 +12,11 @@ import {
 export const FooterDialogSplitTransaction = (props: {}) => {
   const form = useFormContext<TypeSchemaSplitTransaction>();
 
-  const {data: dialogData} = useDialog("split-transaction");
+  const { data: dialogData } = useDialog("split-transaction");
 
-  const { mutateAsync: splitTransaction } = useMutateSplitTransaction();
+  const { asyncToast: splitTransaction } = useMutateToasty(
+    useMutateSplitTransaction
+  );
 
   const onSubmit: SubmitHandler<TypeSchemaSplitTransaction> = (data) => {
     splitTransaction({
@@ -21,12 +24,12 @@ export const FooterDialogSplitTransaction = (props: {}) => {
       idTransaction: dialogData?.idTransaction || "",
       idWallet: data.wallet,
     });
-    console.log("data", data);
+    dialogs.close("split-transaction");
   };
 
-  const onError: SubmitErrorHandler<TypeSchemaSplitTransaction> = (errors) => {
-    console.log("errors", errors);
-  };
+  const onError: SubmitErrorHandler<TypeSchemaSplitTransaction> = (
+    errors
+  ) => {};
 
   return (
     <>
