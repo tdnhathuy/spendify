@@ -9,17 +9,17 @@ datasource db {
 }
 
 model User {
-  id                  String                @id @default(uuid())
-  email               String                @unique
-  name                String
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
-  categories          Category[]
-  icons               Icon[]
-  transactions        Transaction[]
-  transactionSplits   TransactionSplit[]
-  wallets             Wallet[]
-  TransactionTransfer TransactionTransfer[]
+  id                   String                @id @default(uuid())
+  email                String                @unique
+  name                 String
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  categories           Category[]
+  icons                Icon[]
+  wallets              Wallet[]
+  transactions         Transaction[]
+  transactionSplits    TransactionSplit[]
+  transactionTransfers TransactionTransfer[]
 }
 
 model Icon {
@@ -74,22 +74,22 @@ model Category {
 }
 
 model Transaction {
-  id                String                 @id @default(uuid())
+  id                String               @id @default(uuid())
   note              String?
   amount            Float
-  date              DateTime               @default(now())
-  isNeedToSplit     Boolean                @default(false)
+  date              DateTime             @default(now())
+  isNeedToSplit     Boolean              @default(false)
   idCategory        String?
   idWallet          String?
   idUser            String
-  createdAt         DateTime               @default(now())
-  updatedAt         DateTime               @updatedAt
-  isInitTransaction Boolean                @default(false)
-  category          Category?              @relation(fields: [idCategory], references: [id])
-  user              User                   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  wallet            Wallet?                @relation("WalletTransactions", fields: [idWallet], references: [id])
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  isInitTransaction Boolean              @default(false)
+  category          Category?            @relation(fields: [idCategory], references: [id])
+  user              User                 @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  wallet            Wallet?              @relation("WalletTransactions", fields: [idWallet], references: [id])
   splits            TransactionSplit[]
-  transfer          TransactionTransfer?   // 1-1 relation
+  transfer          TransactionTransfer? // 1-1 relation
 }
 
 model TransactionSplit {
@@ -109,8 +109,8 @@ model TransactionSplit {
 
 model TransactionTransfer {
   id            String      @id @default(uuid())
-  idWalletFrom  String      // NOT NULL - Transfer phải có ví nguồn
-  idWalletTo    String      // NOT NULL - Transfer phải có ví đích
+  idWalletFrom  String // NOT NULL - Transfer phải có ví nguồn
+  idWalletTo    String // NOT NULL - Transfer phải có ví đích
   amount        Float
   fee           Float       @default(0) // Phí chuyển khoản
   idTransaction String      @unique // Transfer 1-1 với Transaction
