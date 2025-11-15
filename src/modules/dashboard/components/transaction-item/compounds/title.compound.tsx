@@ -41,7 +41,6 @@ const TileTransfer = () => {
 
   return (
     <span className="font-semibold text-sm flex gap-2 items-center">
-      <span>Transfer</span>
       <TagWallet disabled />
       <ArrowRight className="size-4" />
       <TagWallet disabled wallet={transaction.transfer?.toWallet} />

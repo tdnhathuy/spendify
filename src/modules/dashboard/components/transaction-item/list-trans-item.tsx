@@ -3,10 +3,13 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { range } from "lodash";
 import * as TransactionItem from "./compounds";
+import { cn } from "@/lib/utils";
+import { useTransactionItem } from "@/modules/dashboard/components/transaction-item/list-trans-item.hook";
 
 interface TransactionListItemProps {}
 
 export const TransactionListItem = (props: TransactionListItemProps) => {
+  const { isTransfer } = useTransactionItem();
   return (
     <TransactionItem.Wrapper>
       <div className="flex items-center gap-3">
@@ -24,7 +27,7 @@ export const TransactionListItem = (props: TransactionListItemProps) => {
       </div>
 
       <Wrapper>
-        <div className="flex gap-2">
+        <div className={cn("flex gap-2", isTransfer && "invisible")}>
           <TransactionItem.TagCategory />
           <TransactionItem.TagWallet />
         </div>
@@ -55,6 +58,16 @@ export const SkeletonTransactionListItem = () => {
   ));
 };
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex justify-between w-full">{children}</div>;
+const Wrapper = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("flex justify-between w-full", className)}>
+      {children}
+    </div>
+  );
 };
