@@ -172,7 +172,6 @@ export async function splitTransaction(params: PayloadSplitTransaction) {
     },
   });
 
-  console.log("result", result);
 
   return true;
 }
@@ -189,10 +188,20 @@ export interface PayloadMarkTransfer {
  * - Tạo TransactionTransfer record
  * - Cập nhật balance của 2 ví (trừ From, cộng To)
  * - Validation: Transaction không được có splits hoặc transfer trước đó
+ * - Amount và fee được đảm bảo là số dương
  */
 export const markTransfer = async (params: PayloadMarkTransfer) => {
   const { idUser } = await getAuthenticatedUser();
-  const { idTransaction, idWalletTo, amount, fee = 0 } = params;
+  const { idTransaction, idWalletTo, amount: rawAmount, fee: rawFee = 0 } = params;
+
+  // 0. Normalize amount và fee về số dương
+  const amount = Math.abs(rawAmount);
+  const fee = Math.abs(rawFee);
+
+  // 0.1. Validation: Amount phải > 0
+  if (amount === 0) {
+    throw new Error("Transfer amount must be greater than 0");
+  }
 
   // 1. Validate transaction tồn tại và lấy idWallet nguồn
   const transaction = await prisma.transaction.findUniqueOrThrow({
@@ -227,7 +236,7 @@ export const markTransfer = async (params: PayloadMarkTransfer) => {
   // 6. Tạo TransactionTransfer và cập nhật balance trong 1 transaction
   const idWalletFrom = transaction.idWallet; // TypeScript now knows it's not null
   const result = await prisma.$transaction(async (tx) => {
-    // Tạo TransactionTransfer
+    // Tạo TransactionTransfer với amount và fee là số dương
     const transfer = await tx.transactionTransfer.create({
       data: {
         amount,
