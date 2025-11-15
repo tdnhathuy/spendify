@@ -46,6 +46,11 @@ function open<K extends keyof DialogMap>(
   key: K,
   payload?: DialogMap[K] | null
 ) {
+  console.log(
+    `---------------------- Open Dialog ${key} with payload:\n`,
+    payload
+  );
+
   useStore.setState((s) => ({
     open: { ...s.open, [key]: true },
     data: { ...s.data, [key]: payload },

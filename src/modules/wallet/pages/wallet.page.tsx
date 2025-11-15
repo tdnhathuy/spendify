@@ -21,8 +21,9 @@ const HeaderButtons = () => {
         onClick={() =>
           dialogs.open("transfer", {
             amount: "",
-            walletFrom: null,
-            walletTo: null,
+            idWalletFrom: "",
+            idWalletTo: "",
+            idTransaction: null,
           })
         }
       >

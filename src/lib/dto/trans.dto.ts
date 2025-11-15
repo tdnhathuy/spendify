@@ -20,6 +20,16 @@ const fromDB = (transaction: DBTransaction): ITransaction => {
       fromWallet: x.fromWallet ? DTOWallet.fromDBSimple(x.fromWallet) : null,
       toWallet: x.toWallet ? DTOWallet.fromDBSimple(x.toWallet) : null,
     })),
+
+    transfer: transaction.transfer
+      ? {
+          id: transaction.transfer.id,
+          amount: transaction.transfer.amount,
+          fee: transaction.transfer.fee,
+          toWallet: DTOWallet.fromDBSimple(transaction.transfer.toWallet),
+          fromWallet: DTOWallet.fromDBSimple(transaction.transfer.fromWallet),
+        }
+      : null,
   };
 
   return result;

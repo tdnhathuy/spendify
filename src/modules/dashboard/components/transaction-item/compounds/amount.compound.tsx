@@ -16,7 +16,7 @@ export const Amount = () => {
         "text-blue-500": isTransfer,
       })}
     >
-      {formatMoney(amount)}
+      {isTransfer ? formatMoney(Math.abs(amount)) : formatMoney(amount)}
     </span>
   );
 };

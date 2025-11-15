@@ -24,7 +24,8 @@ export const Icon = () => {
         />
       );
     }
-    if (isTransfer) return <BiTransferAlt />;
+
+    if (isTransfer) return <BiTransferAlt className="text-blue-600" />;
     if (isAdjust) return <FaScaleUnbalanced />;
     return <WiseIcon icon={categoryIcon} size="lg" />;
   };

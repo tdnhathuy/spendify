@@ -99,13 +99,15 @@ export interface ITransaction {
   note: string;
   isInitTransaction: boolean;
   splits: ITransactionSplit[];
+  transfer: ITransfer | null;
 }
 
 export interface ITransfer {
-  isTransfer: true; // Flag để dễ dàng identify transfer transaction
-  walletFrom: IWalletSimple | null; // Wallet nguồn (trừ tiền)
-  walletTo: IWalletSimple | null; // Wallet đích (cộng tiền)
-  direction: "out" | "in"; // 'out' = transfer từ wallet này, 'in' = transfer đến wallet này
+  id: string;
+  amount: number;
+  fee: number;
+  toWallet: IWalletSimple | null;
+  fromWallet: IWalletSimple | null;
 }
 
 export interface IInfoSync {}

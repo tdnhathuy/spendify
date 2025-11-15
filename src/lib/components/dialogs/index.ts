@@ -26,7 +26,7 @@ export * from './transaction/inputs/wallet.input';
 export * from './transaction/schema';
 export * from './transfer/dialog';
 export * from './transfer/footer';
-export * from './transfer/inputs/wallet-selector.input';
+export * from './transfer/inputs/wallet-popover.input';
 export * from './transfer/schema';
 export * from './wallet-detail/dialog';
 export * from './wallet-detail/footer';

@@ -12,6 +12,7 @@ import {
   createTransaction,
   deleteTransaction,
   getWallets,
+  markTransfer,
   splitTransaction,
   toggleNeedSplit,
   updateWallet,
@@ -86,6 +87,7 @@ export const useMutateAssignWallet = () => {
   return useMutation({
     mutationKey: [MutationKeys.assignWallet],
     mutationFn: assignWallet,
+    onSuccess: Refetch.trans,
   });
 };
 
@@ -112,7 +114,7 @@ export const useMutateCreateConfigSync = () => {
 export const useMutateCreateTransfer = () => {
   return useMutation({
     mutationKey: [MutationKeys.createTransfer],
-    mutationFn: ServiceTransfer.transfer,
+    mutationFn: markTransfer,
     onSuccess: async () => {
       await Refetch.trans();
       await Refetch.wallet();
@@ -123,7 +125,7 @@ export const useMutateCreateTransfer = () => {
 export const useMutateMarkTransfer = () => {
   return useMutation({
     mutationKey: [MutationKeys.markTransfer],
-    mutationFn: () => Promise.resolve(true),
+    mutationFn: markTransfer,
     onSuccess: Refetch.trans,
   });
 };

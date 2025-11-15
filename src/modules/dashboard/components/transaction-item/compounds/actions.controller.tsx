@@ -31,15 +31,10 @@ export const usePopoverListTrans = () => {
 
   const onTransfer = () => {
     dialogs.open("transfer", {
-      isMarkTransfer: true,
-      amount: transaction.amount + "",
+      amount: String(transaction.amount),
       idTransaction: transaction.id,
-      walletFrom: {
-        id: transaction.wallet?.id || "",
-        name: transaction.wallet?.name || "",
-        currentBalance: "0",
-        icon: transaction.wallet?.icon || null,
-      },
+      idWalletFrom: transaction.wallet?.id || "",
+      idWalletTo: null,
     });
   };
 

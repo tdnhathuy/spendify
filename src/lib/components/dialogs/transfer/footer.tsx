@@ -6,7 +6,7 @@ import {
 import { dialogs } from "@/lib/components/dialogs/dialog.store";
 import { TypeSchemaTransfer } from "@/lib/components/dialogs/transfer/schema";
 import { WiseButton } from "@/lib/components/wise/button/wise-button";
-import { SubmitHandler, useFormContext } from "react-hook-form";
+import { FieldErrors, SubmitHandler, useFormContext } from "react-hook-form";
 
 export const FooterDialogTransfer = () => {
   const form = useFormContext<TypeSchemaTransfer>();
@@ -15,26 +15,41 @@ export const FooterDialogTransfer = () => {
 
   const onCancel = () => dialogs.close("transfer");
 
+  const isMarkTransfer = !!form.watch("idTransaction");
+
   const onTransfer: SubmitHandler<TypeSchemaTransfer> = async (data) => {
-    if (data.isMarkTransfer) {
-      const { idTransaction = "", amount, walletFrom, walletTo } = data;
-      const payload: any = {
+    if (isMarkTransfer) {
+      const {
+        idTransaction = "",
         amount,
-        idTransaction,
-        idWalletTo: walletTo?.id || "",
-        idWalletFrom: walletFrom?.id || "",
-      };
-      await markTransfer(payload);
-    } else {
-      await createTransfer({
-        idWalletFrom: data.walletFrom?.id || "",
-        idWalletTo: data.walletTo?.id || "",
-        amount: data.amount,
+        idWalletFrom,
+        idWalletTo = "",
+      } = data;
+      await markTransfer({
+        idTransaction: idTransaction || "",
+        idWalletTo: idWalletTo || "",
+        amount: Number(amount),
+        fee: 0,
       });
+    } else {
+      // await createTransfer({
+      //   idWalletFrom: data.walletFrom?.id || "",
+      //   idWalletTo: data.walletTo?.id || "",
+      //   amount: data.amount,
+      // });
     }
 
     dialogs.close("transfer");
   };
+
+  const onError = (errors: FieldErrors<TypeSchemaTransfer>) => {
+    console.log("errors", errors);
+  };
+
+  const isDisable =
+    !form.watch("idWalletFrom") ||
+    !form.watch("idWalletTo") ||
+    !form.watch("amount");
 
   return (
     <>
@@ -49,9 +64,10 @@ export const FooterDialogTransfer = () => {
       <WiseButton
         variant={"default"}
         className="flex flex-1"
-        onClick={form.handleSubmit(onTransfer)}
+        disabled={isDisable}
+        onClick={form.handleSubmit(onTransfer, onError)}
       >
-        {form.watch("isMarkTransfer") ? "Mark Transfer" : "Transfer"}
+        {form.watch("idTransaction") ? "Mark Transfer" : "Transfer"}
       </WiseButton>
     </>
   );

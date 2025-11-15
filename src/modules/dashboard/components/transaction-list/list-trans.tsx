@@ -9,6 +9,7 @@ import { Root as TransactionItemRoot } from "../transaction-item/compounds/root"
 
 export const ListTrans = () => {
   const { data, isLoading } = useListTrans();
+  console.log('data', data)
 
   if (isLoading) return <SkeletonTransactionListItem />;
   return (

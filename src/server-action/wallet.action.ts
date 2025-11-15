@@ -4,7 +4,6 @@ import { WalletType } from "@/generated/prisma";
 import { TypeSchemaWalletDetail } from "@/lib/components/sheets/wallet-detail/schema";
 import { DTOWallet } from "@/lib/dto";
 import { isNotNull } from "@/lib/helpers";
-import { IWallet } from "@/lib/types";
 import {
   getAuthenticatedUser,
   prisma,
@@ -25,9 +24,15 @@ export const getBalanceWallet = async (idWallet: string) => {
     select: { amount: true },
   });
 
+  const transfers = await prisma.transactionTransfer.findMany({
+    where: { idWalletTo: idWallet },
+    select: { amount: true },
+  });
+
   const balance =
     trans.reduce((acc, curr) => acc + curr.amount, 0) +
-    splits.reduce((acc, curr) => acc + curr.amount, 0);
+    splits.reduce((acc, curr) => acc + curr.amount, 0) +
+    transfers.reduce((acc, curr) => acc + curr.amount, 0);
 
   return balance || 0;
 };

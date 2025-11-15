@@ -2,7 +2,6 @@
 
 import { Dialog } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { useQueryWallet } from "@/lib/api/app.query";
 import { dialogs, useDialog } from "@/lib/components/dialogs/dialog.store";
 import { FooterDialogTransfer } from "@/lib/components/dialogs/transfer/footer";
 import { InputWalletSelector } from "@/lib/components/dialogs/transfer/inputs/wallet-selector.input";
@@ -19,7 +18,6 @@ import { useDidUpdate } from "rooks";
 
 export const DialogTransfer = () => {
   const { isOpen, data } = useDialog("transfer");
-  const { data: listWallets = [] } = useQueryWallet();
 
   const form = useForm<TypeSchemaTransfer>({ resolver });
 
@@ -30,15 +28,12 @@ export const DialogTransfer = () => {
   }, [isOpen, data]);
 
   const onClickSwap = () => {
-    const { walletFrom, walletTo } = form.getValues();
-    form.reset({
-      ...form.getValues(),
-      walletFrom: { ...walletTo },
-      walletTo: { ...walletFrom },
-    });
+    const { idWalletFrom, idWalletTo } = form.getValues();
+    form.setValue("idWalletFrom", idWalletTo);
+    form.setValue("idWalletTo", idWalletFrom);
   };
 
-  const isDisableSwap = !!form.watch("isMarkTransfer");
+  const isDisableSwap = !!form.getValues("idTransaction");
 
   return (
     <Dialog open={isOpen} onOpenChange={() => dialogs.close("transfer")}>
@@ -50,8 +45,8 @@ export const DialogTransfer = () => {
         >
           <div className="flex gap-2 justify-between px-2">
             <InputWalletSelector
-              schemaKey="walletFrom"
-              listWallets={listWallets}
+              value={form.watch("idWalletFrom") || ""}
+              onValueChange={(id) => form.setValue("idWalletFrom", id)}
               disabled={isDisableSwap}
             />
 
@@ -64,8 +59,12 @@ export const DialogTransfer = () => {
             </WiseButton>
 
             <InputWalletSelector
-              schemaKey="walletTo"
-              listWallets={listWallets}
+              excludeWallets={[form.watch("idWalletFrom") || ""]}
+              value={form.watch("idWalletTo") || ""}
+              onValueChange={(id) => {
+                console.log("id", id);
+                form.setValue("idWalletTo", id);
+              }}
             />
           </div>
 
@@ -74,7 +73,8 @@ export const DialogTransfer = () => {
             className="text-2xl py-8 text-center font-semibold"
             placeholder="Amount"
             style={{ fontSize: 36 }}
-            {...form.register("amount")}
+            value={form.watch("amount") || ""}
+            onValueChange={(value) => form.setValue("amount", value)}
             money
           />
         </WiseDialogContent>

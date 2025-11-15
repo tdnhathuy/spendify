@@ -35,10 +35,10 @@ export const Wrapper = ({
         "transition-all duration-300",
         "border-gray-700 hover:bg-focus flex-col",
         className,
-        isInitTransaction && "border-blue-500",
-        isSplit && "border-blue-500",
         isValid && "border-green-500",
-        isTransfer && "border-yellow-500",
+        isInitTransaction && "border-blue-500",
+        isTransfer && "border-blue-500",
+        isSplit && "border-blue-500",
         isNeedSplit && "border-red-500",
         isAdjust && "border-orange-300"
       )}

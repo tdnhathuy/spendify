@@ -1,6 +1,7 @@
 import { TagCategory } from "@/modules/dashboard/components/transaction-item/compounds/tag-category.compound";
 import { TagWallet } from "@/modules/dashboard/components/transaction-item/compounds/tag-wallet.compound";
 import { useTransactionItem } from "../list-trans-item.hook";
+import { ArrowRight } from "lucide-react";
 
 export const Title = () => {
   const { isTransfer, isAdjust, categoryName, isInitTransaction } =
@@ -26,8 +27,6 @@ export const Title = () => {
 };
 
 const TileAdjust = () => {
-  const { transaction } = useTransactionItem();
-
   return (
     <span className="font-semibold text-sm flex gap-2">
       <span>Adjust balance wallet </span>
@@ -37,27 +36,17 @@ const TileAdjust = () => {
 };
 
 const TileTransfer = () => {
-  return "!";
-  // const { isTransfer, isAdjust, transaction } = useTransactionItem();
-  // const { walletFrom, walletTo } = transaction.transfer || {};
+  const { transaction } = useTransactionItem();
+  console.log("transaction ----", transaction);
 
-  // if (!isTransfer) return null;
-
-  // return (
-  //   <span className="font-semibold text-sm  items-center gap-2 flex">
-  //     <span>Transfer</span>
-
-  //     <WrapperIcon>
-  //       <IconPicker className="size-5" icon={walletFrom?.icon} disabled />
-  //     </WrapperIcon>
-
-  //     <BiTransferAlt />
-
-  //     <WrapperIcon>
-  //       <IconPicker className="size-5" icon={walletTo?.icon} disabled />
-  //     </WrapperIcon>
-  //   </span>
-  // );
+  return (
+    <span className="font-semibold text-sm flex gap-2 items-center">
+      <span>Transfer</span>
+      <TagWallet disabled />
+      <ArrowRight className="size-4" />
+      <TagWallet disabled wallet={transaction.transfer?.toWallet} />
+    </span>
+  );
 };
 
 const WrapperIcon = ({ children }: { children: React.ReactNode }) => {

@@ -12,9 +12,8 @@ export const useTransactionItem = () => {
 
   const { transaction } = context;
 
-  console.log("transaction", transaction);
   // Helper computed values
-  const isTransfer = false;
+  const isTransfer = !!transaction.transfer;
   const isIncome = transaction.category?.type === "Income";
   const isExpense = transaction.category?.type === "Spend";
   const hasCategory = !!transaction.category;

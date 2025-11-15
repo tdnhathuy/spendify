@@ -112,6 +112,15 @@ export const selectTrans = {
   category: { select: selectCategory },
   wallet: { select: selectWallet },
   splits: { select: selectTransSplit },
+  transfer: {
+    select: {
+      id: true,
+      amount: true,
+      fee: true,
+      toWallet: { select: selectWalletSimple },
+      fromWallet: { select: selectWalletSimple },
+    },
+  },
   isInitTransaction: true,
 } satisfies Prisma.TransactionSelect;
 

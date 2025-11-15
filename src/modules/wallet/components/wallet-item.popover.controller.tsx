@@ -28,11 +28,13 @@ const onClickAdjust = (wallet: IWallet) => {
 };
 
 const onClickTransfer = (wallet: IWallet) => {
+  console.log("wallet-----------", wallet);
   const currentBalance = wallet.currentBalance.toString();
   dialogs.open("transfer", {
-    walletFrom: { ...wallet, currentBalance },
-    walletTo: null,
-    amount: "0",
+    amount: currentBalance,
+    idTransaction: null,
+    idWalletFrom: wallet.id,
+    idWalletTo: null,
   });
 };
 

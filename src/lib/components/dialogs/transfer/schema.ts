@@ -1,21 +1,13 @@
-import { schemaIcon } from "@/lib/components/dialogs/create-wallet";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
-const schemaWallet = z.object({
-  id: z.string(),
-  name: z.string(),
-  currentBalance: z.string(),
-  icon: schemaIcon.nullable().optional(),
-});
-
 export const schemaTransfer = z.object({
-  walletFrom: schemaWallet.nullable().optional(),
-  walletTo: schemaWallet.nullable().optional(),
+  idWalletFrom: z.string().nullable(),
+  idWalletTo: z.string().nullable(),
+
   amount: z.string(),
 
-  isMarkTransfer: z.boolean().optional(),
-  idTransaction: z.string().optional(),
+  idTransaction: z.string().nullable(),
 });
 
 export const resolverTransfer = zodResolver(schemaTransfer);
