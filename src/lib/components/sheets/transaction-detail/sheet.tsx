@@ -2,7 +2,7 @@ import { Form } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useSheet } from "@/lib/components/sheets/sheet.store";
 import { SheetTransactionDetailTopInfo } from "@/lib/components/sheets/transaction-detail/components/top-info";
-import { useSheetTransactionDetail } from "@/lib/components/sheets/transaction-detail/sheet.controller";
+import { useSheetTransactionDetail } from "@/lib/components/sheets/transaction-detail/controller";
 import {
   WiseSheetContent,
   WiseSheetFooter,

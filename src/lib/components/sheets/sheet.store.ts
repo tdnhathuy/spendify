@@ -7,6 +7,12 @@ type SheetMap = {
   "transaction-detail": ITransaction;
   "category-detail": ICategory | null;
   "wallet-detail": IWallet | null;
+  "assign-wallet": ITransaction & {
+    onSelectWallet?: (wallet: IWallet) => void;
+  };
+  "assign-category": ITransaction & {
+    onSelectCategory?: (category: ICategory) => void;
+  };
 };
 
 type DialogsState<M extends Record<string, any>> = {
