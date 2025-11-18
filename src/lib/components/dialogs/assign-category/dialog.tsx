@@ -45,7 +45,7 @@ export const DialogAssignCategory = () => {
         title="Assign Category"
         footer={<FooterDialogAssignCategory />}
         className="gap-4"
-        ctnClassName="h-[70%] -translate-y-[60%] w-92"
+        ctnClassName="h-[70%] -translate-y-[60%] w-92 lg:w-128"
       >
         <ModeSelection mode={mode} setMode={setMode} />
 
