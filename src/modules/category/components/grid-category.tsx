@@ -13,6 +13,7 @@ export const GridCategory = (props: GridCategoryProps) => {
       {data.map((parent) => {
         return (
           <GridCategoryItem
+            key={parent.id}
             category={parent}
             onSelectCategory={onSelectCategory}
           />

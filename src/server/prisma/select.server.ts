@@ -94,6 +94,8 @@ export const selectWalletDetail = {
 export const selectTransToCalc = {
   id: true,
   amount: true,
+  wallet: { select: { name: true } },
+  transfer: { select: { amount: true,idWalletFrom:true } },
 } satisfies Prisma.TransactionSelect;
 
 export const selectTransSplit = {

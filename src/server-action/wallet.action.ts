@@ -14,10 +14,16 @@ import {
 
 export const getBalanceWallet = async (idWallet: string) => {
   const { idUser } = await getAuthenticatedUser();
+
   const trans = await prisma.transaction.findMany({
     where: { idWallet, idUser },
     select: selectTransToCalc,
   });
+
+  if (trans[0].wallet?.name === "VCB") {
+    console.log("trans", trans);
+    
+  }
 
   const splits = await prisma.transactionSplit.findMany({
     where: { idWalletTo: idWallet },
@@ -62,6 +68,9 @@ export async function getWallets() {
     result.map(async (w) => {
       const currentBalance = await getBalanceWallet(w.id);
       const initBalance = await getInitBalanceWallet(w.id);
+      console.log("wallet name: ", w.name);
+      console.log("currentBalance", currentBalance);
+      console.log("initBalance", initBalance);
       return { ...w, currentBalance, initBalance };
     })
   );
