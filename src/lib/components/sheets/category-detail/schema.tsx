@@ -2,9 +2,8 @@ import { schemaCategory } from "@/lib/components/sheets/transaction-detail/schem
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 
-export const schemaCategoryDetail = z.object({
-  category: schemaCategory.nullable().optional(),
-  parent: schemaCategory.nullable().optional(),
+export const schemaCategoryDetail = schemaCategory.extend({
+  children: z.array(schemaCategory).optional(),
 });
 
 export const resolverCategoryDetail = zodResolver(schemaCategoryDetail);

@@ -19,7 +19,6 @@ export const FooterDialogAdjustBalance = ({ amount }: { amount: string }) => {
     };
 
     const trans = await adjustBalance(params);
-    console.log("trans", trans);
   };
 
   return (

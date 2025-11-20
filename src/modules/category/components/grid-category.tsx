@@ -1,9 +1,12 @@
 import { ICategory } from "@/lib/types";
-import { GridCategoryItem } from "@/modules/category/components/grid-category-item";
+import {
+  GridCategoryItem,
+  OnSelectCategory,
+} from "@/modules/category/components/grid-category-item";
 
 type GridCategoryProps = {
   data: ICategory[];
-  onSelectCategory?: (category: ICategory) => void;
+  onSelectCategory?: OnSelectCategory;
 };
 export const GridCategory = (props: GridCategoryProps) => {
   const { data = [], onSelectCategory = () => {} } = props;

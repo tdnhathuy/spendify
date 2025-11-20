@@ -2,7 +2,11 @@ import { WiseIcon } from "@/lib/components/wise/wise-icon";
 import { ICategory } from "@/lib/types/app.type";
 import { cn } from "@/lib/utils";
 
-type OnSelectCategory = (category: ICategory) => void;
+export type OnSelectCategory = (
+  category: ICategory,
+  parent?: ICategory
+) => void;
+
 export const GridCategoryItem = (props: {
   category: ICategory;
   onSelectCategory: OnSelectCategory;
@@ -18,6 +22,7 @@ export const GridCategoryItem = (props: {
             <Child
               key={child.id}
               category={child}
+              parent={category}
               onSelectCategory={onSelectCategory}
             />
           );
@@ -47,15 +52,16 @@ const Parent = (props: {
 const Child = (props: {
   category: ICategory;
   onSelectCategory: OnSelectCategory;
+  parent?: ICategory;
 }) => {
-  const { category, onSelectCategory } = props;
+  const { category, parent, onSelectCategory } = props;
   return (
     <button
       role="button"
       className={cn(
         "cursor-pointer flex items-center  w-[calc(50%-3px)] border bg-border rounded-xs py-2 flex-col gap-1"
       )}
-      onClick={() => onSelectCategory(category)}
+      onClick={() => onSelectCategory(category, parent)}
     >
       <WiseIcon icon={category.icon} size={26} />
       <span className="text-sm">{category.name}</span>

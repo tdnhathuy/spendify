@@ -9,16 +9,6 @@ export type AuthenticatedUser = {
   name: string;
 };
 
-/**
- * Helper to get authenticated user in Server Actions
- * Usage in Server Actions:
- *
- * export const myAction = async (params: MyParams) => {
- *   "use server";
- *   const { idUser, email } = await getAuthenticatedUser();
- *   // Your code here
- * };
- */
 export async function getAuthenticatedUser(): Promise<AuthenticatedUser> {
   const session = await auth();
 
@@ -32,10 +22,6 @@ export async function getAuthenticatedUser(): Promise<AuthenticatedUser> {
     where: { email },
     select: { id: true },
   });
-
-  // if (!user) {
-  //   throw new Error("User not found");
-  // }
 
   return {
     name: session.user.name || "",

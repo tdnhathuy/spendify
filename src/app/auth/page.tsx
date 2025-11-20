@@ -14,6 +14,8 @@ export default function AuthPage() {
         callbackUrl: "/dashboard",
         redirect: false,
       });
+      
+      console.log("res", res);
 
       if (res?.error) {
         console.error("Sign in error", res.error);

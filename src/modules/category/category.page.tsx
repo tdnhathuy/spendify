@@ -6,6 +6,7 @@ import { Page } from "@/lib/components/shared/page";
 import { sheets } from "@/lib/components/sheets/sheet.store";
 import { ICategory } from "@/lib/types";
 import { GridCategory } from "@/modules/category/components/grid-category";
+import { OnSelectCategory } from "@/modules/category/components/grid-category-item";
 import { useState } from "react";
 
 export const PageCategory = () => {
@@ -15,8 +16,11 @@ export const PageCategory = () => {
 
   const listCategory = categories.filter((item) => item.type === mode);
 
-  const onSelectCategory = (category: ICategory) => {
-    sheets.open("category-detail", category);
+  const onSelectCategory: OnSelectCategory = (
+    category: ICategory,
+    parent?: ICategory
+  ) => {
+    sheets.open("category-detail", parent || category);
   };
 
   return (
