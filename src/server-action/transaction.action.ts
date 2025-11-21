@@ -16,7 +16,29 @@ export async function getTransactions(params: PayloadGetTransactions) {
   const response = await prisma.transaction.findMany({
     where: {
       idUser,
-      ...(walletIds.length > 0 && { idWallet: { in: walletIds } }),
+      ...(walletIds.length > 0 && {
+        OR: [
+          { idWallet: { in: walletIds } },
+          {
+            splits: {
+              some: {
+                OR: [
+                  { idWalletFrom: { in: walletIds } },
+                  { idWalletTo: { in: walletIds } },
+                ],
+              },
+            },
+          },
+          {
+            transfer: {
+              OR: [
+                { idWalletFrom: { in: walletIds } },
+                { idWalletTo: { in: walletIds } },
+              ],
+            },
+          },
+        ],
+      }),
     },
     orderBy: { date: "desc" },
     select: selectTrans,
@@ -150,9 +172,9 @@ export async function splitTransaction(params: PayloadSplitTransaction) {
   // Validate transaction và lấy thông tin
   const transaction = await prisma.transaction.findUniqueOrThrow({
     where: { id: idTransaction, idUser },
-    select: { 
+    select: {
       idWallet: true,
-      transfer: { select: { id: true } }
+      transfer: { select: { id: true } },
     },
   });
 
@@ -171,7 +193,6 @@ export async function splitTransaction(params: PayloadSplitTransaction) {
       idTransaction,
     },
   });
-
 
   return true;
 }
@@ -192,7 +213,12 @@ export interface PayloadMarkTransfer {
  */
 export const markTransfer = async (params: PayloadMarkTransfer) => {
   const { idUser } = await getAuthenticatedUser();
-  const { idTransaction, idWalletTo, amount: rawAmount, fee: rawFee = 0 } = params;
+  const {
+    idTransaction,
+    idWalletTo,
+    amount: rawAmount,
+    fee: rawFee = 0,
+  } = params;
 
   // 0. Normalize amount và fee về số dương
   const amount = Math.abs(rawAmount);
@@ -206,10 +232,10 @@ export const markTransfer = async (params: PayloadMarkTransfer) => {
   // 1. Validate transaction tồn tại và lấy idWallet nguồn
   const transaction = await prisma.transaction.findUniqueOrThrow({
     where: { id: idTransaction, idUser },
-    select: { 
+    select: {
       idWallet: true,
       splits: { select: { id: true } },
-      transfer: { select: { id: true } }
+      transfer: { select: { id: true } },
     },
   });
 
