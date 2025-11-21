@@ -15,31 +15,35 @@ import {
 export const getBalanceWallet = async (idWallet: string) => {
   const { idUser } = await getAuthenticatedUser();
 
-  const trans = await prisma.transaction.findMany({
-    where: { idWallet, idUser },
-    select: selectTransToCalc,
-  });
-
-  if (trans[0].wallet?.name === "VCB") {
-    console.log("trans", trans);
-    
-  }
-
-  const splits = await prisma.transactionSplit.findMany({
-    where: { idWalletTo: idWallet },
-    select: { amount: true },
-  });
-
-  const transfers = await prisma.transactionTransfer.findMany({
-    where: { idWalletTo: idWallet },
-    select: { amount: true },
-  });
+  const [initBalance, trans, splits, transfersTo, transfersFrom] =
+    await Promise.all([
+      getInitBalanceWallet(idWallet),
+      prisma.transaction.findMany({
+        where: { idWallet, idUser, isInitTransaction: false, transfer: null },
+        select: selectTransToCalc,
+      }),
+      prisma.transactionSplit.findMany({
+        where: { idWalletTo: idWallet, idUser },
+        select: { amount: true },
+      }),
+      prisma.transactionTransfer.findMany({
+        where: { idWalletTo: idWallet, idUser },
+        select: { amount: true },
+      }),
+      prisma.transactionTransfer.findMany({
+        where: { idWalletFrom: idWallet, idUser },
+        select: { amount: true },
+      }),
+    ]);
 
   const balance =
+    initBalance +
     trans.reduce((acc, curr) => acc + curr.amount, 0) +
     splits.reduce((acc, curr) => acc + curr.amount, 0) +
-    transfers.reduce((acc, curr) => acc + curr.amount, 0);
+    transfersTo.reduce((acc, curr) => acc + curr.amount, 0) -
+    transfersFrom.reduce((acc, curr) => acc + curr.amount, 0);
 
+  console.log("balance", balance);
   return balance || 0;
 };
 
@@ -64,16 +68,101 @@ export async function getWallets() {
 
   const result = wallets.map(DTOWallet.fromDB).filter(isNotNull);
 
-  return await Promise.all(
-    result.map(async (w) => {
-      const currentBalance = await getBalanceWallet(w.id);
-      const initBalance = await getInitBalanceWallet(w.id);
-      console.log("wallet name: ", w.name);
-      console.log("currentBalance", currentBalance);
-      console.log("initBalance", initBalance);
-      return { ...w, currentBalance, initBalance };
-    })
-  );
+  if (result.length === 0) return [];
+
+  const walletIds = result.map((w) => w.id);
+
+  // Lấy TẤT CẢ dữ liệu cần thiết trong 1 lần với batch queries
+  const [initTransactions, transactions, splits, transfersTo, transfersFrom] =
+    await Promise.all([
+      // Init balances cho tất cả wallets
+      prisma.transaction.findMany({
+        where: {
+          idWallet: { in: walletIds },
+          idUser,
+          isInitTransaction: true,
+        },
+        select: { idWallet: true, amount: true },
+      }),
+      // Transactions thường cho tất cả wallets
+      prisma.transaction.findMany({
+        where: {
+          idWallet: { in: walletIds },
+          idUser,
+          isInitTransaction: false,
+          transfer: null,
+        },
+        select: { idWallet: true, amount: true },
+      }),
+      // Splits cho tất cả wallets
+      prisma.transactionSplit.findMany({
+        where: { idWalletTo: { in: walletIds }, idUser },
+        select: { idWalletTo: true, amount: true },
+      }),
+      // Transfers TO cho tất cả wallets
+      prisma.transactionTransfer.findMany({
+        where: { idWalletTo: { in: walletIds }, idUser },
+        select: { idWalletTo: true, amount: true },
+      }),
+      // Transfers FROM cho tất cả wallets
+      prisma.transactionTransfer.findMany({
+        where: { idWalletFrom: { in: walletIds }, idUser },
+        select: { idWalletFrom: true, amount: true },
+      }),
+    ]);
+
+  // Group dữ liệu theo walletId để tính toán
+  const initBalanceMap = new Map<string, number>();
+  initTransactions.forEach((t) => {
+    if (!t.idWallet) return;
+    initBalanceMap.set(t.idWallet, t.amount);
+  });
+
+  const transactionsMap = new Map<string, number>();
+  transactions.forEach((t) => {
+    if (!t.idWallet) return;
+    const current = transactionsMap.get(t.idWallet) || 0;
+    transactionsMap.set(t.idWallet, current + t.amount);
+  });
+
+  const splitsMap = new Map<string, number>();
+  splits.forEach((s) => {
+    if (!s.idWalletTo) return;
+    const current = splitsMap.get(s.idWalletTo) || 0;
+    splitsMap.set(s.idWalletTo, current + s.amount);
+  });
+
+  const transfersToMap = new Map<string, number>();
+  transfersTo.forEach((t) => {
+    if (!t.idWalletTo) return;
+    const current = transfersToMap.get(t.idWalletTo) || 0;
+    transfersToMap.set(t.idWalletTo, current + t.amount);
+  });
+
+  const transfersFromMap = new Map<string, number>();
+  transfersFrom.forEach((t) => {
+    if (!t.idWalletFrom) return;
+    const current = transfersFromMap.get(t.idWalletFrom) || 0;
+    transfersFromMap.set(t.idWalletFrom, current + t.amount);
+  });
+
+  // Tính toán balance cho từng wallet
+  return result.map((w) => {
+    const initBalance = initBalanceMap.get(w.id) || 0;
+    const transAmount = transactionsMap.get(w.id) || 0;
+    const splitsAmount = splitsMap.get(w.id) || 0;
+    const transfersToAmount = transfersToMap.get(w.id) || 0;
+    const transfersFromAmount = transfersFromMap.get(w.id) || 0;
+
+    const currentBalance =
+      initBalance +
+      transAmount +
+      splitsAmount +
+      transfersToAmount -
+      transfersFromAmount;
+
+    return { ...w, currentBalance, initBalance };
+  });
 }
 
 export interface ParamsAdjustBalance {
