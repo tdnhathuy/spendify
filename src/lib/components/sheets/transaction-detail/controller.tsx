@@ -11,7 +11,7 @@ const convertCategory = (
   params: ICategory
 ): TypeSchemaTransactionDetail["category"] => {
   return {
-    icon: params.icon,
+    icon: params.icon || { id: "", url: "", isDefault: false },
     name: params.name,
     id: params.id,
   };

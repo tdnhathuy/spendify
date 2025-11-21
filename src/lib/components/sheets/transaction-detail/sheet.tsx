@@ -21,21 +21,7 @@ export const SheetTransactionDetail = () => {
 
   useDidUpdate(() => {
     if (sheetProps.open && !!data) {
-      form.reset({
-        amount: data.amount.toString(),
-        category: {
-          icon: data.category?.icon,
-          name: data.category?.name,
-          id: data.category?.id,
-        },
-        wallet: {
-          icon: data.wallet?.icon,
-          name: data.wallet?.name,
-          id: data.wallet?.id,
-        },
-        date: new Date(data.date),
-        note: data.note || "",
-      });
+      form.reset(data as any);
     }
   }, [data, sheetProps.open]);
 
