@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const POST = async (request: NextRequest) => {
   const {
     idWallet = null,
+    idCategory = null,
     email = "",
     note = "",
     amount = 0,
@@ -23,6 +24,7 @@ export const POST = async (request: NextRequest) => {
       note,
       idWallet,
       idUser,
+      idCategory,
     },
   });
 

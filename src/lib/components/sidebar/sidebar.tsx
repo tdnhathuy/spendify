@@ -9,8 +9,10 @@ import {
 import { SidebarButton } from "@/lib/components/sidebar/sidebar.button";
 import { AppSidebarFooter } from "@/lib/components/sidebar/sidebar.footer";
 import {
+  ChartArea,
   CircleUserRound,
   LayoutDashboard,
+  MessageCircle,
   Tags,
   WalletMinimal,
 } from "lucide-react";
@@ -27,6 +29,8 @@ export function AppSidebar() {
             icon={<LayoutDashboard />}
             label="Dashboard"
           />
+
+          <SidebarButton href={"/chat"} icon={<MessageCircle />} label="Chat" />
 
           <SidebarButton
             href={"/wallet"}
