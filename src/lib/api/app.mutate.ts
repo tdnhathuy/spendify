@@ -7,6 +7,7 @@ import { ServiceConfigSync } from "@/lib/services/config-sync.service";
 import { ServiceTransfer } from "@/lib/services/transfer.service";
 import { ServiceUser } from "@/lib/services/user.service";
 import {
+  adjustBalance,
   assignCategory,
   assignWallet,
   createTransaction,
@@ -184,4 +185,12 @@ export const useMutateToggleNeedSplit = () => {
       onSuccess: Refetch.trans,
     })
   );
+};
+
+export const useMutateAdjustBalance = () => {
+  return useMutation({
+    mutationKey: [MutationKeys.adjustBalance],
+    mutationFn: adjustBalance,
+    onSuccess: Refetch.wallet,
+  });
 };

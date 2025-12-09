@@ -29,6 +29,7 @@ export const MutationKeys = {
   splitTransaction: "splitTransaction",
   toggleNeedSplit: "toggleNeedSplit",
   getBalanceWallet: "getBalanceWallet",
+  adjustBalance: "adjustBalance",
 } as const;
 
 export type MutationKeysType = (typeof MutationKeys)[keyof typeof MutationKeys];

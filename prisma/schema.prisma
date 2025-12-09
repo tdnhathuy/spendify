@@ -90,7 +90,7 @@ model Transaction {
   wallet            Wallet?              @relation("WalletTransactions", fields: [idWallet], references: [id])
   splits            TransactionSplit[]
   transfer          TransactionTransfer? // 1-1 relation
-  isAdjustBalance   Boolean              @default(false)
+  isAdjustBalance   Boolean?             @default(false)
 }
 
 model TransactionSplit {
