@@ -188,9 +188,11 @@ export const useMutateToggleNeedSplit = () => {
 };
 
 export const useMutateAdjustBalance = () => {
-  return useMutation({
-    mutationKey: [MutationKeys.adjustBalance],
-    mutationFn: adjustBalance,
-    onSuccess: Refetch.wallet,
-  });
+  return useMutateToasty(() =>
+    useMutation({
+      mutationKey: [MutationKeys.adjustBalance],
+      mutationFn: adjustBalance,
+      onSuccess: Refetch.wallet,
+    })
+  );
 };

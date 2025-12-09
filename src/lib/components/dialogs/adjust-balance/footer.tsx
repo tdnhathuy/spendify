@@ -6,15 +6,15 @@ import { adjustBalance, ParamsAdjustBalance } from "@/server-action";
 
 export const FooterDialogAdjustBalance = ({ amount }: { amount: string }) => {
   const { data } = useDialog("adjust-balance");
-  const { mutateAsync: mutateAdjustBalance } = useMutateAdjustBalance();
+  const { asyncToast: mutateAdjustBalance } = useMutateAdjustBalance();
   const onClickAdjust = async () => {
+    dialogs.close("adjust-balance");
     const params: ParamsAdjustBalance = {
       idWallet: data?.id || "",
       newAmount: Number(removeMoneyFormat(amount)),
     };
 
     await mutateAdjustBalance(params);
-    dialogs.close("adjust-balance");
   };
 
   return (
