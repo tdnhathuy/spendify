@@ -173,12 +173,7 @@ export async function adjustBalance(params: ParamsAdjustBalance) {
   const { idWallet, newAmount } = params;
   const { idUser } = await getAuthenticatedUser();
 
-  const wallet = await prisma.wallet.findUniqueOrThrow({
-    where: { id: idWallet, idUser },
-    select: selectWallet,
-  });
-
-  const { currentBalance } = DTOWallet.fromDB(wallet)!;
+  const currentBalance = await getBalanceWallet(idWallet);
 
   const amount = newAmount - currentBalance;
 
@@ -187,6 +182,7 @@ export async function adjustBalance(params: ParamsAdjustBalance) {
       amount,
       wallet: { connect: { id: idWallet } },
       user: { connect: { id: idUser } },
+      isAdjustBalance: true,
     },
     select: selectTrans,
   });
