@@ -14,9 +14,13 @@ export default auth(async (request) => {
 
   const pathname = url.pathname;
 
-  const arrIgnoreRoutes = ["/api/auth", "/api/wallets"];
+  const arrIgnoreRoutes = ["/api/wallets"];
 
-  if (arrIgnoreRoutes.includes(pathname) || pathname.startsWith("/api/hook")) {
+  if (
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/hook") ||
+    arrIgnoreRoutes.includes(pathname)
+  ) {
     return NextResponse.next();
   }
 
